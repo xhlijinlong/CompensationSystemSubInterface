@@ -3,6 +3,9 @@
 #### Description
 薪酬系统 界面组件开发
 
+版本对齐
+.NET Framework 4.6.2 + NPOI 2.5.6 + SharpZipLib 1.3.3
+
 #### Software Architecture
 Software architecture description
 
