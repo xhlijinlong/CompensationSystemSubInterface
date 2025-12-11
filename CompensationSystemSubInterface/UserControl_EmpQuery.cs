@@ -113,6 +113,17 @@ namespace CompensationSystemSubInterface {
                     col.DefaultCellStyle.Format = "yyyy-MM-dd";
                     col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
+
+                if (col.Name.Contains("身份证起始") || col.Name.Contains("身份证截止")) {
+                    col.DefaultCellStyle.Format = "yyyy-MM-dd";
+                    col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
+
+                // 处理日期列格式 (只显示 yyyy-MM-dd HH:mm:ss)
+                //if (col.Name == "打卡时间") {
+                //    col.DefaultCellStyle.Format = "yyyy-MM-dd HH:mm:ss";
+                //    col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                //}
             }
 
             // 冻结前几列 (员工号、姓名、部门)
