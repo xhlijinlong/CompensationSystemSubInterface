@@ -45,7 +45,7 @@ namespace CompensationSystemSubInterface {
         /// <summary>
         /// 用户控件加载事件处理，执行默认查询
         /// </summary>
-        private void UserControl_EmpInfoQuery_Load(object sender, EventArgs e) {
+        private void UserControl_EmpQuery_Load(object sender, EventArgs e) {
             if (this.DesignMode) return;
             // 加载时默认查询所有
             PerformQuery();

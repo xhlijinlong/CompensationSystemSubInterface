@@ -164,6 +164,7 @@
     <Compile Include="FrmSalaryCondition.Designer.cs">
       <DependentUpon>FrmSalaryCondition.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\PfmcQueryCondition.cs" />
     <Compile Include="Models\EmpCgQueryCondition.cs" />
     <Compile Include="Models\EmpQueryCondition.cs" />
     <Compile Include="Models\SalaryQueryCondition.cs" />
@@ -172,7 +173,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\EmpCgService.cs" />
+    <Compile Include="Services\PfmcService.cs" />
     <Compile Include="Services\EmpService.cs" />
     <Compile Include="Services\SalaryService.cs" />
     <Compile Include="UserControl_EmpQuery.cs">

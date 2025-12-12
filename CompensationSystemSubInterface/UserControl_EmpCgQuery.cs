@@ -21,7 +21,7 @@ namespace CompensationSystemSubInterface {
         /// <summary>
         /// 员工变动服务实例
         /// </summary>
-        private EmpCgService _service = new EmpCgService();
+        private EmpService _service = new EmpService();
 
         /// <summary>
         /// 当前的查询筛选条件
@@ -44,7 +44,7 @@ namespace CompensationSystemSubInterface {
         /// <summary>
         /// 用户控件加载事件处理，初始化日期下拉框并执行默认查询
         /// </summary>
-        private void UserControl_SalaryQuery_Load(object sender, EventArgs e) {
+        private void UserControl_EmpCgQuery_Load(object sender, EventArgs e) {
             if (this.DesignMode) return;
             InitDateCombos();
             // 默认查最近一个月，或者今年

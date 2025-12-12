@@ -146,7 +146,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "UserControl_EmpInfoQuery";
             this.Size = new System.Drawing.Size(1000, 600);
-            this.Load += new System.EventHandler(this.UserControl_EmpInfoQuery_Load);
+            this.Load += new System.EventHandler(this.UserControl_EmpQuery_Load);
             this.pnlBody.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).EndInit();
             this.flpnlTop.ResumeLayout(false);

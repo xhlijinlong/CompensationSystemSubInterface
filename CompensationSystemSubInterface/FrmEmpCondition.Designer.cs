@@ -188,7 +188,7 @@
             this.Name = "FrmEmpInfoCondition";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "高级查询条件设置";
-            this.Load += new System.EventHandler(this.FrmEmpInfoCondition_Load);
+            this.Load += new System.EventHandler(this.FrmEmpCondition_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.cmsSelection.ResumeLayout(false);
             this.gpbDept.ResumeLayout(false);

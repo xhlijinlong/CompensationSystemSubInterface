@@ -37,7 +37,7 @@ namespace CompensationSystemSubInterface {
         /// <summary>
         /// 窗体加载事件处理
         /// </summary>
-        private void FrmEmpInfoCondition_Load(object sender, EventArgs e) {
+        private void FrmEmpCgCondition_Load(object sender, EventArgs e) {
             LoadBaseData();
             RestoreSelection();
 

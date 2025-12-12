@@ -11,9 +11,9 @@ using Sm4Encode;
 
 namespace CompensationSystemSubInterface.Services {
     /// <summary>
-    /// 员工变动信息查询服务类
+    /// 绩效信息查询服务类
     /// </summary>
-    public class EmpCgService {
+    public class PfmcService {
         /// <summary>
         /// 查询员工变动信息
         /// </summary>

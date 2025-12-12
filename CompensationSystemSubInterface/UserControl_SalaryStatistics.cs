@@ -44,7 +44,7 @@ namespace CompensationSystemSubInterface {
         /// <summary>
         /// 用户控件加载事件处理，初始化默认日期和执行自动查询
         /// </summary>
-        private void UserControl_SalaryQuery_Load(object sender, EventArgs e) {
+        private void UserControl_SalaryStatistics_Load(object sender, EventArgs e) {
             if (this.DesignMode) return;
 
             InitDateCombos();

@@ -254,7 +254,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "UserControl_SalaryQuery";
             this.Size = new System.Drawing.Size(1000, 600);
-            this.Load += new System.EventHandler(this.UserControl_SalaryQuery_Load);
+            this.Load += new System.EventHandler(this.UserControl_SalaryStatistics_Load);
             this.pnlBody.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).EndInit();
             this.flpnlTop.ResumeLayout(false);
