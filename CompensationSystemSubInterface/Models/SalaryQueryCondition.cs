@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CompensationSystemSubInterface.Models {
     /// <summary>
-    /// 筛选条件类
+    /// 薪资查询筛选条件类
     /// </summary>
     public class SalaryQueryCondition {
         /// <summary>

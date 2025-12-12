@@ -146,6 +146,12 @@
   <ItemGroup>
     <Compile Include="common\AppConfig.cs" />
     <Compile Include="common\LogManager.cs" />
+    <Compile Include="FrmEmpCgCondition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmEmpCgCondition.Designer.cs">
+      <DependentUpon>FrmEmpCgCondition.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmEmpCondition.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,6 +164,7 @@
     <Compile Include="FrmSalaryCondition.Designer.cs">
       <DependentUpon>FrmSalaryCondition.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\EmpCgQueryCondition.cs" />
     <Compile Include="Models\EmpQueryCondition.cs" />
     <Compile Include="Models\SalaryQueryCondition.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -165,6 +172,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\EmpCgService.cs" />
     <Compile Include="Services\EmpService.cs" />
     <Compile Include="Services\SalaryService.cs" />
     <Compile Include="UserControl_EmpQuery.cs">
@@ -172,6 +180,12 @@
     </Compile>
     <Compile Include="UserControl_EmpQuery.Designer.cs">
       <DependentUpon>UserControl_EmpQuery.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl_EmpCgQuery.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl_EmpCgQuery.Designer.cs">
+      <DependentUpon>UserControl_EmpCgQuery.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControl_SalaryStatistics.cs">
       <SubType>UserControl</SubType>
@@ -191,6 +205,9 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FrmEmpCgCondition.resx">
+      <DependentUpon>FrmEmpCgCondition.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmEmpCondition.resx">
       <DependentUpon>FrmEmpCondition.cs</DependentUpon>
     </EmbeddedResource>
@@ -203,6 +220,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl_EmpQuery.resx">
       <DependentUpon>UserControl_EmpQuery.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl_EmpCgQuery.resx">
+      <DependentUpon>UserControl_EmpCgQuery.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl_SalaryStatistics.resx">

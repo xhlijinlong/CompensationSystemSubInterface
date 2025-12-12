@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CompensationSystemSubInterface.Models {
     /// <summary>
-    /// 员工信息筛选条件类
+    /// 员工变动筛选条件类
     /// </summary>
-    public class EmpQueryCondition {
+    public class EmpCgQueryCondition {
         /// <summary>
         /// 部门ID列表
         /// </summary>
@@ -33,8 +33,8 @@ namespace CompensationSystemSubInterface.Models {
         /// 克隆当前筛选条件对象
         /// </summary>
         /// <returns>包含相同筛选条件的新实例</returns>
-        public EmpQueryCondition Clone() {
-            return new EmpQueryCondition {
+        public EmpCgQueryCondition Clone() {
+            return new EmpCgQueryCondition {
                 DepartmentIds = new List<int>(this.DepartmentIds),
                 EmployeeIds = new List<int>(this.EmployeeIds)
             };

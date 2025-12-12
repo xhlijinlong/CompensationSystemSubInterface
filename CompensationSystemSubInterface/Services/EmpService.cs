@@ -31,7 +31,7 @@ namespace CompensationSystemSubInterface.Services {
             // 拼接 SQL 语句 (直接使用你提供的 SQL)
             sb.Append(@"
                 SELECT 
-                    yg.yuangongbh AS '员工编号',
+                    yg.yuangongbh AS '员工号',
                     yg.xingming AS '姓名',
                     bm.bmname AS '部门',
                     xl.xlname AS '序列',
