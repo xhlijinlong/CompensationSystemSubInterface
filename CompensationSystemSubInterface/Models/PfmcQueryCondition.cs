@@ -10,9 +10,15 @@ namespace CompensationSystemSubInterface.Models {
     /// </summary>
     public class PfmcQueryCondition {
         /// <summary>
-        /// 部门ID列表
+        /// 年份筛选 (存 int, 例如 2023, 2024)
         /// </summary>
-        public List<int> DepartmentIds { get; set; } = new List<int>();
+        public List<int> Years { get; set; } = new List<int>();
+
+        /// <summary>
+        /// 结果筛选 (存 string, 例如 "优秀", "合格")
+        /// </summary>
+        public List<string> Results { get; set; } = new List<string>();
+
         /// <summary>
         /// 员工ID列表
         /// </summary>
@@ -24,8 +30,7 @@ namespace CompensationSystemSubInterface.Models {
         /// <value>如果至少有一个筛选条件列表不为空，则为 true；否则为 false</value>
         public bool HasFilter {
             get {
-                return (DepartmentIds.Count > 0) ||
-                    (EmployeeIds.Count > 0);
+                return (EmployeeIds.Count > 0) || (Years.Count > 0) || (Results.Count > 0);
             }
         }
 
@@ -33,10 +38,11 @@ namespace CompensationSystemSubInterface.Models {
         /// 克隆当前筛选条件对象
         /// </summary>
         /// <returns>包含相同筛选条件的新实例</returns>
-        public EmpCgQueryCondition Clone() {
-            return new EmpCgQueryCondition {
-                DepartmentIds = new List<int>(this.DepartmentIds),
-                EmployeeIds = new List<int>(this.EmployeeIds)
+        public PfmcQueryCondition Clone() {
+            return new PfmcQueryCondition {
+                EmployeeIds = new List<int>(this.EmployeeIds),
+                Years = new List<int>(this.Years),
+                Results = new List<string>(this.Results)
             };
         }
     }

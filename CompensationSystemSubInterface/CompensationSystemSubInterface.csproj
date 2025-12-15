@@ -146,6 +146,12 @@
   <ItemGroup>
     <Compile Include="common\AppConfig.cs" />
     <Compile Include="common\LogManager.cs" />
+    <Compile Include="FrmPfmcCondition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmPfmcCondition.Designer.cs">
+      <DependentUpon>FrmPfmcCondition.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmEmpCgCondition.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -176,6 +182,12 @@
     <Compile Include="Services\PfmcService.cs" />
     <Compile Include="Services\EmpService.cs" />
     <Compile Include="Services\SalaryService.cs" />
+    <Compile Include="UserControl_PfmcQuery.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl_PfmcQuery.Designer.cs">
+      <DependentUpon>UserControl_PfmcQuery.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControl_EmpQuery.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -206,6 +218,9 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FrmPfmcCondition.resx">
+      <DependentUpon>FrmPfmcCondition.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmEmpCgCondition.resx">
       <DependentUpon>FrmEmpCgCondition.cs</DependentUpon>
     </EmbeddedResource>
@@ -218,6 +233,10 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl_PfmcQuery.resx">
+      <DependentUpon>UserControl_PfmcQuery.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl_EmpQuery.resx">
       <DependentUpon>UserControl_EmpQuery.cs</DependentUpon>
