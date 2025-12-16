@@ -36,22 +36,22 @@
             this.clbPost = new System.Windows.Forms.CheckedListBox();
             this.gpbLevel = new System.Windows.Forms.GroupBox();
             this.clbLevel = new System.Windows.Forms.CheckedListBox();
+            this.gpbItm = new System.Windows.Forms.GroupBox();
+            this.clbItem = new System.Windows.Forms.CheckedListBox();
             this.gpbEmp = new System.Windows.Forms.GroupBox();
             this.clbEmp = new System.Windows.Forms.CheckedListBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnConfirm = new System.Windows.Forms.Button();
             this.btnDefault = new System.Windows.Forms.Button();
-            this.gpbItm = new System.Windows.Forms.GroupBox();
-            this.clbItem = new System.Windows.Forms.CheckedListBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.gpbSeq.SuspendLayout();
             this.cmsSelection.SuspendLayout();
             this.gpbDept.SuspendLayout();
             this.gpbPost.SuspendLayout();
             this.gpbLevel.SuspendLayout();
+            this.gpbItm.SuspendLayout();
             this.gpbEmp.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
-            this.gpbItm.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -210,6 +210,35 @@
             this.clbLevel.Size = new System.Drawing.Size(463, 193);
             this.clbLevel.TabIndex = 0;
             // 
+            // gpbItm
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.gpbItm, 2);
+            this.gpbItm.Controls.Add(this.clbItem);
+            this.gpbItm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gpbItm.Location = new System.Drawing.Point(4, 306);
+            this.gpbItm.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gpbItm.Name = "gpbItm";
+            this.gpbItm.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gpbItm.Size = new System.Drawing.Size(676, 240);
+            this.gpbItm.TabIndex = 4;
+            this.gpbItm.TabStop = false;
+            this.gpbItm.Text = "选择项目";
+            // 
+            // clbItem
+            // 
+            this.clbItem.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.clbItem.CheckOnClick = true;
+            this.clbItem.ColumnWidth = 165;
+            this.clbItem.ContextMenuStrip = this.cmsSelection;
+            this.clbItem.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.clbItem.FormattingEnabled = true;
+            this.clbItem.Location = new System.Drawing.Point(4, 19);
+            this.clbItem.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.clbItem.MultiColumn = true;
+            this.clbItem.Name = "clbItem";
+            this.clbItem.Size = new System.Drawing.Size(668, 218);
+            this.clbItem.TabIndex = 0;
+            // 
             // gpbEmp
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.gpbEmp, 2);
@@ -264,43 +293,14 @@
             // 
             // btnDefault
             // 
-            this.btnDefault.Location = new System.Drawing.Point(514, 5);
+            this.btnDefault.Location = new System.Drawing.Point(524, 5);
             this.btnDefault.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
             this.btnDefault.Name = "btnDefault";
-            this.btnDefault.Size = new System.Drawing.Size(85, 25);
+            this.btnDefault.Size = new System.Drawing.Size(75, 25);
             this.btnDefault.TabIndex = 1;
-            this.btnDefault.Text = "恢复默认";
+            this.btnDefault.Text = "重置";
             this.btnDefault.UseVisualStyleBackColor = true;
             this.btnDefault.Click += new System.EventHandler(this.btnDefault_Click);
-            // 
-            // gpbItm
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.gpbItm, 2);
-            this.gpbItm.Controls.Add(this.clbItem);
-            this.gpbItm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gpbItm.Location = new System.Drawing.Point(4, 306);
-            this.gpbItm.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.gpbItm.Name = "gpbItm";
-            this.gpbItm.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.gpbItm.Size = new System.Drawing.Size(676, 240);
-            this.gpbItm.TabIndex = 4;
-            this.gpbItm.TabStop = false;
-            this.gpbItm.Text = "选择项目";
-            // 
-            // clbItem
-            // 
-            this.clbItem.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.clbItem.CheckOnClick = true;
-            this.clbItem.ColumnWidth = 165;
-            this.clbItem.ContextMenuStrip = this.cmsSelection;
-            this.clbItem.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clbItem.FormattingEnabled = true;
-            this.clbItem.Location = new System.Drawing.Point(4, 19);
-            this.clbItem.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.clbItem.MultiColumn = true;
-            this.clbItem.Name = "clbItem";
-            this.clbItem.Size = new System.Drawing.Size(668, 218);
-            this.clbItem.TabIndex = 0;
             // 
             // FrmSalaryCondition
             // 
@@ -324,9 +324,9 @@
             this.gpbDept.ResumeLayout(false);
             this.gpbPost.ResumeLayout(false);
             this.gpbLevel.ResumeLayout(false);
+            this.gpbItm.ResumeLayout(false);
             this.gpbEmp.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
-            this.gpbItm.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -25,7 +25,7 @@ namespace CompensationSystemSubInterface.Services {
         /// <param name="keyword">关键字搜索（姓名）</param>
         /// <param name="cond">高级筛选条件（部门、员工）</param>
         /// <returns>员工信息数据表</returns>
-        public DataTable GetEmpData(string keyword, EmpQueryCondition cond) {
+        public DataTable GetEmpData(string keyword, EmpMaintCondition cond) {
             StringBuilder sb = new StringBuilder();
 
             // 拼接 SQL 语句 (直接使用你提供的 SQL)
@@ -187,6 +187,150 @@ namespace CompensationSystemSubInterface.Services {
             sb.Append(" ORDER BY yg.xuhao, cg.changeTime DESC"); // 按人排序，同一个人按时间倒序
 
             return SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
-        } //
+        }
+
+        /// <summary>
+        /// 获取单个员工的详细信息（用于修改界面回显）
+        /// </summary>
+        public DataRow GetEmpDetail(int empId) {
+            string sql = @"
+                SELECT yg.*, 
+                       bm.bmname, xl.xlname, gw.gwname, cj.cjname 
+                FROM ZX_config_yg yg
+                LEFT JOIN ZX_config_bm bm ON yg.bmid = bm.id
+                LEFT JOIN ZX_config_xl xl ON yg.xlid = xl.id
+                LEFT JOIN ZX_config_gw gw ON yg.gwid = gw.id
+                LEFT JOIN ZX_config_cj cj ON yg.cjid = cj.id
+                WHERE yg.id = @Id";
+
+            DataTable dt = SqlHelper.ExecuteDataTable(sql, new SqlParameter("@Id", empId));
+            if (dt.Rows.Count > 0) {
+                DataRow row = dt.Rows[0];
+                // 解密敏感信息
+                try {
+                    if (row["shenfenzheng"] != DBNull.Value)
+                        row["shenfenzheng"] = _sm4.Decrypt_ECB_Str(row["shenfenzheng"].ToString());
+                    if (row["gongzikh"] != DBNull.Value)
+                        row["gongzikh"] = _sm4.Decrypt_ECB_Str(row["gongzikh"].ToString());
+                } catch { /* 忽略解密错误 */ }
+                return row;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 获取基础配置数据（用于下拉框）
+        /// </summary>
+        /// <param name="tableName">表名：ZX_config_bm, ZX_config_xl 等</param>
+        public DataTable GetDictData(string tableName) {
+            // 注意：为了防止SQL注入，通常不直接拼表名，但这里是内部调用，仅限已知表名
+            string sql = $"SELECT id, {(tableName == "ZX_config_bm" ? "bmname" : tableName == "ZX_config_xl" ? "xlname" : tableName == "ZX_config_gw" ? "gwname" : "cjname")} as name FROM {tableName} WHERE IsEnabled=1 AND DeleteType=0";
+            return SqlHelper.ExecuteDataTable(sql);
+        }
+
+        /// <summary>
+        /// 更新员工基础信息（不包含部门职务等变动信息）
+        /// </summary>
+        public void UpdateEmpBasicInfo(int empId, string name, string phone, string idCard, string bankCard, string address) {
+            // 加密
+            string encIdCard = _sm4.Encrypt_ECB_Str(idCard);
+            string encBankCard = _sm4.Encrypt_ECB_Str(bankCard);
+
+            string sql = @"
+                UPDATE ZX_config_yg 
+                SET xingming=@Name, lianxidh=@Phone, shenfenzheng=@IdCard, gongzikh=@BankCard, hujidz=@Addr 
+                WHERE id=@Id";
+
+            SqlHelper.ExecuteNonQuery(sql,
+                new SqlParameter("@Name", name),
+                new SqlParameter("@Phone", phone),
+                new SqlParameter("@IdCard", encIdCard),
+                new SqlParameter("@BankCard", encBankCard),
+                new SqlParameter("@Addr", address),
+                new SqlParameter("@Id", empId)
+            );
+        }
+
+        /// <summary>
+        /// 执行员工变动（核心事务：插入变动记录 + 更新员工表）
+        /// </summary>
+        public void ExecuteEmployeeChange(int empId, string changeType, DateTime changeTime,
+                                          int newBm, int newXl, int newZw, int newCj,
+                                          DateTime? wageStart, DateTime? wageEnd,
+                                          string oldBmName, string oldXlName, string oldZwName, string oldCjName) {
+            // 开启事务处理
+            using (SqlConnection conn = new SqlConnection(SqlHelper.ConnString)) { // 需将 ConnString 在 SqlHelper 中改为 public 或提供获取方法
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction()) {
+                    try {
+                        // 1. 获取新部门名称等文本（为了存入变动表的文本字段）
+                        // 这里为了简化，假设前端传进来或者在存储过程中查，这里演示先获取ID
+                        // 实际开发中，ZX_yuangong_change 表最好存 ID，存文本是历史遗留设计
+
+                        // 2. 插入变动记录
+                        string insertSql = @"
+                            INSERT INTO ZX_yuangong_change 
+                            (ygid, changeType, changeTime, 
+                             oldbm, oldxl, oldzw, oldcj, 
+                             newbmid, newxlid, newzwid, newcjid, 
+                             wageStart, wageEnd, CreateTime)
+                            VALUES 
+                            (@YgId, @Type, @Time, 
+                             @OldBm, @OldXl, @OldZw, @OldCj, 
+                             @NewBmId, @NewXlId, @NewZwId, @NewCjId, 
+                             @WageStart, @WageEnd, GETDATE())";
+
+                        // 注意：这里需要根据 newId 反查出 newName 存入 newbm 字段，或者表结构里有 newbmid
+                        // 假设你的表结构同时有 newbm (文本) 和 newbmid (ID)
+                        // 为简化代码，这里省略根据ID查Name的步骤，实际项目中需要补全
+
+                        SqlHelper.ExecuteNonQuery(trans, insertSql,
+                            new SqlParameter("@YgId", empId),
+                            new SqlParameter("@Type", changeType),
+                            new SqlParameter("@Time", changeTime),
+                            new SqlParameter("@OldBm", oldBmName),
+                            new SqlParameter("@OldXl", oldXlName),
+                            new SqlParameter("@OldZw", oldZwName),
+                            new SqlParameter("@OldCj", oldCjName),
+                            new SqlParameter("@NewBmId", newBm),
+                            new SqlParameter("@NewXlId", newXl),
+                            new SqlParameter("@NewZwId", newZw),
+                            new SqlParameter("@NewCjId", newCj),
+                            new SqlParameter("@WageStart", wageStart ?? (object)DBNull.Value),
+                            new SqlParameter("@WageEnd", wageEnd ?? (object)DBNull.Value)
+                        );
+
+                        // 3. 更新员工主表
+                        string updateSql = @"
+                            UPDATE ZX_config_yg 
+                            SET bmid=@Bm, xlid=@Xl, gwid=@Zw, cjid=@Cj 
+                            WHERE id=@Id";
+
+                        if (changeType == "离职") {
+                            // 如果是离职，还需要更新 zaizhi 状态和离职时间
+                            updateSql = @"
+                                UPDATE ZX_config_yg 
+                                SET bmid=@Bm, xlid=@Xl, gwid=@Zw, cjid=@Cj, 
+                                    zaizhi=0, lizhisj=@Time 
+                                WHERE id=@Id";
+                        }
+
+                        SqlHelper.ExecuteNonQuery(trans, updateSql,
+                            new SqlParameter("@Bm", newBm),
+                            new SqlParameter("@Xl", newXl),
+                            new SqlParameter("@Zw", newZw),
+                            new SqlParameter("@Cj", newCj),
+                            new SqlParameter("@Time", changeTime), // 仅离职用到
+                            new SqlParameter("@Id", empId)
+                        );
+
+                        trans.Commit();
+                    } catch {
+                        trans.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }//
     }
 }

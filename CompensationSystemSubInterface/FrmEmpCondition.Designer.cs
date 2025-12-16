@@ -25,19 +25,19 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.gpbDept = new System.Windows.Forms.GroupBox();
+            this.clbDept = new System.Windows.Forms.CheckedListBox();
             this.cmsSelection = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiInvert = new System.Windows.Forms.ToolStripMenuItem();
-            this.gpbDept = new System.Windows.Forms.GroupBox();
-            this.clbDept = new System.Windows.Forms.CheckedListBox();
             this.gpbEmp = new System.Windows.Forms.GroupBox();
             this.clbEmp = new System.Windows.Forms.CheckedListBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnConfirm = new System.Windows.Forms.Button();
             this.btnDefault = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
-            this.cmsSelection.SuspendLayout();
             this.gpbDept.SuspendLayout();
+            this.cmsSelection.SuspendLayout();
             this.gpbEmp.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -59,28 +59,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(684, 421);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // cmsSelection
-            // 
-            this.cmsSelection.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiSelectAll,
-            this.tsmiInvert});
-            this.cmsSelection.Name = "cmsSelection";
-            this.cmsSelection.Size = new System.Drawing.Size(101, 48);
-            // 
-            // tsmiSelectAll
-            // 
-            this.tsmiSelectAll.Name = "tsmiSelectAll";
-            this.tsmiSelectAll.Size = new System.Drawing.Size(100, 22);
-            this.tsmiSelectAll.Text = "全选";
-            this.tsmiSelectAll.Click += new System.EventHandler(this.tsmiSelectAll_Click);
-            // 
-            // tsmiInvert
-            // 
-            this.tsmiInvert.Name = "tsmiInvert";
-            this.tsmiInvert.Size = new System.Drawing.Size(100, 22);
-            this.tsmiInvert.Text = "反选";
-            this.tsmiInvert.Click += new System.EventHandler(this.tsmiInvert_Click);
             // 
             // gpbDept
             // 
@@ -109,6 +87,28 @@
             this.clbDept.Name = "clbDept";
             this.clbDept.Size = new System.Drawing.Size(668, 98);
             this.clbDept.TabIndex = 0;
+            // 
+            // cmsSelection
+            // 
+            this.cmsSelection.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiSelectAll,
+            this.tsmiInvert});
+            this.cmsSelection.Name = "cmsSelection";
+            this.cmsSelection.Size = new System.Drawing.Size(101, 48);
+            // 
+            // tsmiSelectAll
+            // 
+            this.tsmiSelectAll.Name = "tsmiSelectAll";
+            this.tsmiSelectAll.Size = new System.Drawing.Size(100, 22);
+            this.tsmiSelectAll.Text = "全选";
+            this.tsmiSelectAll.Click += new System.EventHandler(this.tsmiSelectAll_Click);
+            // 
+            // tsmiInvert
+            // 
+            this.tsmiInvert.Name = "tsmiInvert";
+            this.tsmiInvert.Size = new System.Drawing.Size(100, 22);
+            this.tsmiInvert.Text = "反选";
+            this.tsmiInvert.Click += new System.EventHandler(this.tsmiInvert_Click);
             // 
             // gpbEmp
             // 
@@ -164,16 +164,16 @@
             // 
             // btnDefault
             // 
-            this.btnDefault.Location = new System.Drawing.Point(514, 5);
+            this.btnDefault.Location = new System.Drawing.Point(524, 5);
             this.btnDefault.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
             this.btnDefault.Name = "btnDefault";
-            this.btnDefault.Size = new System.Drawing.Size(85, 25);
+            this.btnDefault.Size = new System.Drawing.Size(75, 25);
             this.btnDefault.TabIndex = 1;
-            this.btnDefault.Text = "恢复默认";
+            this.btnDefault.Text = "重置";
             this.btnDefault.UseVisualStyleBackColor = true;
             this.btnDefault.Click += new System.EventHandler(this.btnDefault_Click);
             // 
-            // FrmEmpInfoCondition
+            // FrmEmpCondition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -185,13 +185,13 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FrmEmpInfoCondition";
+            this.Name = "FrmEmpCondition";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "高级查询条件设置";
             this.Load += new System.EventHandler(this.FrmEmpCondition_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.cmsSelection.ResumeLayout(false);
             this.gpbDept.ResumeLayout(false);
+            this.cmsSelection.ResumeLayout(false);
             this.gpbEmp.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);

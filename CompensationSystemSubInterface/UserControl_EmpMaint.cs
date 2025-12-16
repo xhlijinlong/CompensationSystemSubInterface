@@ -17,7 +17,7 @@ namespace CompensationSystemSubInterface {
     /// <summary>
     /// 员工信息查询用户控件，提供员工信息查询、筛选和导出功能
     /// </summary>
-    public partial class UserControl_EmpQuery : UserControl {
+    public partial class UserControl_EmpMaint : UserControl {
         /// <summary>
         /// 员工服务实例
         /// </summary>
@@ -26,17 +26,17 @@ namespace CompensationSystemSubInterface {
         /// <summary>
         /// 当前的查询筛选条件
         /// </summary>
-        private EmpQueryCondition _condition = new EmpQueryCondition();
+        private EmpMaintCondition _condition = new EmpMaintCondition();
 
         /// <summary>
         /// 员工筛选条件窗体实例
         /// </summary>
-        private FrmEmpCondition _frmCondition = null;
+        private FrmEmpMaintCondition _frmCondition = null;
 
         /// <summary>
         /// 初始化员工信息查询用户控件
         /// </summary>
-        public UserControl_EmpQuery() {
+        public UserControl_EmpMaint() {
             InitializeComponent();
             // 员工信息表不需要复杂的行颜色逻辑 (RowPrePaint)，只需交替色即可
             dgvSalary.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
@@ -45,7 +45,7 @@ namespace CompensationSystemSubInterface {
         /// <summary>
         /// 用户控件加载事件处理，执行默认查询
         /// </summary>
-        private void UserControl_EmpQuery_Load(object sender, EventArgs e) {
+        private void UserControl_EmpMaint_Load(object sender, EventArgs e) {
             if (this.DesignMode) return;
             // 加载时默认查询所有
             PerformQuery();
@@ -62,7 +62,27 @@ namespace CompensationSystemSubInterface {
         /// 执行员工信息查询并显示结果
         /// </summary>
         private void PerformQuery() {
-            
+            try {
+                this.Cursor = Cursors.WaitCursor;
+
+                // 1. 调用 Service 获取数据
+                string keyword = txtName.Text.Trim();
+                DataTable dt = _service.GetEmpData(keyword, _condition);
+
+                // 2. 绑定数据
+                dgvSalary.DataSource = null;
+                dgvSalary.Columns.Clear();
+                dgvSalary.DataSource = dt;
+
+                // 3. 格式化界面
+                FormatGrid();
+
+            } catch (Exception ex) {
+                LogManager.Error("查询员工信息失败", ex);
+                MessageBox.Show("查询出错: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            } finally {
+                this.Cursor = Cursors.Default;
+            }
         }
 
         /// <summary>
@@ -117,7 +137,7 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void btnCondition_Click(object sender, EventArgs e) {
             if (_frmCondition == null || _frmCondition.IsDisposed) {
-                _frmCondition = new FrmEmpCondition(_condition);
+                _frmCondition = new FrmEmpMaintCondition(_condition);
                 _frmCondition.ApplySelect += (newCond) => {
                     _condition = newCond;
                     btnCondition.Text = _condition.HasFilter ? "条件设置 *" : "条件设置";

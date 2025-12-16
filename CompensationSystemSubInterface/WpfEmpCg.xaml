@@ -1,0 +1,146 @@
+﻿<Window x:Class="CompensationSystemSubInterface.WpfEmpCg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="员工岗位变动办理" Height="550" Width="700"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Background="#F5F6F8">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="White" BorderBrush="#DDD" BorderThickness="0,0,0,1" Padding="15">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Background="#007ACC" CornerRadius="3" Padding="8,3" Margin="0,0,10,0">
+                    <TextBlock Text="当前操作" Foreground="White" FontWeight="Bold" FontSize="12"/>
+                </Border>
+                <TextBlock Text="员工号: " Foreground="#666" VerticalAlignment="Center"/>
+                <TextBlock Text="10000968" FontWeight="Bold" Foreground="#333" Margin="0,0,20,0" VerticalAlignment="Center"/>
+
+                <TextBlock Text="姓名: " Foreground="#666" VerticalAlignment="Center"/>
+                <TextBlock Text="韩爱华" FontWeight="Bold" Foreground="#333" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="15">
+            <StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Foreground" Value="#444"/>
+                    </Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Height" Value="28"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="0,4"/>
+                    </Style>
+                    <Style TargetType="ComboBox">
+                        <Setter Property="Height" Value="28"/>
+                        <Setter Property="Margin" Value="0,4"/>
+                    </Style>
+                    <Style TargetType="DatePicker">
+                        <Setter Property="Height" Value="28"/>
+                        <Setter Property="Margin" Value="0,4"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </StackPanel.Resources>
+
+                <GroupBox Header="1. 变动类型与时间" Margin="0,0,0,15" Padding="10" Background="White" BorderBrush="#CCC">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="变动项目:" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                        <ComboBox Grid.Column="1" x:Name="cbChangeType" SelectedIndex="0">
+                            <ComboBoxItem>平调</ComboBoxItem>
+                            <ComboBoxItem>晋升</ComboBoxItem>
+                            <ComboBoxItem>降职</ComboBoxItem>
+                            <ComboBoxItem>变更</ComboBoxItem>
+                            <ComboBoxItem Foreground="Red">离职</ComboBoxItem>
+                        </ComboBox>
+
+                        <TextBlock Text="变动生效日:" HorizontalAlignment="Right" Grid.Column="2" Margin="0,0,10,0"/>
+                        <DatePicker Grid.Column="3" x:Name="dpChangeTime" SelectedDate="{x:Static sys:DateTime.Now}" 
+                                    xmlns:sys="clr-namespace:System;assembly=mscorlib"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="2. 岗位信息变更" Margin="0,0,0,15" Padding="10" Background="White" BorderBrush="#CCC">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="变更前 (原)" Grid.Row="0" Grid.Column="1" Foreground="#888" FontSize="11" Margin="2,0,0,5"/>
+                        <TextBlock Text="变更后 (新)" Grid.Row="0" Grid.Column="3" Foreground="#007ACC" FontSize="11" Margin="2,0,0,5"/>
+
+                        <TextBlock Text="部门:" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="综合管理部" IsReadOnly="True" Background="#F2F2F2" Foreground="#666" ToolTip="原部门"/>
+                        <TextBlock Text="➜" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Foreground="#CCC"/>
+                        <ComboBox Grid.Row="1" Grid.Column="3" x:Name="cbNewDept"/>
+
+                        <TextBlock Text="序列:" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="管理序列" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
+                        <TextBlock Text="➜" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Foreground="#CCC"/>
+                        <ComboBox Grid.Row="2" Grid.Column="3" x:Name="cbNewSeq"/>
+
+                        <TextBlock Text="职务:" Grid.Row="3" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="部门经理" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
+                        <TextBlock Text="➜" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Foreground="#CCC"/>
+                        <ComboBox Grid.Row="3" Grid.Column="3" x:Name="cbNewJob"/>
+
+                        <TextBlock Text="层级:" Grid.Row="4" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="M3" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
+                        <TextBlock Text="➜" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Foreground="#CCC"/>
+                        <ComboBox Grid.Row="4" Grid.Column="3" x:Name="cbNewLevel"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="3. 薪资周期设定" Margin="0,0,0,10" Padding="10" Background="White" BorderBrush="#CCC">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="起薪时间:" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                        <DatePicker Grid.Column="1" x:Name="dpWageStart"/>
+
+                        <TextBlock Text="薪止时间:" HorizontalAlignment="Right" Grid.Column="2" Margin="0,0,10,0"/>
+                        <DatePicker Grid.Column="3" x:Name="dpWageEnd" IsEnabled="False" Background="#F9F9F9"/>
+
+                        <TextBlock Text="(仅离职需填)" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                                   FontSize="10" Foreground="Gray" Margin="0,0,25,0" IsHitTestVisible="False"/>
+                    </Grid>
+                </GroupBox>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Background="#EEE" BorderBrush="#CCC" BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Button Content="取消" Width="80" Margin="5" Height="30" Background="White" BorderBrush="#BBB"/>
+                <Button Content="保存" Width="80" Margin="5" Height="30" Background="#007ACC" Foreground="White" FontWeight="Bold" BorderThickness="0"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

@@ -73,6 +73,8 @@
     <Reference Include="NSax, Version=1.0.2.0, Culture=neutral, PublicKeyToken=0b3d9671cbd3c8d0, processorArchitecture=MSIL">
       <HintPath>..\packages\NSax.1.0.2\lib\netstandard2.0\NSax.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
       <HintPath>..\packages\SixLabors.Fonts.1.0.1\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
     </Reference>
@@ -130,6 +132,7 @@
     <Reference Include="System.ValueTuple, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.6.1\lib\net462\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -146,6 +149,12 @@
   <ItemGroup>
     <Compile Include="common\AppConfig.cs" />
     <Compile Include="common\LogManager.cs" />
+    <Compile Include="FrmEmpMaintCondition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmEmpMaintCondition.Designer.cs">
+      <DependentUpon>FrmEmpMaintCondition.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmPfmcCondition.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,6 +179,7 @@
     <Compile Include="FrmSalaryCondition.Designer.cs">
       <DependentUpon>FrmSalaryCondition.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\EmpMaintCondition.cs" />
     <Compile Include="Models\PfmcQueryCondition.cs" />
     <Compile Include="Models\EmpCgQueryCondition.cs" />
     <Compile Include="Models\EmpQueryCondition.cs" />
@@ -182,6 +192,12 @@
     <Compile Include="Services\PfmcService.cs" />
     <Compile Include="Services\EmpService.cs" />
     <Compile Include="Services\SalaryService.cs" />
+    <Compile Include="UserControl_EmpMaint.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControl_EmpMaint.Designer.cs">
+      <DependentUpon>UserControl_EmpMaint.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControl_PfmcQuery.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -215,9 +231,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ExcelHelper.cs" />
     <Compile Include="Utilities\SqlHelper.cs" />
+    <Compile Include="WpfEmpCg.xaml.cs">
+      <DependentUpon>WpfEmpCg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WpfEmpMaint.xaml.cs">
+      <DependentUpon>WpfEmpMaint.xaml</DependentUpon>
+    </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FrmEmpMaintCondition.resx">
+      <DependentUpon>FrmEmpMaintCondition.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmPfmcCondition.resx">
       <DependentUpon>FrmPfmcCondition.cs</DependentUpon>
     </EmbeddedResource>
@@ -233,6 +258,10 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControl_EmpMaint.resx">
+      <DependentUpon>UserControl_EmpMaint.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl_PfmcQuery.resx">
       <DependentUpon>UserControl_PfmcQuery.cs</DependentUpon>
@@ -262,6 +291,16 @@
   <ItemGroup>
     <Content Include="Libs\BouncyCastle.Crypto.dll" />
     <Content Include="Libs\Sm4Encode.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="WpfEmpCg.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WpfEmpMaint.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

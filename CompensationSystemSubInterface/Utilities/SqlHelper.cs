@@ -14,7 +14,7 @@ namespace CompensationSystemSubInterface.Utilities {
         /// <summary>
         /// 数据库连接字符串
         /// </summary>
-        private static readonly string ConnString =
+        public static readonly string ConnString =
             "Data Source=192.168.100.16;Initial Catalog=jzcw_t;User ID=PEPTest;Password=Test1511*;";
 
         /// <summary>
@@ -62,5 +62,24 @@ namespace CompensationSystemSubInterface.Utilities {
                 }
             }
         }
+        // 2. 【新增】支持事务的 ExecuteNonQuery
+        public static int ExecuteNonQuery(string sql, params SqlParameter[] parameters) {
+            using (SqlConnection conn = new SqlConnection(ConnString)) {
+                using (SqlCommand cmd = new SqlCommand(sql, conn)) {
+                    if (parameters != null) cmd.Parameters.AddRange(parameters);
+                    conn.Open();
+                    return cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        // 3. 【新增】重载方法：接收外部传入的 Transaction (用于 Service 层控制事务)
+        public static int ExecuteNonQuery(SqlTransaction trans, string sql, params SqlParameter[] parameters) {
+            // 注意：cmd 必须绑定 Connection 和 Transaction
+            using (SqlCommand cmd = new SqlCommand(sql, trans.Connection, trans)) {
+                if (parameters != null) cmd.Parameters.AddRange(parameters);
+                return cmd.ExecuteNonQuery();
+            }
+        }//
     }
 }

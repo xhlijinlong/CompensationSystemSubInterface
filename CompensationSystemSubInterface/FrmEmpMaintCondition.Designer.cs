@@ -1,5 +1,5 @@
 ﻿namespace CompensationSystemSubInterface {
-    partial class FrmEmpCgCondition {
+    partial class FrmEmpMaintCondition {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -169,11 +169,11 @@
             this.btnDefault.Name = "btnDefault";
             this.btnDefault.Size = new System.Drawing.Size(75, 25);
             this.btnDefault.TabIndex = 1;
-            this.btnDefault.Text = " 重置";
+            this.btnDefault.Text = "重置";
             this.btnDefault.UseVisualStyleBackColor = true;
             this.btnDefault.Click += new System.EventHandler(this.btnDefault_Click);
             // 
-            // FrmEmpCgCondition
+            // FrmEmpMaintCondition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -185,7 +185,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FrmEmpCgCondition";
+            this.Name = "FrmEmpMaintCondition";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "高级查询条件设置";
             this.Load += new System.EventHandler(this.FrmEmpCgCondition_Load);

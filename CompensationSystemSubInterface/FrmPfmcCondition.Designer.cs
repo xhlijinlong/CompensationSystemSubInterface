@@ -194,12 +194,12 @@
             // 
             // btnDefault
             // 
-            this.btnDefault.Location = new System.Drawing.Point(514, 5);
+            this.btnDefault.Location = new System.Drawing.Point(524, 5);
             this.btnDefault.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
             this.btnDefault.Name = "btnDefault";
-            this.btnDefault.Size = new System.Drawing.Size(85, 25);
+            this.btnDefault.Size = new System.Drawing.Size(75, 25);
             this.btnDefault.TabIndex = 1;
-            this.btnDefault.Text = "恢复默认";
+            this.btnDefault.Text = "重置";
             this.btnDefault.UseVisualStyleBackColor = true;
             this.btnDefault.Click += new System.EventHandler(this.btnDefault_Click);
             // 
