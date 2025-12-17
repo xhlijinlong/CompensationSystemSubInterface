@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -11,19 +12,13 @@ namespace CompensationSystemSubInterface.Utilities {
     /// SQL Server 数据库访问辅助类
     /// </summary>
     public class SqlHelper {
-        /// <summary>
-        /// 数据库连接字符串
-        /// </summary>
+        // 暂时直接写死，等以后集成到主程序（EXE）里再换回 ConfigurationManager
         public static readonly string ConnString =
             "Data Source=192.168.100.16;Initial Catalog=jzcw_t;User ID=PEPTest;Password=Test1511*;";
+        // 1. 从配置文件读取连接字符串，避免硬编码
+        //public static readonly string ConnString = ConfigurationManager.ConnectionStrings["DefaultConnection"]?.ConnectionString
+        //                                           ?? throw new Exception("未在配置文件中找到名为 DefaultConnection 的连接字符串");
 
-        /// <summary>
-        /// 执行 SQL 查询并返回 DataTable
-        /// </summary>
-        /// <param name="sql">要执行的 SQL 语句</param>
-        /// <param name="parameters">SQL 参数数组，可选</param>
-        /// <returns>查询结果的 DataTable</returns>
-        /// <exception cref="Exception">当数据库操作失败时抛出异常</exception>
         public static DataTable ExecuteDataTable(string sql, params SqlParameter[] parameters) {
             using (SqlConnection conn = new SqlConnection(ConnString)) {
                 using (SqlCommand cmd = new SqlCommand(sql, conn)) {
@@ -36,19 +31,13 @@ namespace CompensationSystemSubInterface.Utilities {
                         }
                         return dt;
                     } catch (Exception ex) {
-                        throw new Exception("数据库错误: " + ex.Message);
+                        // 2. 保留原始异常堆栈
+                        throw new Exception("ExecuteDataTable error: " + ex.Message, ex);
                     }
                 }
             }
         }
 
-        /// <summary>
-        /// 执行 SQL 查询并返回结果集中第一行第一列的值
-        /// </summary>
-        /// <param name="sql">要执行的 SQL 语句</param>
-        /// <param name="parameters">SQL 参数数组，可选</param>
-        /// <returns>查询结果的第一行第一列的值；如果结果集为空则返回 null</returns>
-        /// <exception cref="Exception">当数据库操作失败时抛出异常</exception>
         public static object ExecuteScalar(string sql, params SqlParameter[] parameters) {
             using (SqlConnection conn = new SqlConnection(ConnString)) {
                 using (SqlCommand cmd = new SqlCommand(sql, conn)) {
@@ -57,29 +46,38 @@ namespace CompensationSystemSubInterface.Utilities {
                         conn.Open();
                         return cmd.ExecuteScalar();
                     } catch (Exception ex) {
-                        throw new Exception("数据库错误: " + ex.Message);
+                        throw new Exception("ExecuteScalar error: " + ex.Message, ex);
                     }
                 }
             }
         }
-        // 2. 【新增】支持事务的 ExecuteNonQuery
+
+        // 不带事务
         public static int ExecuteNonQuery(string sql, params SqlParameter[] parameters) {
             using (SqlConnection conn = new SqlConnection(ConnString)) {
                 using (SqlCommand cmd = new SqlCommand(sql, conn)) {
                     if (parameters != null) cmd.Parameters.AddRange(parameters);
-                    conn.Open();
-                    return cmd.ExecuteNonQuery();
+                    try {
+                        conn.Open();
+                        return cmd.ExecuteNonQuery();
+                    } catch (Exception ex) {
+                        throw new Exception("ExecuteNonQuery error: " + ex.Message, ex);
+                    }
                 }
             }
         }
 
-        // 3. 【新增】重载方法：接收外部传入的 Transaction (用于 Service 层控制事务)
+        // 带事务 (注意：这里不 try-catch，让 Service 层控制事务的回滚)
         public static int ExecuteNonQuery(SqlTransaction trans, string sql, params SqlParameter[] parameters) {
-            // 注意：cmd 必须绑定 Connection 和 Transaction
+            // 3. 检查事务是否有效
+            if (trans == null) throw new ArgumentNullException(nameof(trans));
+            if (trans.Connection == null) throw new Exception("事务对应的连接已关闭，无法执行命令。");
+
             using (SqlCommand cmd = new SqlCommand(sql, trans.Connection, trans)) {
                 if (parameters != null) cmd.Parameters.AddRange(parameters);
+                // 注意：不需要 conn.Open()，因为事务存在的前提是连接已打开
                 return cmd.ExecuteNonQuery();
             }
-        }//
+        }
     }
 }

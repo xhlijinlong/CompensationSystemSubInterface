@@ -1,7 +1,8 @@
 ﻿<Window x:Class="CompensationSystemSubInterface.WpfEmpCg"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="员工岗位变动办理" Height="550" Width="700"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="员工变动信息维护" Height="590" Width="700"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         Background="#F5F6F8">
 
@@ -67,8 +68,7 @@
                         </ComboBox>
 
                         <TextBlock Text="变动生效日:" HorizontalAlignment="Right" Grid.Column="2" Margin="0,0,10,0"/>
-                        <DatePicker Grid.Column="3" x:Name="dpChangeTime" SelectedDate="{x:Static sys:DateTime.Now}" 
-                                    xmlns:sys="clr-namespace:System;assembly=mscorlib"/>
+                        <DatePicker Grid.Column="3" x:Name="dpChangeTime" SelectedDate="{x:Static sys:DateTime.Now}"/>
                     </Grid>
                 </GroupBox>
 
@@ -92,22 +92,22 @@
                         <TextBlock Text="变更后 (新)" Grid.Row="0" Grid.Column="3" Foreground="#007ACC" FontSize="11" Margin="2,0,0,5"/>
 
                         <TextBlock Text="部门:" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,10,0"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="综合管理部" IsReadOnly="True" Background="#F2F2F2" Foreground="#666" ToolTip="原部门"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtOldDept" IsReadOnly="True" Background="#F2F2F2" Foreground="#666" ToolTip="原部门"/>
                         <TextBlock Text="➜" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Foreground="#CCC"/>
                         <ComboBox Grid.Row="1" Grid.Column="3" x:Name="cbNewDept"/>
 
                         <TextBlock Text="序列:" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,10,0"/>
-                        <TextBox Grid.Row="2" Grid.Column="1" Text="管理序列" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtOldSeq" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
                         <TextBlock Text="➜" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Foreground="#CCC"/>
                         <ComboBox Grid.Row="2" Grid.Column="3" x:Name="cbNewSeq"/>
 
                         <TextBlock Text="职务:" Grid.Row="3" HorizontalAlignment="Right" Margin="0,0,10,0"/>
-                        <TextBox Grid.Row="3" Grid.Column="1" Text="部门经理" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtOldJob" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
                         <TextBlock Text="➜" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Foreground="#CCC"/>
                         <ComboBox Grid.Row="3" Grid.Column="3" x:Name="cbNewJob"/>
 
                         <TextBlock Text="层级:" Grid.Row="4" HorizontalAlignment="Right" Margin="0,0,10,0"/>
-                        <TextBox Grid.Row="4" Grid.Column="1" Text="M3" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtOldLevel" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
                         <TextBlock Text="➜" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Foreground="#CCC"/>
                         <ComboBox Grid.Row="4" Grid.Column="3" x:Name="cbNewLevel"/>
                     </Grid>
@@ -137,9 +137,9 @@
         </ScrollViewer>
 
         <Border Grid.Row="2" Background="#EEE" BorderBrush="#CCC" BorderThickness="0,1,0,0">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button Content="取消" Width="80" Margin="5" Height="30" Background="White" BorderBrush="#BBB"/>
-                <Button Content="保存" Width="80" Margin="5" Height="30" Background="#007ACC" Foreground="White" FontWeight="Bold" BorderThickness="0"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
+                <Button x:Name="btnCancel" Content="取消" Width="80" Margin="5" Height="30" Background="White" BorderBrush="#BBB"/>
+                <Button x:Name="btnSave" Content="保存" Width="80" Margin="5" Height="30" Background="#007ACC" Foreground="White" FontWeight="Bold" BorderThickness="0"/>
             </StackPanel>
         </Border>
     </Grid>

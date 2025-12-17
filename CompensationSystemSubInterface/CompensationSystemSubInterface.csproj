@@ -179,6 +179,8 @@
     <Compile Include="FrmSalaryCondition.Designer.cs">
       <DependentUpon>FrmSalaryCondition.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ComboItem.cs" />
+    <Compile Include="Models\EmployeeDetail.cs" />
     <Compile Include="Models\EmpMaintCondition.cs" />
     <Compile Include="Models\PfmcQueryCondition.cs" />
     <Compile Include="Models\EmpCgQueryCondition.cs" />

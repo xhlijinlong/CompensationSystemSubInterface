@@ -42,14 +42,14 @@ namespace CompensationSystemSubInterface {
             dgvSalary.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// 用户控件加载事件处理，执行默认查询
         /// </summary>
         private void UserControl_EmpMaint_Load(object sender, EventArgs e) {
             if (this.DesignMode) return;
             // 加载时默认查询所有
             PerformQuery();
-        }
+        }*/
 
         /// <summary>
         /// 查询按钮点击事件处理
@@ -175,6 +175,77 @@ namespace CompensationSystemSubInterface {
                     LogManager.Error("导出员工信息失败", ex);
                     MessageBox.Show("导出失败: " + ex.Message + "\n请检查文件是否被占用。", "错误");
                 }
+            }
+        }
+
+        private void UserControl_EmpMaint_Load(object sender, EventArgs e) {
+            if (this.DesignMode) return;
+            PerformQuery();
+
+            // 绑定双击事件
+            dgvSalary.CellDoubleClick += DgvSalary_CellDoubleClick;
+
+            // 绑定右键菜单
+            ContextMenuStrip cms = new ContextMenuStrip();
+            ToolStripMenuItem tsmiMod = new ToolStripMenuItem("维护");
+            tsmiMod.Click += btnMaint_Click; // 复用修改按钮逻辑
+            ToolStripMenuItem tsmiCg = new ToolStripMenuItem("变动");
+            tsmiCg.Click += btnCg_Click; // 复用变动按钮逻辑
+            cms.Items.Add(tsmiMod);
+            cms.Items.Add(tsmiCg);
+            dgvSalary.ContextMenuStrip = cms;
+        }
+
+        private void DgvSalary_CellDoubleClick(object sender, DataGridViewCellEventArgs e) {
+            if (e.RowIndex >= 0) {
+                OpenMaintWindow();
+            }
+        }
+
+        // 修改按钮
+        private void btnMaint_Click(object sender, EventArgs e) {
+            OpenMaintWindow();
+        }
+
+        // 变动按钮
+        private void btnCg_Click(object sender, EventArgs e) {
+            OpenChangeWindow();
+        }
+
+        // 打开修改界面逻辑
+        private void OpenMaintWindow() {
+            if (dgvSalary.SelectedRows.Count == 0) {
+                MessageBox.Show("请先选择一名员工");
+                return;
+            }
+
+            // 获取选中员工ID (假设隐藏列 "id" 存在)
+            int empId = Convert.ToInt32(dgvSalary.SelectedRows[0].Cells["id"].Value);
+
+            // 打开 WPF 窗口
+            WpfEmpMaint win = new WpfEmpMaint(empId);
+
+            // 监听窗口内的“变动”请求 (如果在WpfEmpMaint内部处理了，这里就不需要特殊处理，只要刷新即可)
+            bool? result = win.ShowDialog();
+
+            if (result == true) {
+                PerformQuery(); // 刷新列表
+            }
+        }
+
+        // 打开变动界面逻辑
+        private void OpenChangeWindow() {
+            if (dgvSalary.SelectedRows.Count == 0) {
+                MessageBox.Show("请先选择一名员工");
+                return;
+            }
+            int empId = Convert.ToInt32(dgvSalary.SelectedRows[0].Cells["id"].Value);
+
+            WpfEmpCg win = new WpfEmpCg(empId);
+            bool? result = win.ShowDialog();
+
+            if (result == true) {
+                PerformQuery(); // 刷新列表
             }
         }
     }

@@ -220,34 +220,117 @@ namespace CompensationSystemSubInterface.Services {
 
         /// <summary>
         /// 获取基础配置数据（用于下拉框）
+        /// 根据不同表名应用不同的筛选条件和排序
         /// </summary>
-        /// <param name="tableName">表名：ZX_config_bm, ZX_config_xl 等</param>
+        /// <param name="tableName">表名：ZX_config_bm, ZX_config_xl, ZX_config_gw, ZX_config_cj</param>
         public DataTable GetDictData(string tableName) {
-            // 注意：为了防止SQL注入，通常不直接拼表名，但这里是内部调用，仅限已知表名
-            string sql = $"SELECT id, {(tableName == "ZX_config_bm" ? "bmname" : tableName == "ZX_config_xl" ? "xlname" : tableName == "ZX_config_gw" ? "gwname" : "cjname")} as name FROM {tableName} WHERE IsEnabled=1 AND DeleteType=0";
+            string sql = "";
+
+            switch (tableName) {
+                case "ZX_config_bm":
+                    // 部门：有 IsEnabled, DeleteType, 按 DisplayOrder 排序
+                    sql = @"SELECT id, bmname as name 
+                            FROM ZX_config_bm 
+                            WHERE IsEnabled=1 AND DeleteType=0 
+                            ORDER BY DisplayOrder ASC";
+                    break;
+
+                case "ZX_config_xl":
+                    // 序列：有 IsEnabled, DeleteType (未指定排序，默认处理)
+                    sql = @"SELECT id, xlname as name 
+                            FROM ZX_config_xl 
+                            WHERE IsEnabled=1 AND DeleteType=0";
+                    break;
+
+                case "ZX_config_gw":
+                    // 职务：有 IsEnabled, DeleteType, 按 DisplayOrder 排序
+                    sql = @"SELECT id, gwname as name 
+                            FROM ZX_config_gw 
+                            WHERE IsEnabled=1 AND DeleteType=0 
+                            ORDER BY DisplayOrder ASC";
+                    break;
+
+                case "ZX_config_cj":
+                    // ★层级：只有 DeleteType，没有 IsEnabled★ (这是之前报错的原因)
+                    sql = @"SELECT id, cjname as name 
+                            FROM ZX_config_cj 
+                            WHERE DeleteType=0";
+                    break;
+
+                default:
+                    // 默认兜底逻辑
+                    sql = $"SELECT id, name FROM {tableName}";
+                    break;
+            }
+
             return SqlHelper.ExecuteDataTable(sql);
         }
 
         /// <summary>
-        /// 更新员工基础信息（不包含部门职务等变动信息）
+        /// 更新员工信息（包含加密逻辑）
         /// </summary>
-        public void UpdateEmpBasicInfo(int empId, string name, string phone, string idCard, string bankCard, string address) {
-            // 加密
-            string encIdCard = _sm4.Encrypt_ECB_Str(idCard);
-            string encBankCard = _sm4.Encrypt_ECB_Str(bankCard);
+        public void UpdateEmpBasicInfo(EmployeeDetail emp) {
+            // 1. 加密敏感字段
+            // 注意：如果输入为空，则存入空字符串或处理为 DBNull，视数据库约束而定
+            string encIdCard = "";
+            if (!string.IsNullOrEmpty(emp.IdCard)) {
+                encIdCard = _sm4.Encrypt_ECB_Str(emp.IdCard.Trim());
+            }
 
+            string encBankCard = "";
+            if (!string.IsNullOrEmpty(emp.BankCard)) {
+                encBankCard = _sm4.Encrypt_ECB_Str(emp.BankCard.Trim());
+            }
+
+            // 2. 构建 SQL
+            // 这里的字段名必须与数据库列名完全一致
             string sql = @"
                 UPDATE ZX_config_yg 
-                SET xingming=@Name, lianxidh=@Phone, shenfenzheng=@IdCard, gongzikh=@BankCard, hujidz=@Addr 
-                WHERE id=@Id";
+                SET 
+                    xingming = @Name,
+                    xingbie = @Gender,
+                    minzu = @Nation,
+                    zhengzhimm = @Politic,
+                    hunyinzk = @Marital,
+                    shuxing = @Zodiac,
+                    hujidz = @HujiAddr,
+                    xianzhuzhi = @CurrentAddr,
+                    lianxidh = @Phone,
+                    
+                    xueli = @Education,
+                    xuewei = @Degree,
+                    renyuanlb = @PersonType,
+                    zhuanyejs = @Tech,
+                    zhichengdj = @TitleLevel,
+                    zhuanyejn = @Skill,
 
+                    shenfenzheng = @IdCard, -- 加密后
+                    gongzikh = @BankCard    -- 加密后
+                WHERE id = @Id";
+
+            // 3. 执行更新
             SqlHelper.ExecuteNonQuery(sql,
-                new SqlParameter("@Name", name),
-                new SqlParameter("@Phone", phone),
+                new SqlParameter("@Id", emp.Id),
+                new SqlParameter("@Name", emp.Name ?? ""),
+                new SqlParameter("@Gender", emp.Gender ?? ""),
+                new SqlParameter("@Nation", emp.Nation ?? ""),
+                new SqlParameter("@Politic", emp.Politic ?? ""),
+                new SqlParameter("@Marital", emp.Marital ?? ""),
+                new SqlParameter("@Zodiac", emp.Zodiac ?? ""),
+                new SqlParameter("@HujiAddr", emp.HujiAddr ?? ""),
+                new SqlParameter("@CurrentAddr", emp.CurrentAddr ?? ""),
+                new SqlParameter("@Phone", emp.Phone ?? ""),
+
+                new SqlParameter("@Education", emp.Education ?? ""),
+                new SqlParameter("@Degree", emp.Degree ?? ""),
+                new SqlParameter("@PersonType", emp.PersonType ?? ""),
+                new SqlParameter("@Tech", emp.TechSpecialty ?? ""),
+                new SqlParameter("@TitleLevel", emp.TitleLevel ?? ""),
+                new SqlParameter("@Skill", emp.Skill ?? ""),
+
+                // 传入加密后的密文
                 new SqlParameter("@IdCard", encIdCard),
-                new SqlParameter("@BankCard", encBankCard),
-                new SqlParameter("@Addr", address),
-                new SqlParameter("@Id", empId)
+                new SqlParameter("@BankCard", encBankCard)
             );
         }
 
@@ -331,6 +414,78 @@ namespace CompensationSystemSubInterface.Services {
                     }
                 }
             }
-        }//
+        }
+
+        public EmployeeDetail GetEmpDetailObj(int empId) {
+            DataRow row = GetEmpDetail(empId); // 调用你之前写好的 SQL 方法
+            if (row == null) return null;
+
+            // 手动映射，或者使用 AutoMapper
+            return new EmployeeDetail {
+                Id = Convert.ToInt32(row["id"]),
+                EmployeeNo = row["yuangongbh"].ToString(),
+                Name = row["xingming"].ToString(),
+
+                // 基础信息
+                Gender = row["xingbie"].ToString(),
+                Nation = row["minzu"].ToString(),
+                Politic = row["zhengzhimm"].ToString(),
+                Marital = row["hunyinzk"].ToString(),
+                Zodiac = row["shuxing"].ToString(),
+                Age = row["nianling"] != DBNull.Value ? Convert.ToInt32(row["nianling"]) : 0,
+                Birthday = row["chushengrq"] as DateTime?,
+                IdCard = row["shenfenzheng"].ToString(), // 此时已解密
+                IdStart = row["qishisfzrq"] as DateTime?,
+                IdEnd = row["jieshusfzrq"] as DateTime?,
+
+                // 组织信息 (Value)
+                DeptId = row["bmid"] as int?,
+                DeptName = row["bmname"].ToString(),
+                SeqId = row["xlid"] as int?,
+                SeqName = row["xlname"].ToString(),
+                JobId = row["gwid"] as int?,
+                JobName = row["gwname"].ToString(),
+                LevelId = row["cjid"] as int?,
+                LevelName = row["cjname"].ToString(),
+                PersonType = row["renyuanlb"].ToString(),
+
+                // 日期
+                WorkStart = row["gongzuosj"] as DateTime?,
+                JoinDate = row["rusisj"] as DateTime?,
+                PostDate = row["gangweisj"] as DateTime?,
+                ResignDate = row["lizhisj"] as DateTime?,
+
+                // 学历技能
+                Education = row["xueli"].ToString(),
+                Degree = row["xuewei"].ToString(),
+                TechSpecialty = row["zhuanyejs"].ToString(),
+                TitleLevel = row["zhichengdj"].ToString(),
+                TitleDate = row["zhichengsj"] as DateTime?,
+                Skill = row["zhuanyejn"].ToString(),
+                SkillDate = row["jinengsj"] as DateTime?,
+
+                // 联系
+                Phone = row["lianxidh"].ToString(),
+                BankCard = row["gongzikh"].ToString(), // 此时已解密
+                HujiAddr = row["hujidz"].ToString(),
+                CurrentAddr = row["xianzhuzhi"].ToString()
+            };
+        }
+
+        // 获取配置表数据的通用方法
+        public List<ComboItem> GetComboList(string tableName) {
+            DataTable dt = GetDictData(tableName);
+            List<ComboItem> list = new List<ComboItem>();
+
+            foreach (DataRow row in dt.Rows) {
+                list.Add(new ComboItem {
+                    // 确保转换安全
+                    Id = row["id"] != DBNull.Value ? Convert.ToInt32(row["id"]) : 0,
+                    Name = row["name"] != DBNull.Value ? row["name"].ToString() : ""
+                });
+            }
+            return list;
+        }
+        //
     }
 }
