@@ -62,7 +62,27 @@ namespace CompensationSystemSubInterface {
         /// 执行员工信息查询并显示结果
         /// </summary>
         private void PerformQuery() {
-            
+            try {
+                this.Cursor = Cursors.WaitCursor;
+
+                // 1. 调用 Service 获取数据
+                string keyword = txtName.Text.Trim();
+                DataTable dt = _service.GetEmpData(keyword, _condition);
+
+                // 2. 绑定数据
+                dgvSalary.DataSource = null;
+                dgvSalary.Columns.Clear();
+                dgvSalary.DataSource = dt;
+
+                // 3. 格式化界面
+                FormatGrid();
+
+            } catch (Exception ex) {
+                LogManager.Error("查询员工信息失败", ex);
+                MessageBox.Show("查询出错: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            } finally {
+                this.Cursor = Cursors.Default;
+            }
         }
 
         /// <summary>

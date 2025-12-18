@@ -67,7 +67,7 @@ namespace CompensationSystemSubInterface {
 
                 // 1. 调用 Service 获取数据
                 string keyword = txtName.Text.Trim();
-                DataTable dt = _service.GetEmpData(keyword, _condition);
+                DataTable dt = _service.GetEmpMaintData(keyword, _condition);
 
                 // 2. 绑定数据
                 dgvSalary.DataSource = null;

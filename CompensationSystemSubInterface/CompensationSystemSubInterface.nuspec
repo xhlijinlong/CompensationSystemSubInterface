@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>PRPRC.PaySys</id>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <title>PaySys</title>
     <authors>LiJinLong</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -13,5 +13,11 @@
     <releaseNotes>Last release</releaseNotes>
     <copyright>Copyright 2025 PEPRC</copyright>
     <tags>Pay System PEPRC</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="PresentationCore" />
+      <frameworkAssembly assemblyName="PresentationFramework" />
+      <frameworkAssembly assemblyName="WindowsBase" />
+      <frameworkAssembly assemblyName="System.Xaml" />
+    </frameworkAssemblies>
   </metadata>
 </package>
