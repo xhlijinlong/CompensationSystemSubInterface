@@ -12,12 +12,20 @@ namespace CompensationSystemSubInterface.Utilities {
     /// SQL Server 数据库访问辅助类
     /// </summary>
     public class SqlHelper {
-        // 暂时直接写死，等以后集成到主程序（EXE）里再换回 ConfigurationManager
-        public static readonly string ConnString =
-            "Data Source=192.168.100.16;Initial Catalog=jzcw_t;User ID=PEPTest;Password=Test1511*;";
+        // 0. 暂时直接写死，等以后集成到主程序（EXE）里再换回 ConfigurationManager
+        //public static readonly string ConnString =
+        //    "Data Source=192.168.100.16;Initial Catalog=jzcw_t;User ID=PEPTest;Password=Test1511*;";
+
         // 1. 从配置文件读取连接字符串，避免硬编码
         //public static readonly string ConnString = ConfigurationManager.ConnectionStrings["DefaultConnection"]?.ConnectionString
         //                                           ?? throw new Exception("未在配置文件中找到名为 DefaultConnection 的连接字符串");
+
+        // 2. 提供一个公开的静态属性或方法，供主程序赋值
+        private static string _connString = "Data Source=192.168.100.16;Initial Catalog=jzcw_t;User ID=PEPTest;Password=Test1511*;"; // 默认测试地址
+        public static string ConnString {
+            get { return _connString; }
+            set { _connString = value; }
+        }
 
         public static DataTable ExecuteDataTable(string sql, params SqlParameter[] parameters) {
             using (SqlConnection conn = new SqlConnection(ConnString)) {
