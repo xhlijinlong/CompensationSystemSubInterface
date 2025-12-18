@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>PRPRC.PaySys</id>
+    <version>1.0.0</version>
+    <title>PaySys</title>
+    <authors>LiJinLong</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <!-- <icon>icon.png</icon> -->
+    <!-- <projectUrl>http://project_url_here_or_delete_this_line/</projectUrl> -->
+    <description>Pay System UserControl</description>
+    <releaseNotes>Last release</releaseNotes>
+    <copyright>Copyright 2025 PEPRC</copyright>
+    <tags>Pay System PEPRC</tags>
+  </metadata>
+</package>

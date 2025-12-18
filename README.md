@@ -4,7 +4,39 @@
 薪酬系统 界面组件开发
 
 版本对齐
+~~~txt
 .NET Framework 4.6.2 + NPOI 2.5.6 + SharpZipLib 1.3.3
+~~~
+
+NuGet 打包配置
+
+~~~xml
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>PRPRC.PaySys</id>
+    <version>1.0.0</version>
+    <title>PaySys</title>
+    <authors>LiJinLong</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <!-- <icon>icon.png</icon> -->
+    <!-- <projectUrl>http://project_url_here_or_delete_this_line/</projectUrl> -->
+    <description>Pay System UserControl</description>
+    <releaseNotes>Last release</releaseNotes>
+    <copyright>Copyright 2025 PEPRC</copyright>
+    <tags>Pay System PEPRC</tags>
+  </metadata>
+</package>
+~~~
+
+NuGet 打包命令
+
+~~~shell
+nuget pack CompensationSystemSubInterface.csproj -Prop Configuration=Release
+~~~
+
+
 
 #### 软件架构
 软件架构说明
