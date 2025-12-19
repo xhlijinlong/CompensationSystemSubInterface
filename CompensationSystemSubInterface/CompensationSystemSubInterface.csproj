@@ -293,6 +293,16 @@
   <ItemGroup>
     <Content Include="Libs\BouncyCastle.Crypto.dll" />
     <Content Include="Libs\Sm4Encode.dll" />
+    <Content Include="Sql\ZX_yuangong_change.sql" />
+    <Content Include="Sql\ZX_Assessment.sql" />
+    <Content Include="Sql\ZX_SalaryDetails.sql" />
+    <Content Include="Sql\ZX_SalaryHeaders.sql" />
+    <Content Include="Sql\ZX_SalaryItems.sql" />
+    <Content Include="Sql\ZX_config_cj.sql" />
+    <Content Include="Sql\ZX_config_gw.sql" />
+    <Content Include="Sql\ZX_config_xl.sql" />
+    <Content Include="Sql\ZX_config_bm.sql" />
+    <Content Include="Sql\ZX_config_yg.sql" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="WpfEmpCg.xaml">

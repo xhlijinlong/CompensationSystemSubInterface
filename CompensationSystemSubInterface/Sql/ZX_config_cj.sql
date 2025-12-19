@@ -1,0 +1,13 @@
+﻿CREATE TABLE [dbo].[ZX_config_cj] (
+  [id] int  IDENTITY(1,1) NOT NULL,
+  [cjname] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
+  [cjgw] varchar(500) COLLATE Chinese_PRC_CI_AS  NULL,
+  [DeleteType] bit DEFAULT 0 NULL,
+  CONSTRAINT [PK_ZX_config_cj] PRIMARY KEY CLUSTERED ([id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+)  
+ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[ZX_config_cj] SET (LOCK_ESCALATION = TABLE)

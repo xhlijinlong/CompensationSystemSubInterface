@@ -1,0 +1,15 @@
+﻿CREATE TABLE [dbo].[ZX_config_xl] (
+  [id] int  IDENTITY(1,1) NOT NULL,
+  [xlname] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
+  [gongzilb] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
+  [beizhu] varchar(50) COLLATE Chinese_PRC_CI_AS DEFAULT 0 NULL,
+  [IsEnabled] bit DEFAULT 1 NULL,
+  [DeleteType] bit DEFAULT 0 NULL,
+  CONSTRAINT [PK_ZX_config] PRIMARY KEY CLUSTERED ([id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+)  
+ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[ZX_config_xl] SET (LOCK_ESCALATION = TABLE)
