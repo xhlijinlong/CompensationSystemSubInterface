@@ -408,24 +408,24 @@ namespace CompensationSystemSubInterface.Services {
             zhengzhimm = @Politic,
             hunyinzk = @Marital,
             shuxing = @Zodiac,
-            nianling = @Age,          -- 新增：年龄
-            chushengrq = @Birthday,   -- 新增：出生日期
+            nianling = @Age,
+            chushengrq = @Birthday,
             
             hujidz = @HujiAddr,
             xianzhuzhi = @CurrentAddr,
             lianxidh = @Phone,
             
-            qishisfzrq = @IdStart,    -- 新增：身份证起
-            jieshusfzrq = @IdEnd,     -- 新增：身份证止
+            qishisfzrq = @IdStart,
+            jieshusfzrq = @IdEnd,
 
             xueli = @Education,
             xuewei = @Degree,
             renyuanlb = @PersonType,
             
-            gongzuosj = @WorkStart,   -- 新增：参加工作时间
-            rusisj = @JoinDate,       -- 新增：入社时间
-            gangweisj = @PostDate,    -- 新增：任现岗时间
-            -- lizhisj 通常由离职流程控制，基础修改建议不开放，或者您也可以加上
+            gongzuosj = @WorkStart,
+            rusisj = @JoinDate,
+            gangweisj = @PostDate,
+            lizhisj = @ResignDate,
 
             zhuanyejs = @Tech,
             zhichengdj = @TitleLevel,
@@ -463,6 +463,7 @@ namespace CompensationSystemSubInterface.Services {
                 new SqlParameter("@WorkStart", emp.WorkStart ?? (object)DBNull.Value),
                 new SqlParameter("@JoinDate", emp.JoinDate ?? (object)DBNull.Value),
                 new SqlParameter("@PostDate", emp.PostDate ?? (object)DBNull.Value),
+                new SqlParameter("@ResignDate", emp.ResignDate ?? (object)DBNull.Value),
 
                 new SqlParameter("@Tech", emp.TechSpecialty ?? ""),
                 new SqlParameter("@TitleLevel", emp.TitleLevel ?? ""),
