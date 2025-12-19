@@ -141,7 +141,7 @@ namespace CompensationSystemSubInterface {
             string changeType = (cbChangeType.SelectedItem as ComboBoxItem).Content.ToString();
             DateTime changeTime = dpChangeTime.SelectedDate ?? DateTime.Now;
 
-            // 校验
+            // 校验逻辑 (保持不变)
             if (changeType == "离职") {
                 if (dpWageEnd.SelectedDate == null) {
                     MessageBox.Show("办理离职时，【薪止时间】不能为空！");
@@ -152,7 +152,6 @@ namespace CompensationSystemSubInterface {
                     MessageBox.Show("办理岗位变动时，【起薪时间】不能为空！");
                     return;
                 }
-                // 非离职必须校验
                 if (cbNewDept.SelectedValue == null) {
                     MessageBox.Show("请选择新部门！");
                     return;
@@ -160,32 +159,38 @@ namespace CompensationSystemSubInterface {
             }
 
             try {
-                // 获取选中的ID，如果没选或者为空（as int? ?? 0），则使用 0
-                // ★注意：如果用户没改，因为我们在 LoadOriginalData 里设置了默认值，
-                // 所以这里 SelectedValue 就是原 ID，不需要再写额外的逻辑去判断 "IsChanged"
+                // 1. 获取新 ID
                 int newBmId = (cbNewDept.SelectedValue as int?) ?? 0;
                 int newXlId = (cbNewSeq.SelectedValue as int?) ?? 0;
                 int newZwId = (cbNewJob.SelectedValue as int?) ?? 0;
                 int newCjId = (cbNewLevel.SelectedValue as int?) ?? 0;
 
-                // 如果是离职，虽然 UI 禁用了，但 SelectedValue 还在。
-                // 数据库层面离职人员的 bmid/gwid 是否要更新？通常离职记录表存原部门，员工表状态改为离职。
-                // 这里保持传入选中的值（即原值）。
+                // 2. 获取新名称
+                string newBmName = (cbNewDept.SelectedItem as ComboItem)?.Name ?? "";
+                string newXlName = (cbNewSeq.SelectedItem as ComboItem)?.Name ?? "";
+                string newZwName = (cbNewJob.SelectedItem as ComboItem)?.Name ?? "";
+                string newCjName = (cbNewLevel.SelectedItem as ComboItem)?.Name ?? "";
 
+                // 3. 调用 Service (传入 原ID 和 原名称)
                 _service.ExecuteEmployeeChange(
                     _empId,
                     changeType,
                     changeTime,
-                    newBmId,
-                    newXlId,
-                    newZwId,
-                    newCjId,
+
+                    // --- 传入原 ID (来自 _oldData) ---
+                    _oldData.DeptId, _oldData.DeptName,
+                    _oldData.SeqId, _oldData.SeqName,
+                    _oldData.JobId, _oldData.JobName,
+                    _oldData.LevelId, _oldData.LevelName,
+                    // -----------------------------
+
+                    newBmId, newBmName,
+                    newXlId, newXlName,
+                    newZwId, newZwName,
+                    newCjId, newCjName,
+
                     dpWageStart.SelectedDate,
-                    dpWageEnd.SelectedDate,
-                    _oldData.DeptName,
-                    _oldData.SeqName,
-                    _oldData.JobName,
-                    _oldData.LevelName
+                    dpWageEnd.SelectedDate
                 );
 
                 MessageBox.Show("变动办理成功！");

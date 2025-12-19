@@ -163,7 +163,8 @@ namespace CompensationSystemSubInterface {
 
         private void btnChange_Click(object sender, RoutedEventArgs e) {
             // 隐藏当前修改窗口
-            this.Hide();
+            //this.Hide();
+
             // 打开变动窗口
             WpfEmpCg cgWindow = new WpfEmpCg(_empId);
             bool? result = cgWindow.ShowDialog();
@@ -174,7 +175,7 @@ namespace CompensationSystemSubInterface {
                 this.Close();
             } else {
                 // 变动取消，重新显示修改窗口
-                this.Show();
+                //this.Show();
                 // 建议重新加载一下数据，以防万一
                 LoadData();
             }
