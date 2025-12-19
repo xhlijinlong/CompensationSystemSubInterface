@@ -22,18 +22,18 @@
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="员工号: " FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtEmpNo" Text="10000968" BorderThickness="0" Background="Transparent" 
+                    <TextBox x:Name="txtEmpNo" Text="10002940" BorderThickness="0" Background="Transparent" 
                              FontWeight="Bold" Foreground="DarkBlue" FontSize="14" IsReadOnly="True" VerticalAlignment="Center" Margin="5,0,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="姓名: " FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtNameHeader" Text="韩爱华" Width="150" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtNameHeader" Text="理金龙" Width="150" Margin="5,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="部门: " FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtDeptHeader" Text="综合管理部" IsReadOnly="True" BorderThickness="0" Background="Transparent" 
+                    <TextBox x:Name="txtDeptHeader" Text="技术部" IsReadOnly="True" BorderThickness="0" Background="Transparent" 
                              Width="180" Margin="5,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
                 </StackPanel>
             </Grid>
@@ -96,7 +96,7 @@
                         <TextBox Grid.Row="1" Grid.Column="3" x:Name="txtZodiac"/>
 
                         <TextBlock Text="年龄:" Grid.Row="1" Grid.Column="4"/>
-                        <TextBox Grid.Row="1" Grid.Column="5" x:Name="txtAge" IsReadOnly="True" Background="#F0F0F0"/>
+                        <TextBox Grid.Row="1" Grid.Column="5" x:Name="txtAge"/>
 
                         <TextBlock Text="出生日期:" Grid.Row="2" Grid.Column="0"/>
                         <DatePicker Grid.Row="2" Grid.Column="1" x:Name="dpBirthday"/>
@@ -112,7 +112,7 @@
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Header="2. 组织与职务信息 (需通过'变动'修改)" Margin="0,0,0,10" Padding="10" Background="#FAFAFA" BorderBrush="#CCC" IsEnabled="False">
+                <GroupBox Header="2. 组织与职务信息 (职务变动请点击下方'变动'按钮)" Margin="0,0,0,10" Padding="10" Background="#FAFAFA" BorderBrush="#CCC">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="90"/>
@@ -129,13 +129,13 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="序列:" Grid.Row="0" Grid.Column="0"/>
-                        <ComboBox Grid.Row="0" Grid.Column="1" x:Name="cbSequence"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" x:Name="cbSequence" IsEnabled="False"/>
 
                         <TextBlock Text="职务:" Grid.Row="0" Grid.Column="2"/>
-                        <ComboBox Grid.Row="0" Grid.Column="3" x:Name="cbJob"/>
+                        <ComboBox Grid.Row="0" Grid.Column="3" x:Name="cbJob" IsEnabled="False"/>
 
                         <TextBlock Text="层级:" Grid.Row="0" Grid.Column="4"/>
-                        <ComboBox Grid.Row="0" Grid.Column="5" x:Name="cbLevel"/>
+                        <ComboBox Grid.Row="0" Grid.Column="5" x:Name="cbLevel" IsEnabled="False"/>
 
                         <TextBlock Text="人员类别:" Grid.Row="1" Grid.Column="0"/>
                         <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtPersonType"/>

@@ -118,16 +118,23 @@ namespace CompensationSystemSubInterface {
                 // 1. 收集界面数据到实体对象
                 EmployeeDetail empToSave = new EmployeeDetail {
                     Id = _empId,
-                    Name = txtNameHeader.Text, // 姓名
+                    Name = txtNameHeader.Text,
 
                     // 基础身份
-                    Gender = cbGender.Text,    // 下拉框文本
+                    Gender = cbGender.Text,
                     Nation = txtNation.Text,
                     Politic = txtPolitic.Text,
                     Marital = txtMarital.Text,
                     Zodiac = txtZodiac.Text,
+                    // 尝试解析年龄，防止空值报错
+                    Age = int.TryParse(txtAge.Text, out int age) ? age : 0,
+                    Birthday = dpBirthday.SelectedDate, // ★ 新增收集
 
-                    // 敏感信息 (传明文给Service，Service内部加密)
+                    // 证件有效期
+                    IdStart = dpIdStart.SelectedDate,   // ★ 新增收集
+                    IdEnd = dpIdEnd.SelectedDate,       // ★ 新增收集
+
+                    // 敏感信息
                     IdCard = txtIdCard.Text,
                     BankCard = txtBankCard.Text,
 
@@ -136,13 +143,21 @@ namespace CompensationSystemSubInterface {
                     HujiAddr = txtHujiAddr.Text,
                     CurrentAddr = txtCurrentAddr.Text,
 
-                    // 其他信息
+                    // 人员与工作时间
                     PersonType = txtPersonType.Text,
+                    WorkStart = dpWorkStart.SelectedDate, // ★ 新增收集
+                    JoinDate = dpJoinDate.SelectedDate,   // ★ 新增收集
+                    PostDate = dpPostDate.SelectedDate,   // ★ 新增收集
+                                                          // ResignDate 通常不在此修改
+
+                    // 学历技能
                     Education = txtEducation.Text,
                     Degree = txtDegree.Text,
                     TechSpecialty = txtTech.Text,
                     TitleLevel = txtTitleLevel.Text,
-                    Skill = txtSkill.Text
+                    TitleDate = dpTitleDate.SelectedDate, // ★ 新增收集
+                    Skill = txtSkill.Text,
+                    SkillDate = dpSkillDate.SelectedDate  // ★ 新增收集
                 };
 
                 // 2. 调用 Service 保存

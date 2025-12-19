@@ -385,48 +385,59 @@ namespace CompensationSystemSubInterface.Services {
         /// <summary>
         /// 更新员工信息（包含加密逻辑）
         /// </summary>
+        // EmpService.cs
+
         public void UpdateEmpBasicInfo(EmployeeDetail emp) {
-            // 1. 加密敏感字段
-            // 注意：如果输入为空，则存入空字符串或处理为 DBNull，视数据库约束而定
+            // 1. 加密敏感字段 (保持不变)
             string encIdCard = "";
             if (!string.IsNullOrEmpty(emp.IdCard)) {
                 encIdCard = _sm4.Encrypt_ECB_Str(emp.IdCard.Trim());
             }
-
             string encBankCard = "";
             if (!string.IsNullOrEmpty(emp.BankCard)) {
                 encBankCard = _sm4.Encrypt_ECB_Str(emp.BankCard.Trim());
             }
 
-            // 2. 构建 SQL
-            // 这里的字段名必须与数据库列名完全一致
+            // 2. 构建完整的 UPDATE SQL
             string sql = @"
-                UPDATE ZX_config_yg 
-                SET 
-                    xingming = @Name,
-                    xingbie = @Gender,
-                    minzu = @Nation,
-                    zhengzhimm = @Politic,
-                    hunyinzk = @Marital,
-                    shuxing = @Zodiac,
-                    hujidz = @HujiAddr,
-                    xianzhuzhi = @CurrentAddr,
-                    lianxidh = @Phone,
-                    
-                    xueli = @Education,
-                    xuewei = @Degree,
-                    renyuanlb = @PersonType,
-                    zhuanyejs = @Tech,
-                    zhichengdj = @TitleLevel,
-                    zhuanyejn = @Skill,
-                    zhichengsj = @TitleDate, -- 补上这个
-                    jinengsj = @SkillDate,    -- 补上这个
+        UPDATE ZX_config_yg 
+        SET 
+            xingming = @Name,
+            xingbie = @Gender,
+            minzu = @Nation,
+            zhengzhimm = @Politic,
+            hunyinzk = @Marital,
+            shuxing = @Zodiac,
+            nianling = @Age,          -- 新增：年龄
+            chushengrq = @Birthday,   -- 新增：出生日期
+            
+            hujidz = @HujiAddr,
+            xianzhuzhi = @CurrentAddr,
+            lianxidh = @Phone,
+            
+            qishisfzrq = @IdStart,    -- 新增：身份证起
+            jieshusfzrq = @IdEnd,     -- 新增：身份证止
 
-                    shenfenzheng = @IdCard, -- 加密后
-                    gongzikh = @BankCard    -- 加密后
-                WHERE id = @Id";
+            xueli = @Education,
+            xuewei = @Degree,
+            renyuanlb = @PersonType,
+            
+            gongzuosj = @WorkStart,   -- 新增：参加工作时间
+            rusisj = @JoinDate,       -- 新增：入社时间
+            gangweisj = @PostDate,    -- 新增：任现岗时间
+            -- lizhisj 通常由离职流程控制，基础修改建议不开放，或者您也可以加上
 
-            // 3. 执行更新
+            zhuanyejs = @Tech,
+            zhichengdj = @TitleLevel,
+            zhichengsj = @TitleDate,
+            zhuanyejn = @Skill,
+            jinengsj = @SkillDate,
+
+            shenfenzheng = @IdCard,
+            gongzikh = @BankCard
+        WHERE id = @Id";
+
+            // 3. 执行更新 (补全参数)
             SqlHelper.ExecuteNonQuery(sql,
                 new SqlParameter("@Id", emp.Id),
                 new SqlParameter("@Name", emp.Name ?? ""),
@@ -435,20 +446,30 @@ namespace CompensationSystemSubInterface.Services {
                 new SqlParameter("@Politic", emp.Politic ?? ""),
                 new SqlParameter("@Marital", emp.Marital ?? ""),
                 new SqlParameter("@Zodiac", emp.Zodiac ?? ""),
+                new SqlParameter("@Age", emp.Age), // int类型
+                new SqlParameter("@Birthday", emp.Birthday ?? (object)DBNull.Value), // DateTime?
+
                 new SqlParameter("@HujiAddr", emp.HujiAddr ?? ""),
                 new SqlParameter("@CurrentAddr", emp.CurrentAddr ?? ""),
                 new SqlParameter("@Phone", emp.Phone ?? ""),
 
+                new SqlParameter("@IdStart", emp.IdStart ?? (object)DBNull.Value),
+                new SqlParameter("@IdEnd", emp.IdEnd ?? (object)DBNull.Value),
+
                 new SqlParameter("@Education", emp.Education ?? ""),
                 new SqlParameter("@Degree", emp.Degree ?? ""),
                 new SqlParameter("@PersonType", emp.PersonType ?? ""),
+
+                new SqlParameter("@WorkStart", emp.WorkStart ?? (object)DBNull.Value),
+                new SqlParameter("@JoinDate", emp.JoinDate ?? (object)DBNull.Value),
+                new SqlParameter("@PostDate", emp.PostDate ?? (object)DBNull.Value),
+
                 new SqlParameter("@Tech", emp.TechSpecialty ?? ""),
                 new SqlParameter("@TitleLevel", emp.TitleLevel ?? ""),
+                new SqlParameter("@TitleDate", emp.TitleDate ?? (object)DBNull.Value), // 数据库已改datetime，直接传
                 new SqlParameter("@Skill", emp.Skill ?? ""),
-                new SqlParameter("@TitleDate", emp.TitleDate?.ToString("yyyy-MM-dd") ?? ""), // 注意类型转换(见下文)
-                new SqlParameter("@SkillDate", emp.SkillDate?.ToString("yyyy-MM-dd") ?? ""),
+                new SqlParameter("@SkillDate", emp.SkillDate ?? (object)DBNull.Value),
 
-                // 传入加密后的密文
                 new SqlParameter("@IdCard", encIdCard),
                 new SqlParameter("@BankCard", encBankCard)
             );
