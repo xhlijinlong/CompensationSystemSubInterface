@@ -17,25 +17,55 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace CompensationSystemSubInterface {
+    /// <summary>
+    /// 员工信息维护窗口
+    /// 用于查看和修改员工的基本信息（不包括组织信息的变动）
+    /// </summary>
     public partial class WpfEmpMaint : Window {
+        /// <summary>
+        /// 当前操作的员工ID
+        /// </summary>
         private int _empId;
+        
+        /// <summary>
+        /// 员工服务类实例，用于数据库操作
+        /// </summary>
         private EmpService _service = new EmpService();
+        
+        /// <summary>
+        /// 当前员工的详细信息对象（用于数据绑定和回显）
+        /// </summary>
         private EmployeeDetail _currentEmp;
 
-        // 定义一个事件，当点击变动时通知外部，或者直接在内部处理
+        /// <summary>
+        /// 事件：请求打开员工变动窗口
+        /// 当点击"变动"按钮时触发，通知外部调用者
+        /// </summary>
         public event Action<int> OpenChangeWindowRequested;
 
+        /// <summary>
+        /// 构造函数：初始化员工维护窗口
+        /// </summary>
+        /// <param name="empId">要维护的员工ID</param>
         public WpfEmpMaint(int empId) {
             InitializeComponent();
             _empId = empId;
             this.Loaded += WpfEmpMaint_Loaded;
         }
 
+        /// <summary>
+        /// 窗口加载完成事件处理
+        /// 初始化下拉框数据源并加载员工详细信息
+        /// </summary>
         private void WpfEmpMaint_Loaded(object sender, RoutedEventArgs e) {
             LoadDropdowns();
             LoadData();
         }
 
+        /// <summary>
+        /// 加载下拉框数据源
+        /// 包括性别下拉框和组织信息下拉框（序列、职务、层级）
+        /// </summary>
         private void LoadDropdowns() {
             // 1. 只有性别是下拉框，需要绑定数据源
             cbGender.ItemsSource = new string[] { "男", "女" };
@@ -54,6 +84,10 @@ namespace CompensationSystemSubInterface {
             } catch { /* 忽略下拉框加载错误，仅显示Text */ }
         }
 
+        /// <summary>
+        /// 加载员工详细数据并回显到界面控件
+        /// 包括基础身份、组织职务、学历技能和联系信息等所有字段
+        /// </summary>
         private void LoadData() {
             try {
                 _currentEmp = _service.GetEmpDetailObj(_empId);
@@ -113,6 +147,10 @@ namespace CompensationSystemSubInterface {
             }
         }
 
+        /// <summary>
+        /// 保存按钮点击事件
+        /// 收集界面数据并保存到数据库
+        /// </summary>
         private void btnSave_Click(object sender, RoutedEventArgs e) {
             try {
                 // 1. 收集界面数据到实体对象
@@ -172,10 +210,19 @@ namespace CompensationSystemSubInterface {
             }
         }
 
+        /// <summary>
+        /// 取消按钮点击事件
+        /// 关闭窗口，不保存任何修改
+        /// </summary>
         private void btnCancel_Click(object sender, RoutedEventArgs e) {
             this.Close();
         }
 
+        /// <summary>
+        /// 变动按钮点击事件
+        /// 打开员工变动窗口，用于处理部门、职务等组织信息的变动
+        /// 变动成功后会通知主界面刷新并关闭当前窗口
+        /// </summary>
         private void btnChange_Click(object sender, RoutedEventArgs e) {
             // 隐藏当前修改窗口
             //this.Hide();
@@ -196,6 +243,10 @@ namespace CompensationSystemSubInterface {
             }
         }
 
+        /// <summary>
+        /// 重置按钮点击事件
+        /// 重新加载数据，放弃用户已修改但未保存的内容
+        /// </summary>
         private void btnReset_Click(object sender, RoutedEventArgs e) {
             // 直接重新加载数据，覆盖用户已修改但未保存的内容
             LoadData();

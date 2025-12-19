@@ -15,26 +15,28 @@ using System.Windows.Forms;
 
 namespace CompensationSystemSubInterface {
     /// <summary>
-    /// 员工信息查询用户控件，提供员工信息查询、筛选和导出功能
+    /// 员工信息维护用户控件
+    /// 提供员工信息查询、筛选、导出、维护和变动功能
     /// </summary>
     public partial class UserControl_EmpMaint : UserControl {
         /// <summary>
-        /// 员工服务实例
+        /// 员工服务实例，用于数据库操作
         /// </summary>
         private EmpService _service = new EmpService();
 
         /// <summary>
-        /// 当前的查询筛选条件
+        /// 当前的查询筛选条件（部门、员工）
         /// </summary>
         private EmpMaintCondition _condition = new EmpMaintCondition();
 
         /// <summary>
-        /// 员工筛选条件窗体实例
+        /// 员工筛选条件窗体实例（单例模式，避免重复创建）
         /// </summary>
         private FrmEmpMaintCondition _frmCondition = null;
 
         /// <summary>
-        /// 初始化员工信息查询用户控件
+        /// 构造函数：初始化员工信息维护用户控件
+        /// 设置 DataGridView 的交替行颜色样式
         /// </summary>
         public UserControl_EmpMaint() {
             InitializeComponent();
@@ -53,13 +55,15 @@ namespace CompensationSystemSubInterface {
 
         /// <summary>
         /// 查询按钮点击事件处理
+        /// 执行员工信息查询操作
         /// </summary>
         private void btnQuery_Click(object sender, EventArgs e) {
             PerformQuery();
         }
 
         /// <summary>
-        /// 执行员工信息查询并显示结果
+        /// 执行员工信息查询并显示结果到 DataGridView
+        /// 包含异常处理和等待光标显示
         /// </summary>
         private void PerformQuery() {
             try {
@@ -86,7 +90,8 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 格式化 DataGridView 的显示效果，包括表头样式、列属性和冻结列
+        /// 格式化 DataGridView 的显示效果
+        /// 包括表头样式、隐藏ID列、日期格式化和冻结列设置
         /// </summary>
         private void FormatGrid() {
             // 统一表头样式
@@ -133,7 +138,8 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 条件设置按钮点击事件处理，打开或激活员工筛选条件窗体
+        /// 条件设置按钮点击事件处理
+        /// 打开或激活员工筛选条件窗体（单例模式）
         /// </summary>
         private void btnCondition_Click(object sender, EventArgs e) {
             if (_frmCondition == null || _frmCondition.IsDisposed) {
@@ -151,7 +157,8 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 导出按钮点击事件处理，将查询结果导出为 Excel 文件
+        /// 导出按钮点击事件处理
+        /// 将查询结果导出为 Excel 文件并提示是否打开
         /// </summary>
         private void btnExport_Click(object sender, EventArgs e) {
             if (dgvSalary.Rows.Count == 0) {
@@ -178,6 +185,10 @@ namespace CompensationSystemSubInterface {
             }
         }
 
+        /// <summary>
+        /// 用户控件加载事件处理
+        /// 执行默认查询并绑定双击事件和右键菜单
+        /// </summary>
         private void UserControl_EmpMaint_Load(object sender, EventArgs e) {
             if (this.DesignMode) return;
             PerformQuery();
@@ -196,23 +207,36 @@ namespace CompensationSystemSubInterface {
             dgvSalary.ContextMenuStrip = cms;
         }
 
+        /// <summary>
+        /// DataGridView 单元格双击事件处理
+        /// 双击员工行时打开维护窗口
+        /// </summary>
         private void DgvSalary_CellDoubleClick(object sender, DataGridViewCellEventArgs e) {
             if (e.RowIndex >= 0) {
                 OpenMaintWindow();
             }
         }
 
-        // 修改按钮
+        /// <summary>
+        /// 维护按钮点击事件处理
+        /// 打开员工信息维护窗口
+        /// </summary>
         private void btnMaint_Click(object sender, EventArgs e) {
             OpenMaintWindow();
         }
 
-        // 变动按钮
+        /// <summary>
+        /// 变动按钮点击事件处理
+        /// 打开员工变动窗口
+        /// </summary>
         private void btnCg_Click(object sender, EventArgs e) {
             OpenChangeWindow();
         }
 
-        // 打开修改界面逻辑
+        /// <summary>
+        /// 打开员工信息维护窗口（WPF）
+        /// 选择当前选中的员工进行信息维护，维护成功后刷新列表
+        /// </summary>
         private void OpenMaintWindow() {
             if (dgvSalary.SelectedRows.Count == 0) {
                 MessageBox.Show("请先选择一名员工");
@@ -225,7 +249,7 @@ namespace CompensationSystemSubInterface {
             // 打开 WPF 窗口
             WpfEmpMaint win = new WpfEmpMaint(empId);
 
-            // 监听窗口内的“变动”请求 (如果在WpfEmpMaint内部处理了，这里就不需要特殊处理，只要刷新即可)
+            // 监听窗口内的"变动"请求 (如果在WpfEmpMaint内部处理了，这里就不需要特殊处理，只要刷新即可)
             bool? result = win.ShowDialog();
 
             if (result == true) {
@@ -233,7 +257,10 @@ namespace CompensationSystemSubInterface {
             }
         }
 
-        // 打开变动界面逻辑
+        /// <summary>
+        /// 打开员工变动窗口（WPF）
+        /// 选择当前选中的员工进行组织变动或离职操作，操作成功后刷新列表
+        /// </summary>
         private void OpenChangeWindow() {
             if (dgvSalary.SelectedRows.Count == 0) {
                 MessageBox.Show("请先选择一名员工");

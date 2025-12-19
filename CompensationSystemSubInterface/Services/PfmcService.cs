@@ -14,7 +14,11 @@ namespace CompensationSystemSubInterface.Services {
     /// 绩效信息查询服务类
     /// </summary>
     public class PfmcService {
-        // 1. 获取近5年年份列表 (用于初始化筛选条件)
+        /// <summary>
+        /// 获取近N年的年份列表 (用于初始化年份筛选条件下拉框)
+        /// </summary>
+        /// <param name="count">需要获取的年份数量，默认5年</param>
+        /// <returns>年份列表，从当前年份开始倒序排列</returns>
         public List<int> GetRecentYears(int count = 5) {
             List<int> years = new List<int>();
             int currentYear = DateTime.Now.Year;
@@ -24,13 +28,21 @@ namespace CompensationSystemSubInterface.Services {
             return years;
         }
 
-        // 2. 获取所有考核结果类型 (用于初始化筛选条件)
-        // 硬编码或查库均可，这里按你需求硬编码
+        /// <summary>
+        /// 获取所有考核结果类型 (用于初始化考核结果筛选条件下拉框)
+        /// </summary>
+        /// <returns>考核结果类型列表：优秀、合格、基本合格、不合格</returns>
         public List<string> GetAssessmentResults() {
             return new List<string> { "优秀", "合格", "基本合格", "不合格" };
         }
 
-        // 3. 获取原始数据 (纵向)
+        /// <summary>
+        /// 获取原始绩效考核数据 (纵向数据结构)
+        /// 每个员工每年的考核记录为一行
+        /// </summary>
+        /// <param name="keyword">关键字搜索（姓名或员工编号）</param>
+        /// <param name="cond">高级筛选条件（员工、年份、考核结果）</param>
+        /// <returns>包含员工绩效考核记录的数据表</returns>
         public DataTable GetRawPfmcData(string keyword, PfmcQueryCondition cond) {
             StringBuilder sb = new StringBuilder();
             sb.Append(@"
@@ -73,7 +85,12 @@ namespace CompensationSystemSubInterface.Services {
             return SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
         }
 
-        // 4. 【核心】构建透视表 (横向展示)
+        /// <summary>
+        /// 【核心方法】构建透视表报表 (将纵向数据转换为横向展示)
+        /// 将每个员工多年的考核结果横向排列，每年为一列
+        /// </summary>
+        /// <param name="rawData">原始纵向数据表（GetRawPfmcData返回的结果）</param>
+        /// <returns>透视后的横向数据表，列结构为：员工号、姓名、2025年、2024年、2023年...</returns>
         public DataTable BuildPivotReport(DataTable rawData) {
             DataTable dt = new DataTable();
 

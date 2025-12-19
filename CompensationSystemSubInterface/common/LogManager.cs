@@ -9,16 +9,16 @@ namespace CompensationSystemSubInterface.Common {
         internal const string Prefix = "[Debug Info] >>> ";
 
         // 日志文件路径 存储在用户的应用数据目录
-        // ...\AppData\Roaming\PdfTextDiff\Logs\PdfTextDiff_20251114.log
+        // ...\AppData\Roaming\PaySys\Logs\ps_20251114.log
         private static readonly string LogDirectory = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "PdfTextDiff",
+            "PaySys",
             "Logs"
         );
 
         private static readonly string LogFilePath = Path.Combine(
             LogDirectory,
-            $"PdfTextDiff_{DateTime.Now:yyyyMMdd}.log"
+            $"ps_{DateTime.Now:yyyyMMdd}.log"
         );
 
         // 文件日志锁对象

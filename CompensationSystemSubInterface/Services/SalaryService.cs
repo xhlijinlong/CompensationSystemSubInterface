@@ -14,7 +14,7 @@ namespace CompensationSystemSubInterface.Services {
     /// </summary>
     public class SalaryService {
         /// <summary>
-        /// 获取最近的一个薪资月份（用于界面默认值）
+        /// 获取最近的一个薪资月份 (用于界面默认值)
         /// </summary>
         /// <returns>最近的薪资月份；如果没有数据则返回 null</returns>
         public DateTime? GetLatestSalaryMonth() {
@@ -25,7 +25,7 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
-        /// 获取所有启用的薪资项目
+        /// 获取所有启用的薪资项目 (用于初始化薪资项目列表)
         /// </summary>
         /// <returns>包含 ItemId、ItemName 和 IsEveryMonth 字段的数据表</returns>
         public DataTable GetSalaryItems() {
@@ -34,12 +34,13 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
-        /// 查询原始薪资数据（纵向格式）
+        /// 查询原始薪资数据 (纵向数据结构)
+        /// 每个员工每月每个薪资项目为一行记录
         /// </summary>
-        /// <param name="startDate">开始日期</param>
-        /// <param name="endDate">结束日期</param>
+        /// <param name="startDate">薪资月份开始日期</param>
+        /// <param name="endDate">薪资月份结束日期</param>
         /// <param name="keyword">关键字搜索（员工姓名或员工编号）</param>
-        /// <param name="cond">高级筛选条件，包含部门、序列、职务、层级和员工ID列表</param>
+        /// <param name="cond">高级筛选条件，包含部门、序列、职务、层级、员工ID和薪资项目ID列表</param>
         /// <returns>包含薪资明细的原始数据表，包括员工信息、薪资项目和金额等字段</returns>
         public DataTable GetRawSalaryData(DateTime startDate, DateTime endDate, string keyword, SalaryQueryCondition cond) {
             StringBuilder sb = new StringBuilder();
@@ -84,22 +85,24 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
-        /// 构建透视表格式的薪资报表（横向格式）
+        /// 【核心方法】构建透视表格式的薪资报表 (横向数据结构，包含月份明细)
+        /// 将纵向数据转换为横向展示，每个薪资项目作为一列
+        /// 自动计算个人小计、部门总计和全厂总计
         /// </summary>
-        /// <param name="rawData">原始薪资数据（纵向格式）</param>
-        /// <param name="allItems">所有薪资项目信息</param>
+        /// <param name="rawData">原始薪资数据（GetRawSalaryData返回的纵向格式数据）</param>
+        /// <param name="allItems">所有薪资项目信息（GetSalaryItems返回的数据）</param>
+        /// <param name="cond">查询条件，包含用户选择的薪资项目ID列表</param>
         /// <returns>
         /// 透视后的报表数据表，包含以下特点：
         /// <list type="bullet">
-        /// <item><description>每个薪资项目作为一列显示</description></item>
+        /// <item><description>固定列：月份、部门、姓名</description></item>
+        /// <item><description>动态列：每个薪资项目作为一列显示</description></item>
+        /// <item><description>合计列：当有部分薪资项目被筛选时显示（非全选）</description></item>
         /// <item><description>自动计算个人小计、部门总计和全厂总计</description></item>
         /// <item><description>仅显示启用的薪资项目或有数据的项目</description></item>
-        /// <item><description>包含隐藏的 RowType 列标识行类型（0=明细，1=个人小计，2=部门总计，3=全厂总计）</description></item>
+        /// <item><description>包含 RowType 列标识行类型（0=明细，1=个人小计，2=部门总计，3=全厂总计）</description></item>
         /// </list>
         /// </returns>
-        /// <summary>
-        /// 构建透视表格式的薪资报表
-        /// </summary>
         public DataTable BuildReportData(DataTable rawData, DataTable allItems, SalaryQueryCondition cond) {
             DataTable dt = new DataTable();
 
@@ -264,8 +267,24 @@ namespace CompensationSystemSubInterface.Services {
 
 
         /// <summary>
-        /// 构建【薪酬统计】报表数据（按员工汇总，无月份明细）
+        /// 【核心方法】构建薪酬统计报表数据 (按员工汇总，无月份明细)
+        /// 将同一员工多个月的薪资数据汇总为一行
         /// </summary>
+        /// <param name="rawData">原始薪资数据（GetRawSalaryData返回的纵向格式数据）</param>
+        /// <param name="allItems">所有薪资项目信息（GetSalaryItems返回的数据）</param>
+        /// <param name="cond">查询条件，包含用户选择的薪资项目ID列表</param>
+        /// <returns>
+        /// 统计报表数据表，包含以下特点：
+        /// <list type="bullet">
+        /// <item><description>固定列：序号、部门、姓名</description></item>
+        /// <item><description>动态列：每个薪资项目作为一列显示</description></item>
+        /// <item><description>合计列：当有部分薪资项目被筛选时显示（非全选）</description></item>
+        /// <item><description>每个员工只显示一行，包含时间范围内的累计金额</description></item>
+        /// <item><description>自动计算部门总计和全厂总计</description></item>
+        /// <item><description>包含序号列用于排序显示</description></item>
+        /// <item><description>包含 RowType 列标识行类型（0=明细，2=部门总计，3=全厂总计）</description></item>
+        /// </list>
+        /// </returns>
         public DataTable BuildStatisticsReportData(DataTable rawData, DataTable allItems, SalaryQueryCondition cond) {
             DataTable dt = new DataTable();
 

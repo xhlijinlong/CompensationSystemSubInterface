@@ -12,21 +12,24 @@ using System.Windows.Forms;
 
 namespace CompensationSystemSubInterface {
     /// <summary>
-    /// 员工变动信息查询高级筛选条件窗体
+    /// 绩效考核信息查询高级筛选条件窗体
+    /// 提供员工、年份、考核结果的多选筛选功能
     /// </summary>
     public partial class FrmPfmcCondition : Form {
         /// <summary>
-        /// 获取当前的筛选条件
+        /// 获取当前的筛选条件对象
+        /// 包含员工ID列表、年份列表和考核结果列表
         /// </summary>
         public PfmcQueryCondition CurrentCondition { get; private set; }
 
         /// <summary>
-        /// 定义事件: 点击应用时将最新的条件传给主界面
+        /// 定义事件：点击确认按钮时将最新的筛选条件传递给主界面
+        /// 主界面订阅此事件以接收筛选条件的更新
         /// </summary>
         public event Action<PfmcQueryCondition> ApplySelect;
 
         /// <summary>
-        /// 初始化薪资筛选条件窗体
+        /// 构造函数：初始化绩效考核筛选条件窗体
         /// </summary>
         /// <param name="existing">现有的筛选条件，如果为 null 则创建新的筛选条件对象</param>
         public FrmPfmcCondition(PfmcQueryCondition existing) {
@@ -36,6 +39,7 @@ namespace CompensationSystemSubInterface {
 
         /// <summary>
         /// 窗体加载事件处理
+        /// 加载基础数据、恢复之前的选中状态、绑定右键菜单
         /// </summary>
         private void FrmPfmcCondition_Load(object sender, EventArgs e) {
             LoadBaseData();
@@ -46,7 +50,8 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 为控件绑定右键上下文菜单
+        /// 为控件绑定右键上下文菜单（全选、反选）
+        /// 如果控件已绑定菜单则跳过
         /// </summary>
         /// <param name="ctl">要绑定菜单的控件</param>
         private void BindContextMenu(Control ctl) {
@@ -55,6 +60,7 @@ namespace CompensationSystemSubInterface {
 
         /// <summary>
         /// 加载基础数据到各个 CheckedListBox 控件
+        /// 包括员工列表、年份列表（最近5年）、考核结果列表
         /// </summary>
         private void LoadBaseData() {
             // 1. 加载员工 (复用之前逻辑)
@@ -79,7 +85,12 @@ namespace CompensationSystemSubInterface {
             clbRslt.Items.Add("不合格");
         }
 
-        // 需要重载或修改 GetChecks 以支持不同类型
+        /// <summary>
+        /// 获取 CheckedListBox 中已选中项的整数值列表
+        /// 用于员工ID和年份的获取
+        /// </summary>
+        /// <param name="clb">CheckedListBox 控件</param>
+        /// <returns>已选中项的整数值列表</returns>
         private List<int> GetIntChecks(CheckedListBox clb) {
             // ... 获取整数列表 (用于员工ID, 年份) ...
             List<int> list = new List<int>();
@@ -91,6 +102,12 @@ namespace CompensationSystemSubInterface {
             return list;
         }
 
+        /// <summary>
+        /// 获取 CheckedListBox 中已选中项的字符串列表
+        /// 用于考核结果的获取
+        /// </summary>
+        /// <param name="clb">CheckedListBox 控件</param>
+        /// <returns>已选中项的字符串列表</returns>
         private List<string> GetStringChecks(CheckedListBox clb) {
             // ... 获取字符串列表 (用于结果) ...
             List<string> list = new List<string>();
@@ -102,6 +119,7 @@ namespace CompensationSystemSubInterface {
 
         /// <summary>
         /// 绑定数据到 CheckedListBox 控件
+        /// 从数据库查询数据并设置 DisplayMember 和 ValueMember
         /// </summary>
         /// <param name="clb">要绑定数据的 CheckedListBox 控件</param>
         /// <param name="sql">查询 SQL 语句</param>
@@ -116,6 +134,7 @@ namespace CompensationSystemSubInterface {
 
         /// <summary>
         /// 根据当前筛选条件恢复各控件的选中状态
+        /// 从 CurrentCondition 中读取之前保存的选中项并恢复
         /// </summary>
         private void RestoreSelection() {
             SetChecks(clbEmp, CurrentCondition.EmployeeIds);
@@ -123,6 +142,7 @@ namespace CompensationSystemSubInterface {
 
         /// <summary>
         /// 根据 ID 列表设置 CheckedListBox 中的选中状态
+        /// 遍历控件中的所有项，匹配 ID 后设置选中
         /// </summary>
         /// <param name="clb">CheckedListBox 控件</param>
         /// <param name="ids">要选中的 ID 列表</param>
@@ -143,7 +163,8 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 确认按钮点击事件处理，保存筛选条件
+        /// 确认按钮点击事件处理
+        /// 收集所有选中的筛选条件并通过事件传递给主界面
         /// </summary>
         private void btnConfirm_Click(object sender, EventArgs e) {
             CurrentCondition.EmployeeIds = GetIntChecks(clbEmp);
@@ -156,6 +177,7 @@ namespace CompensationSystemSubInterface {
 
         /// <summary>
         /// 获取 CheckedListBox 中已选中项的 ID 列表
+        /// 通用方法，支持 DataRowView（员工）和 int（年份）两种数据类型
         /// </summary>
         /// <param name="clb">CheckedListBox 控件</param>
         /// <returns>已选中项的 ID 列表</returns>
@@ -184,7 +206,8 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 默认按钮点击事件处理，清空所有选中状态
+        /// 默认按钮点击事件处理
+        /// 清空所有 CheckedListBox 控件的选中状态，恢复到初始未选择状态
         /// </summary>
         private void btnDefault_Click(object sender, EventArgs e) {
             // 清空所有 CheckBox
@@ -199,6 +222,7 @@ namespace CompensationSystemSubInterface {
 
         /// <summary>
         /// 右键菜单"全选"项点击事件处理
+        /// 选中当前 CheckedListBox 中的所有项
         /// </summary>
         private void tsmiSelectAll_Click(object sender, EventArgs e) {
             CheckedListBox clb = GetSourceControl(sender);
@@ -209,6 +233,7 @@ namespace CompensationSystemSubInterface {
 
         /// <summary>
         /// 右键菜单"反选"项点击事件处理
+        /// 反转当前 CheckedListBox 中所有项的选中状态
         /// </summary>
         private void tsmiInvert_Click(object sender, EventArgs e) {
             CheckedListBox clb = GetSourceControl(sender);
@@ -219,6 +244,7 @@ namespace CompensationSystemSubInterface {
 
         /// <summary>
         /// 获取右键菜单的源控件
+        /// 用于确定用户在哪个 CheckedListBox 上点击了右键菜单
         /// </summary>
         /// <param name="sender">菜单项发送者</param>
         /// <returns>触发右键菜单的 CheckedListBox 控件，如果无法获取则返回 null</returns>

@@ -15,17 +15,17 @@ namespace CompensationSystemSubInterface.Services {
     /// </summary>
     public class EmpService {
         /// <summary>
-        /// 实例化加密对象
+        /// SM4加密解密对象实例 (用于敏感信息的加密和解密)
         /// </summary>
         private Sm4Crypto _sm4 = new Sm4Crypto();
 
 
         /// <summary>
-        /// 查询员工详细信息
+        /// 查询员工详细信息 (用于员工信息查询界面)
         /// </summary>
-        /// <param name="keyword">关键字搜索（姓名）</param>
+        /// <param name="keyword">关键字搜索（姓名或员工编号）</param>
         /// <param name="cond">高级筛选条件（部门、员工）</param>
-        /// <returns>员工信息数据表</returns>
+        /// <returns>包含员工信息的数据表</returns>
         public DataTable GetEmpData(string keyword, EmpQueryCondition cond) {
             StringBuilder sb = new StringBuilder();
 
@@ -136,11 +136,11 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
-        /// 查询员工详细信息
+        /// 查询员工详细信息 (用于员工维护界面)
         /// </summary>
-        /// <param name="keyword">关键字搜索（姓名）</param>
+        /// <param name="keyword">关键字搜索（姓名或员工编号）</param>
         /// <param name="cond">高级筛选条件（部门、员工）</param>
-        /// <returns>员工信息数据表</returns>
+        /// <returns>包含员工信息的数据表</returns>
         public DataTable GetEmpMaintData(string keyword, EmpMaintCondition cond) {
             StringBuilder sb = new StringBuilder();
 
@@ -251,8 +251,13 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
-        /// 查询员工变动信息
+        /// 查询员工变动信息 (用于员工变动查询界面)
         /// </summary>
+        /// <param name="startDate">变动开始日期</param>
+        /// <param name="endDate">变动结束日期</param>
+        /// <param name="keyword">关键字搜索（姓名或员工编号）</param>
+        /// <param name="cond">高级筛选条件（部门、员工）</param>
+        /// <returns>包含员工变动记录的数据表</returns>
         public DataTable GetEmpCgData(DateTime startDate, DateTime endDate, string keyword, EmpCgQueryCondition cond) {
             StringBuilder sb = new StringBuilder();
 
@@ -306,8 +311,10 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
-        /// 获取单个员工的详细信息（用于修改界面回显）
+        /// 获取单个员工的详细信息 (用于修改界面数据回显)
         /// </summary>
+        /// <param name="empId">员工ID</param>
+        /// <returns>员工数据行，如果不存在则返回null</returns>
         public DataRow GetEmpDetail(int empId) {
             string sql = @"
                 SELECT yg.*, 
@@ -335,10 +342,11 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
-        /// 获取基础配置数据（用于下拉框）
-        /// 根据不同表名应用不同的筛选条件和排序
+        /// 获取基础配置数据 (用于下拉框数据绑定)
+        /// 根据不同表名应用不同的筛选条件和排序规则
         /// </summary>
-        /// <param name="tableName">表名：ZX_config_bm, ZX_config_xl, ZX_config_gw, ZX_config_cj</param>
+        /// <param name="tableName">配置表名称：ZX_config_bm(部门), ZX_config_xl(序列), ZX_config_gw(职务), ZX_config_cj(层级)</param>
+        /// <returns>包含id和name列的配置数据表</returns>
         public DataTable GetDictData(string tableName) {
             string sql = "";
 
@@ -383,10 +391,9 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
-        /// 更新员工信息（包含加密逻辑）
+        /// 更新员工基本信息 (包含敏感信息的加密处理)
         /// </summary>
-        // EmpService.cs
-
+        /// <param name="emp">员工详细信息对象，包含所有需要更新的字段</param>
         public void UpdateEmpBasicInfo(EmployeeDetail emp) {
             // 1. 加密敏感字段 (保持不变)
             string encIdCard = "";
@@ -479,8 +486,30 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
-        /// 执行员工变动（核心事务：插入变动记录 + 更新员工表）
+        /// 执行员工变动操作 (核心事务：插入变动记录 + 更新员工表)
+        /// 使用事务确保数据一致性
         /// </summary>
+        /// <param name="empId">员工ID</param>
+        /// <param name="changeType">变动类型（如：调动、晋升、离职等）</param>
+        /// <param name="changeTime">变动时间</param>
+        /// <param name="oldBmId">原部门ID</param>
+        /// <param name="oldBmName">原部门名称</param>
+        /// <param name="oldXlId">原序列ID</param>
+        /// <param name="oldXlName">原序列名称</param>
+        /// <param name="oldZwId">原职务ID</param>
+        /// <param name="oldZwName">原职务名称</param>
+        /// <param name="oldCjId">原层级ID</param>
+        /// <param name="oldCjName">原层级名称</param>
+        /// <param name="newBm">新部门ID</param>
+        /// <param name="newBmName">新部门名称</param>
+        /// <param name="newXl">新序列ID</param>
+        /// <param name="newXlName">新序列名称</param>
+        /// <param name="newZw">新职务ID</param>
+        /// <param name="newZwName">新职务名称</param>
+        /// <param name="newCj">新层级ID</param>
+        /// <param name="newCjName">新层级名称</param>
+        /// <param name="wageStart">起薪时间</param>
+        /// <param name="wageEnd">结束薪资时间</param>
         public void ExecuteEmployeeChange(int empId, string changeType, DateTime changeTime,
                                           // --- 新增：原信息的ID参数 ---
                                           int? oldBmId, string oldBmName,
@@ -573,6 +602,11 @@ namespace CompensationSystemSubInterface.Services {
             }
         }
 
+        /// <summary>
+        /// 获取员工详细信息对象 (返回强类型的EmployeeDetail对象，用于WPF绑定)
+        /// </summary>
+        /// <param name="empId">员工ID</param>
+        /// <returns>员工详细信息对象，如果不存在则返回null</returns>
         public EmployeeDetail GetEmpDetailObj(int empId) {
             DataRow row = GetEmpDetail(empId); // 调用你之前写好的 SQL 方法
             if (row == null) return null;
@@ -639,7 +673,11 @@ namespace CompensationSystemSubInterface.Services {
             };
         }
 
-        // 获取配置表数据的通用方法
+        /// <summary>
+        /// 获取配置表数据的通用方法 (返回ComboItem列表，用于下拉框绑定)
+        /// </summary>
+        /// <param name="tableName">配置表名称</param>
+        /// <returns>ComboItem对象列表</returns>
         public List<ComboItem> GetComboList(string tableName) {
             DataTable dt = GetDictData(tableName);
             List<ComboItem> list = new List<ComboItem>();
@@ -654,7 +692,12 @@ namespace CompensationSystemSubInterface.Services {
             return list;
         }
 
-        // 辅助方法
+        /// <summary>
+        /// 辅助方法：将数据库对象转换为可空DateTime类型
+        /// 自动处理DBNull和1900-01-01无效日期
+        /// </summary>
+        /// <param name="obj">数据库中的日期对象</param>
+        /// <returns>转换后的可空DateTime，无效日期返回null</returns>
         private DateTime? ConvertToDate(object obj) {
             if (obj == null || obj == DBNull.Value) return null;
 
