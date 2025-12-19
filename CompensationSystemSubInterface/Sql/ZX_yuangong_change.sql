@@ -20,7 +20,7 @@
   [newcjid] int  NULL,
   [newcj] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
   [wageStart] datetime  NULL,
-  [wageEnd] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
+  [wageEnd] datetime  NULL,
   CONSTRAINT [PK_ZX_yuangong_change] PRIMARY KEY CLUSTERED ([id])
 WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
 ON [PRIMARY]
