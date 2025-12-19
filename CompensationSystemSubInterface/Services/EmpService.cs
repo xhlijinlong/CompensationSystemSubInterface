@@ -589,10 +589,13 @@ namespace CompensationSystemSubInterface.Services {
                 Marital = row["hunyinzk"].ToString(),
                 Zodiac = row["shuxing"].ToString(),
                 Age = row["nianling"] != DBNull.Value ? Convert.ToInt32(row["nianling"]) : 0,
-                Birthday = row["chushengrq"] as DateTime?,
+                //Birthday = row["chushengrq"] as DateTime?,
+                Birthday = ConvertToDate(row["chushengrq"]),
                 IdCard = row["shenfenzheng"].ToString(), // 此时已解密
-                IdStart = row["qishisfzrq"] as DateTime?,
-                IdEnd = row["jieshusfzrq"] as DateTime?,
+                //IdStart = row["qishisfzrq"] as DateTime?,
+                IdStart = ConvertToDate(row["qishisfzrq"]),
+                //IdEnd = row["jieshusfzrq"] as DateTime?,
+                IdEnd = ConvertToDate(row["jieshusfzrq"]),
 
                 // 组织信息 (Value)
                 DeptId = row["bmid"] as int?,
@@ -606,10 +609,15 @@ namespace CompensationSystemSubInterface.Services {
                 PersonType = row["renyuanlb"].ToString(),
 
                 // 日期
-                WorkStart = row["gongzuosj"] as DateTime?,
-                JoinDate = row["rusisj"] as DateTime?,
-                PostDate = row["gangweisj"] as DateTime?,
-                ResignDate = row["lizhisj"] as DateTime?,
+                //WorkStart = row["gongzuosj"] as DateTime?,
+                //JoinDate = row["rusisj"] as DateTime?,
+                //PostDate = row["gangweisj"] as DateTime?,
+                //ResignDate = row["lizhisj"] as DateTime?,
+
+                WorkStart = ConvertToDate(row["gongzuosj"]),
+                JoinDate = ConvertToDate(row["rusisj"]),
+                PostDate = ConvertToDate(row["gangweisj"]),
+                ResignDate = ConvertToDate(row["lizhisj"]),
 
                 // 学历技能
                 Education = row["xueli"].ToString(),
@@ -648,8 +656,23 @@ namespace CompensationSystemSubInterface.Services {
         // 辅助方法
         private DateTime? ConvertToDate(object obj) {
             if (obj == null || obj == DBNull.Value) return null;
-            if (DateTime.TryParse(obj.ToString(), out DateTime dt)) return dt;
-            return null;
+
+            DateTime dt;
+            // 1. 如果已经是 DateTime 类型（来自 datetime 列）
+            if (obj is DateTime) {
+                dt = (DateTime)obj;
+            }
+            // 2. 如果是字符串（来自 varchar 列），尝试解析
+            else if (!DateTime.TryParse(obj.ToString(), out dt)) {
+                return null;
+            }
+
+            // 3. 核心逻辑：如果是 1900-01-01，视为无效，返回 null
+            if (dt.Year == 1900 && dt.Month == 1 && dt.Day == 1) {
+                return null;
+            }
+
+            return dt;
         }
         //
     }
