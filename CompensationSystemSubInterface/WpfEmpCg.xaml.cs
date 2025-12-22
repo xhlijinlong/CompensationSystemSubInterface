@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace CompensationSystemSubInterface {
     /// <summary>
@@ -25,12 +26,12 @@ namespace CompensationSystemSubInterface {
         /// 当前操作的员工ID
         /// </summary>
         private int _empId;
-        
+
         /// <summary>
         /// 员工服务类实例，用于数据库操作
         /// </summary>
         private EmpService _service = new EmpService();
-        
+
         /// <summary>
         /// 员工原始数据（变动前的组织信息）
         /// 用于显示原部门、原序列、原职务、原层级等信息
@@ -110,6 +111,8 @@ namespace CompensationSystemSubInterface {
 
             // === 1. 回显原数据 (左侧灰色文本框) ===
             // 假设你的 XAML 中有 txtEmpNoHeader 等控件，这里简单略过头部赋值
+            txtEmpNo.Text = _oldData.EmployeeNo;  // 填充员工号
+            txtName.Text = _oldData.Name;    // 填充姓名
 
             txtOldDept.Text = _oldData.DeptName;
             txtOldSeq.Text = _oldData.SeqName;

@@ -19,10 +19,10 @@
                     <TextBlock Text="当前操作" Foreground="White" FontWeight="Bold" FontSize="12"/>
                 </Border>
                 <TextBlock Text="员工号: " Foreground="#666" VerticalAlignment="Center"/>
-                <TextBlock Text="10002940" FontWeight="Bold" Foreground="#333" Margin="0,0,20,0" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtEmpNo" Text="10002940" FontWeight="Bold" Foreground="#333" Margin="0,0,20,0" VerticalAlignment="Center"/>
 
                 <TextBlock Text="姓名: " Foreground="#666" VerticalAlignment="Center"/>
-                <TextBlock Text="理金龙" FontWeight="Bold" Foreground="#333" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtName" Text="理金龙" FontWeight="Bold" Foreground="#333" VerticalAlignment="Center"/>
             </StackPanel>
         </Border>
 
