@@ -101,7 +101,7 @@ namespace CompensationSystemSubInterface.Common {
             try {
                 if (!Directory.Exists(LogDirectory)) return;
 
-                var files = Directory.GetFiles(LogDirectory, "WordAddIn_*.log");
+                var files = Directory.GetFiles(LogDirectory, "ps_*.log");
                 var cutoffDate = DateTime.Now.AddDays(-daysToKeep);
 
                 foreach (var file in files) {
