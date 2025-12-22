@@ -25,7 +25,7 @@ namespace CompensationSystemSubInterface.Utilities {
         /// 数据库连接字符串的私有字段（默认测试环境地址）
         /// </summary>
         private static string _connString = "Data Source=192.168.100.16;Initial Catalog=jzcw_t;User ID=PEPTest;Password=Test1511*;";
-        
+
         /// <summary>
         /// 数据库连接字符串（公开静态属性，供主程序动态赋值）
         /// 可通过 Set 方法在运行时修改连接字符串，以适应不同环境
