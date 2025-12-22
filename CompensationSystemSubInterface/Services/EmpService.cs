@@ -570,17 +570,17 @@ namespace CompensationSystemSubInterface.Services {
                             new SqlParameter("@WageEnd", wageEnd ?? (object)DBNull.Value)
                         );
 
-                        // 2. 更新员工主表 (逻辑不变)
+                        // 2. 更新员工主表 (逻辑不变) 增加 newChange = 1
                         string updateSql = @"
                     UPDATE ZX_config_yg 
-                    SET bmid=@Bm, xlid=@Xl, gwid=@Zw, cjid=@Cj 
+                    SET bmid=@Bm, xlid=@Xl, gwid=@Zw, cjid=@Cj, newChange=1 
                     WHERE id=@Id";
 
                         if (changeType == "离职") {
                             updateSql = @"
                         UPDATE ZX_config_yg 
                         SET bmid=@Bm, xlid=@Xl, gwid=@Zw, cjid=@Cj, 
-                            zaizhi=0, lizhisj=@Time 
+                            zaizhi=0, lizhisj=@Time, newChange=1 
                         WHERE id=@Id";
                         }
 
