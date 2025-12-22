@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[ZX_config_yg] (
-  [id] int  IDENTITY(1,1) NOT NULL,
+  [id] int  NOT NULL,
   [yonghuming] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
   [yuangongbh] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
   [xingming] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
