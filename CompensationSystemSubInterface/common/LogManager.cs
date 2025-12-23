@@ -5,26 +5,43 @@ using System.Text;
 
 namespace CompensationSystemSubInterface.Common {
 
+    /// <summary>
+    /// 日志管理器，提供调试输出和文件日志记录功能
+    /// </summary>
     public static class LogManager {
+        /// <summary>
+        /// 调试信息的前缀标识
+        /// </summary>
         internal const string Prefix = "[Debug Info] >>> ";
 
-        // 日志文件路径 存储在用户的应用数据目录
-        // ...\AppData\Roaming\PaySys\Logs\ps_20251114.log
+        /// <summary>
+        /// 日志文件存储目录路径
+        /// 存储在用户的应用数据目录：...\AppData\Roaming\PaySys\Logs\
+        /// </summary>
         private static readonly string LogDirectory = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "PaySys",
             "Logs"
         );
 
+        /// <summary>
+        /// 当前日志文件的完整路径
+        /// 格式：ps_yyyyMMdd.log（如 ps_20251114.log）
+        /// 注意: CleanOldLogs 删除日志的时候需要与日志名格式匹配
+        /// </summary>
         private static readonly string LogFilePath = Path.Combine(
             LogDirectory,
             $"ps_{DateTime.Now:yyyyMMdd}.log"
         );
 
-        // 文件日志锁对象
+        /// <summary>
+        /// 文件写入操作的锁对象，确保线程安全
+        /// </summary>
         private static readonly object FileLock = new object();
 
-        // 静态构造函数：确保日志目录存在
+        /// <summary>
+        /// 静态构造函数：确保日志目录存在
+        /// </summary>
         static LogManager() {
             try {
                 if (!Directory.Exists(LogDirectory)) {
@@ -38,6 +55,7 @@ namespace CompensationSystemSubInterface.Common {
         /// <summary>
         /// 调试信息（仅输出到 Debug 窗口）
         /// </summary>
+        /// <param name="message">要输出的调试消息</param>
         public static void Print(string message) {
             Debug.WriteLine(Prefix + message);
         }
@@ -67,6 +85,7 @@ namespace CompensationSystemSubInterface.Common {
         /// <summary>
         /// 记录错误日志到文件
         /// </summary>
+        /// <param name="message">错误信息</param>
         public static void Error(string message) {
             Info(message, "ERROR");
         }
@@ -74,6 +93,8 @@ namespace CompensationSystemSubInterface.Common {
         /// <summary>
         /// 记录错误日志到文件（包含异常堆栈）
         /// </summary>
+        /// <param name="message">错误信息</param>
+        /// <param name="ex">异常对象</param>
         public static void Error(string message, Exception ex) {
             string fullMessage = $"{message}\n异常详情: {ex}";
             Info(fullMessage, "ERROR");
@@ -82,6 +103,7 @@ namespace CompensationSystemSubInterface.Common {
         /// <summary>
         /// 记录警告日志到文件
         /// </summary>
+        /// <param name="message">警告信息</param>
         public static void Warn(string message) {
             Info(message, "WARN");
         }
@@ -89,6 +111,9 @@ namespace CompensationSystemSubInterface.Common {
         /// <summary>
         /// 格式化日志条目
         /// </summary>
+        /// <param name="message">日志消息</param>
+        /// <param name="level">日志级别</param>
+        /// <returns>格式化后的日志条目字符串</returns>
         private static string FormatLogEntry(string message, string level) {
             return $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [{level}] {message}";
         }
@@ -119,6 +144,7 @@ namespace CompensationSystemSubInterface.Common {
         /// <summary>
         /// 获取当前日志文件路径
         /// </summary>
+        /// <returns>当前日志文件的完整路径</returns>
         public static string GetLogFilePath() {
             return LogFilePath;
         }

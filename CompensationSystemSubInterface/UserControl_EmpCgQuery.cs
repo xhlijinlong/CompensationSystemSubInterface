@@ -38,7 +38,7 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         public UserControl_EmpCgQuery() {
             InitializeComponent();
-            dgvSalary.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
+            dgvSalary.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue; // 设置交替行颜色
         }
 
         /// <summary>
