@@ -91,14 +91,6 @@ namespace CompensationSystemSubInterface {
         /// <param name="clb">CheckedListBox 控件</param>
         /// <param name="ids">要选中的 ID 列表</param>
         private void SetChecks(CheckedListBox clb, List<int> ids) {
-            /*string valueField = clb.ValueMember;
-            if (string.IsNullOrEmpty(valueField)) valueField = "id";
-            for (int i = 0; i < clb.Items.Count; i++) {
-                DataRowView drv = clb.Items[i] as DataRowView;
-                if (drv != null && ids.Contains(Convert.ToInt32(drv[valueField]))) {
-                    clb.SetItemChecked(i, true);
-                }
-            }*/
             for (int i = 0; i < clb.Items.Count; i++) {
                 DataRowView drv = clb.Items[i] as DataRowView;
                 if (drv != null && ids.Contains(Convert.ToInt32(drv["id"])))
@@ -113,8 +105,7 @@ namespace CompensationSystemSubInterface {
             CurrentCondition.DepartmentIds = GetChecks(clbDept);
             CurrentCondition.EmployeeIds = GetChecks(clbEmp);
 
-            ApplySelect?.Invoke(CurrentCondition);
-            // 条件已经应用,主界面置顶
+            ApplySelect?.Invoke(CurrentCondition); // 触发事件，将最新条件传给主界面
         }
 
         /// <summary>
@@ -123,13 +114,6 @@ namespace CompensationSystemSubInterface {
         /// <param name="clb">CheckedListBox 控件</param>
         /// <returns>已选中项的 ID 列表</returns>
         private List<int> GetChecks(CheckedListBox clb) {
-            /*List<int> list = new List<int>();
-            string valueField = ((ListBox)clb).ValueMember;
-            if (string.IsNullOrEmpty(valueField)) valueField = "id";
-            foreach (DataRowView item in clb.CheckedItems) {
-                list.Add(Convert.ToInt32(item[valueField]));
-            }
-            return list;*/
             List<int> list = new List<int>();
             foreach (DataRowView item in clb.CheckedItems) {
                 list.Add(Convert.ToInt32(item["id"]));

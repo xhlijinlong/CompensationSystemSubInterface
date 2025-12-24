@@ -286,9 +286,11 @@ namespace CompensationSystemSubInterface.Services {
                     AND cg.changeTime BETWEEN @StartDate AND @EndDate
             ");
 
+            // 参数列表
             List<SqlParameter> ps = new List<SqlParameter>();
             ps.Add(new SqlParameter("@StartDate", startDate));
             ps.Add(new SqlParameter("@EndDate", endDate));
+
 
             // 姓名搜索
             if (!string.IsNullOrWhiteSpace(keyword)) {

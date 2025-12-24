@@ -121,30 +121,32 @@ namespace CompensationSystemSubInterface {
         /// 格式化 DataGridView 的显示效果，包括表头样式、列属性和冻结列
         /// </summary>
         private void FormatGrid() {
-            dgvSalary.EnableHeadersVisualStyles = false;
+            dgvSalary.EnableHeadersVisualStyles = false; // 禁用系统样式以自定义表头样式
             dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
             dgvSalary.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
             dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold);
             dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.LightGray;
 
             foreach (DataGridViewColumn col in dgvSalary.Columns) {
+                // 隐藏不必要的列
                 if (col.Name == "id" || col.Name == "ygid") {
                     col.Visible = false;
                     continue;
                 }
 
-                col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                col.SortMode = DataGridViewColumnSortMode.NotSortable;
+                col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter; // 表头居中
+                col.SortMode = DataGridViewColumnSortMode.NotSortable; // 禁用排序
 
-                // 日期列格式化
+                // 时间日期列格式化
                 if (col.Name.Contains("时间") || col.Name.Contains("日期")) {
                     col.DefaultCellStyle.Format = "yyyy-MM-dd";
-                    col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
+
+                //col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter; // 内容居中
             }
 
             // 冻结
-            if (dgvSalary.Columns.Count > 2) dgvSalary.Columns[1].Frozen = true; // 冻结姓名
+            if (dgvSalary.Columns.Count > 2) dgvSalary.Columns[1].Frozen = true; // 冻结前两列(隐藏列也计入)
         }
 
         /// <summary>
@@ -158,7 +160,8 @@ namespace CompensationSystemSubInterface {
                     btnCondition.Text = _condition.HasFilter ? "条件设置 *" : "条件设置";
                     PerformQuery();
                 };
-                _frmCondition.Show(this);
+                //_frmCondition.Show(this);
+                _frmCondition.Show();
             } else {
                 _frmCondition.WindowState = FormWindowState.Normal;
                 _frmCondition.Activate();
