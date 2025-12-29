@@ -145,9 +145,9 @@ namespace CompensationSystemSubInterface {
         private void FormatGrid(DataTable dt) {
             // 设置表头为灰色
             dgvSalary.EnableHeadersVisualStyles = false;
-            dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray; // 设置背景为浅灰
+            dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.White; // 设置背景为浅灰
             dgvSalary.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;     // 设置文字为黑色
-            dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.LightGray; // 防止点击表头变蓝
+            dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White; // 防止点击表头变蓝
             if (!dgvSalary.ColumnHeadersDefaultCellStyle.Font.Bold) {
                 dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold); // 设置表头字体加粗
             }
@@ -204,14 +204,15 @@ namespace CompensationSystemSubInterface {
             DataRowView drv = dgvSalary.Rows[e.RowIndex].DataBoundItem as DataRowView;
             if (drv != null && drv.Row.Table.Columns.Contains("RowType")) {
                 int type = Convert.ToInt32(drv["RowType"]);
-                if (type == 1) dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.AliceBlue; // 个人小计
-                else if (type == 2) // 部门小计
-                {
-                    dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGray;
+                if (type == 1) {
+                    //dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.AliceBlue; // 个人小计
+                } else if (type == 2) {
+                    // 部门小计
+                    //dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGray;
                     dgvSalary.Rows[e.RowIndex].DefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold);
-                } else if (type == 3) // 全厂总计
-                  {
-                    dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGray;
+                } else if (type == 3) {
+                    // 全厂总计
+                    //dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGray;
                     dgvSalary.Rows[e.RowIndex].DefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold);
                 }
             }

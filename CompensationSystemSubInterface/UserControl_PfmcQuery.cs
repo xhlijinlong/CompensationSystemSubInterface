@@ -39,7 +39,7 @@ namespace CompensationSystemSubInterface {
         public UserControl_PfmcQuery() {
             InitializeComponent();
             // 员工信息表不需要复杂的行颜色逻辑 (RowPrePaint)，只需交替色即可
-            dgvSalary.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
+            //dgvSalary.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
         }
 
         /// <summary>
@@ -93,9 +93,9 @@ namespace CompensationSystemSubInterface {
         private void FormatGrid() {
             // 统一表头样式
             dgvSalary.EnableHeadersVisualStyles = false;
-            dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
+            dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
             dgvSalary.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
-            dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.LightGray;
+            dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
             dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold);
 
             // 设置列属性

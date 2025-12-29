@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[ZX_SalaryItems] (
-  [ItemId] int  NOT NULL,
+  [ItemId] int  IDENTITY(1,1) NOT NULL,
   [ItemCode] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
   [ItemName] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
   [TypeId] int  NULL,
@@ -12,6 +12,7 @@
   [IsEveryMonth] bit  NULL,
   [SapCode] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
   [TradeUnionBase] bit  NULL,
+  [QueryType] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
   CONSTRAINT [PK_ZX_SalaryItems] PRIMARY KEY CLUSTERED ([ItemId])
 WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
 ON [PRIMARY]
@@ -23,7 +24,14 @@ ALTER TABLE [dbo].[ZX_SalaryItems] SET (LOCK_ESCALATION = TABLE)
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'是否是工会基数项目',
+'MS_Description', N'sap工资导入表代码',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryItems',
+'COLUMN', N'SapCode'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否是工会会费基数项目',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_SalaryItems',
 'COLUMN', N'TradeUnionBase'

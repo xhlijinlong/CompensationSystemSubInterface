@@ -38,7 +38,6 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         public UserControl_EmpCgQuery() {
             InitializeComponent();
-            dgvSalary.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue; // 设置交替行颜色
         }
 
         /// <summary>
@@ -122,10 +121,11 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void FormatGrid() {
             dgvSalary.EnableHeadersVisualStyles = false; // 禁用系统样式以自定义表头样式
-            dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
+            dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
             dgvSalary.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+            dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
             dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold);
-            dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.LightGray;
+
 
             foreach (DataGridViewColumn col in dgvSalary.Columns) {
                 // 隐藏不必要的列
