@@ -29,9 +29,9 @@ namespace CompensationSystemSubInterface {
         private SalaryQueryCondition _condition = new SalaryQueryCondition();
 
         /// <summary>
-        /// 高级筛选条件窗体实例
+        /// 高级筛选条件窗体实例（WPF版本）
         /// </summary>
-        private FrmSalaryCondition _frmCondition = null;
+        private WpfSalaryCondition _wpfCondition = null;
 
         /// <summary>
         /// 初始化薪资查询用户控件
@@ -223,20 +223,24 @@ namespace CompensationSystemSubInterface {
         /// 条件设置按钮点击事件处理，打开高级筛选条件窗体
         /// </summary>
         private void btnCondition_Click(object sender, EventArgs e) {
-            if (_frmCondition == null || _frmCondition.IsDisposed) {
-                _frmCondition = new FrmSalaryCondition(_condition);
+            if (_wpfCondition == null) {
+                _wpfCondition = new WpfSalaryCondition(_condition);
 
-                _frmCondition.ApplySelect += (newCond) => {
+                _wpfCondition.ApplySelect += (newCond) => {
                     _condition = newCond;
                     btnCondition.Text = _condition.HasFilter ? "条件设置 *" : "条件设置";
                     PerformQuery();
                 };
 
-                _frmCondition.Show(); // 需要在窗体上面则传入 this
+                _wpfCondition.Closed += (s, args) => {
+                    _wpfCondition = null;
+                };
+
+                _wpfCondition.Show();
             } else {
                 // 把它带到最前面，防止用户找不到
-                _frmCondition.WindowState = FormWindowState.Normal; // 防止它被最小化了
-                _frmCondition.Activate();
+                _wpfCondition.WindowState = System.Windows.WindowState.Normal;
+                _wpfCondition.Activate();
             }
         }
 

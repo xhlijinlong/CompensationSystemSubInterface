@@ -29,7 +29,7 @@ namespace CompensationSystemSubInterface.Services {
         /// </summary>
         /// <returns>包含 ItemId、ItemName 和 IsEveryMonth 字段的数据表</returns>
         public DataTable GetSalaryItems() {
-            string sql = "SELECT ItemId, ItemName, IsEveryMonth FROM ZX_SalaryItems WHERE IsEnabled=1 ORDER BY DisplayOrder";
+            string sql = "SELECT ItemId, ItemName, IsEveryMonth, QueryType FROM ZX_SalaryItems WHERE IsEnabled=1 ORDER BY DisplayOrder";
             return SqlHelper.ExecuteDataTable(sql);
         }
 
