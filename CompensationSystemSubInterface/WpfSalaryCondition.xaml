@@ -30,13 +30,13 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
+
             <!-- 员工搜索 -->
             <TextBlock Text="员工搜索：" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
             <TextBox x:Name="txtSearchEmp" Grid.Row="0" Grid.Column="1" Height="26" 
                      VerticalContentAlignment="Center"
                      TextChanged="txtSearchEmp_TextChanged"/>
-            
+
             <!-- 薪资项目搜索 -->
             <TextBlock Text="项目搜索：" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,5,0"/>
             <TextBox x:Name="txtSearchItem" Grid.Row="1" Grid.Column="1" Height="26" 
@@ -55,7 +55,7 @@
                     <MenuItem Header="取消全选" Click="ContextMenu_ClearAll_Click"/>
                 </ContextMenu>
             </TreeView.Resources>
-            
+
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <StackPanel Orientation="Horizontal" Margin="2" 
@@ -85,7 +85,7 @@
 
             <TextBlock x:Name="lblStatus" Text="" Foreground="#666" 
                        VerticalAlignment="Center" FontSize="11"/>
-            
+
             <Button Content="重置" Grid.Column="2" Click="btnReset_Click" 
                     Width="70" Height="30" Margin="5,0"
                     Background="#E0E0E0" BorderThickness="0" Cursor="Hand"/>
