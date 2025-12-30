@@ -32,10 +32,6 @@ namespace CompensationSystemSubInterface {
         public ObservableCollection<ConditionTreeNode> TreeRoots { get; set; } = new ObservableCollection<ConditionTreeNode>();
 
         // Cache root node references for each category for convenient operations
-        private ConditionTreeNode _seqRoot;
-        private ConditionTreeNode _deptRoot;
-        private ConditionTreeNode _postRoot;
-        private ConditionTreeNode _levelRoot;
         private ConditionTreeNode _empRoot;
         private ConditionTreeNode _itemRoot;
 
@@ -83,18 +79,6 @@ namespace CompensationSystemSubInterface {
         private void InitializeStructure() {
             TreeRoots.Clear();
 
-            _seqRoot = new ConditionTreeNode { Name = "序列", NodeType = ConditionNodeType.Category };
-            TreeRoots.Add(_seqRoot);
-
-            _deptRoot = new ConditionTreeNode { Name = "部门", NodeType = ConditionNodeType.Category };
-            TreeRoots.Add(_deptRoot);
-
-            _postRoot = new ConditionTreeNode { Name = "岗位", NodeType = ConditionNodeType.Category };
-            TreeRoots.Add(_postRoot);
-
-            _levelRoot = new ConditionTreeNode { Name = "层级", NodeType = ConditionNodeType.Category };
-            TreeRoots.Add(_levelRoot);
-
             _empRoot = new ConditionTreeNode { Name = "员工", NodeType = ConditionNodeType.Category };
             TreeRoots.Add(_empRoot);
 
@@ -103,24 +87,11 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// Load static data (sequences, positions, levels, salary items)
+        /// Load static data (salary items only - sequences, positions, levels are now in main control)
         /// </summary>
         private void LoadStaticData() {
             try {
-                // 1. Sequences (base filter source)
-                LoadTreeData(_seqRoot,
-                    "SELECT id, xlname FROM ZX_config_xl WHERE IsEnabled=1 AND DeleteType=0",
-                    "xlname", "id");
-
-                // 2. Positions
-                LoadTreeData(_postRoot,
-                    "SELECT id, gwname FROM ZX_config_gw WHERE IsEnabled=1 AND DeleteType=0 ORDER BY DisplayOrder",
-                    "gwname", "id");
-
-                // 3. Levels (with special grouping)
-                LoadLevels();
-
-                // 4. Salary items (with special grouping)
+                // Load salary items (with special grouping)
                 LoadSalaryItems();
 
             } catch (Exception ex) {
@@ -129,50 +100,63 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// Load levels and group them into ranges of 10 (1-10, 11-20, etc.)
+        /// Refresh employee data based on filter conditions from main control (CurrentCondition)
         /// </summary>
-        private void LoadLevels() {
-            _levelRoot.Children.Clear();
-            string sql = "SELECT id, cjname FROM ZX_config_cj WHERE DeleteType=0";
-            DataTable dt = SqlHelper.ExecuteDataTable(sql);
+        private void RefreshCascadingData() {
+            try {
+                // Get filter conditions from CurrentCondition (passed from main control)
+                List<int> selectedSeqIds = CurrentCondition.SequenceIds ?? new List<int>();
+                List<int> selectedDeptIds = CurrentCondition.DepartmentIds ?? new List<int>();
+                List<int> selectedPostIds = CurrentCondition.PositionIds ?? new List<int>();
 
-            // Group in memory
-            var groups = dt.AsEnumerable()
-                .Select(r => new {
-                    Id = Convert.ToInt32(r["id"]),
-                    Name = r["cjname"].ToString()
-                })
-                .GroupBy(x => {
-                    // Parse number from level name (e.g., "1级" -> 1)
-                    var match = LevelNumberRegex.Match(x.Name);
-                    if (match.Success && int.TryParse(match.Value, out int level)) {
-                        int groupStart = ((level - 1) / 10) * 10 + 1;
-                        return $"{groupStart}-{groupStart + 9}";
+                // Note: No user input in SQL query - all data comes from database or controlled sources
+                string empSql = "SELECT id, xingming, xlid, bmid, gwid FROM ZX_config_yg WHERE zaizhi=1 ORDER BY xuhao";
+                DataTable dtEmp = SqlHelper.ExecuteDataTable(empSql);
+
+                // Update persistent employee IDs from currently visible checked items before clearing
+                foreach (var child in _empRoot.Children) {
+                    if (child.IsChecked == true) {
+                        _persistentEmpIds.Add(child.Id);
+                    } else {
+                        _persistentEmpIds.Remove(child.Id);
                     }
-                    return "其他"; // "Others" for items that don't match the pattern
-                })
-                .OrderBy(g => g.Key.Length).ThenBy(g => g.Key); // Simple sorting
-
-            foreach (var group in groups) {
-                var groupNode = new ConditionTreeNode {
-                    Name = group.Key,
-                    NodeType = ConditionNodeType.Group,
-                    Parent = _levelRoot
-                };
-
-                foreach (var item in group.OrderBy(i => i.Id)) { // Assume ID order represents level order
-                    var child = new ConditionTreeNode {
-                        Name = item.Name,
-                        Id = item.Id,
-                        NodeType = ConditionNodeType.Item,
-                        Parent = groupNode
-                    };
-                    groupNode.Children.Add(child);
                 }
-                groupNode.UpdateDisplayText();
-                _levelRoot.Children.Add(groupNode);
+
+                string searchText = txtSearchEmp?.Text?.Trim() ?? string.Empty;
+
+                _empRoot.Children.Clear();
+                foreach (DataRow dr in dtEmp.Rows) {
+                    int xlid = dr["xlid"] != DBNull.Value ? Convert.ToInt32(dr["xlid"]) : 0;
+                    int bmid = dr["bmid"] != DBNull.Value ? Convert.ToInt32(dr["bmid"]) : 0;
+                    int gwid = dr["gwid"] != DBNull.Value ? Convert.ToInt32(dr["gwid"]) : 0;
+                    string name = dr["xingming"].ToString();
+                    int empId = Convert.ToInt32(dr["id"]);
+
+                    // Filter by sequence (from main control)
+                    if (selectedSeqIds.Count > 0 && !selectedSeqIds.Contains(xlid)) continue;
+                    // Filter by department (from main control)
+                    if (selectedDeptIds.Count > 0 && !selectedDeptIds.Contains(bmid)) continue;
+                    // Filter by position (from main control)
+                    if (selectedPostIds.Count > 0 && !selectedPostIds.Contains(gwid)) continue;
+                    // Filter by search text (employees only)
+                    if (!string.IsNullOrEmpty(searchText) && !name.Contains(searchText)) continue;
+
+                    var child = new ConditionTreeNode {
+                        Name = name,
+                        Id = empId,
+                        NodeType = ConditionNodeType.Item,
+                        Parent = _empRoot,
+                        // Restore checked state from persistent IDs
+                        IsChecked = _persistentEmpIds.Contains(empId)
+                    };
+                    _empRoot.Children.Add(child);
+                }
+                _empRoot.UpdateDisplayText();
+
+            } catch (Exception ex) {
+                // Avoid showing too many error dialogs during initialization or frequent operations
+                System.Diagnostics.Debug.WriteLine($"RefreshCascadingData error: {ex}");
             }
-            _levelRoot.UpdateDisplayText();
         }
 
         /// <summary>
@@ -214,100 +198,6 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// Refresh cascading data (departments, employees) based on current selected sequences and departments
-        /// </summary>
-        private void RefreshCascadingData() {
-            try {
-                // Get currently selected sequence IDs
-                List<int> selectedSeqIds = GetCheckedIds(_seqRoot);
-                
-                // 1. Refresh departments (depends on sequences)
-                // Filter departments by xlid when sequences are selected
-                string deptSql = "SELECT id, bmname, xlid FROM ZX_config_bm WHERE IsEnabled=1 AND DeleteType=0 ORDER BY DisplayOrder";
-                DataTable dtDept = SqlHelper.ExecuteDataTable(deptSql);
-                
-                // Save currently selected department IDs to restore after refresh
-                var currentSelectedDeptIds = GetCheckedIds(_deptRoot);
-                
-                _deptRoot.Children.Clear();
-                foreach (DataRow dr in dtDept.Rows) {
-                    int xlid = dr["xlid"] != DBNull.Value ? Convert.ToInt32(dr["xlid"]) : 0;
-                    // Skip if sequences are selected and this department doesn't belong to any selected sequence
-                    if (selectedSeqIds.Count > 0 && !selectedSeqIds.Contains(xlid)) continue;
-
-                    var child = new ConditionTreeNode {
-                        Name = dr["bmname"].ToString(),
-                        Id = Convert.ToInt32(dr["id"]),
-                        NodeType = ConditionNodeType.Item,
-                        Parent = _deptRoot,
-                        // Restore checked state if still in list
-                        IsChecked = currentSelectedDeptIds.Contains(Convert.ToInt32(dr["id"]))
-                    };
-                    _deptRoot.Children.Add(child);
-                }
-                _deptRoot.UpdateDisplayText();
-
-                // 2. Refresh employees (depends on sequences, departments, positions, and levels)
-                // Filter: (no sequences OR xlid in sequences) AND (no departments OR bmid in departments)
-                //         AND (no positions OR gwid in positions) AND (no levels OR cjid in levels)
-                List<int> selectedDeptIds = GetCheckedIds(_deptRoot); // Get selected departments after refresh
-                List<int> selectedPostIds = GetCheckedIdsRecursive(_postRoot); // Get selected positions
-                List<int> selectedLevelIds = GetCheckedIdsRecursive(_levelRoot); // Get selected levels
-
-                // Note: No user input in SQL query - all data comes from database or controlled sources
-                string empSql = "SELECT id, xingming, xlid, bmid, gwid, cjid FROM ZX_config_yg WHERE zaizhi=1 ORDER BY xuhao";
-                DataTable dtEmp = SqlHelper.ExecuteDataTable(empSql);
-
-                // Update persistent employee IDs from currently visible checked items before clearing
-                foreach (var child in _empRoot.Children) {
-                    if (child.IsChecked == true) {
-                        _persistentEmpIds.Add(child.Id);
-                    } else {
-                        _persistentEmpIds.Remove(child.Id);
-                    }
-                }
-
-                string searchText = txtSearchEmp?.Text?.Trim() ?? string.Empty;
-
-                _empRoot.Children.Clear();
-                foreach (DataRow dr in dtEmp.Rows) {
-                    int xlid = dr["xlid"] != DBNull.Value ? Convert.ToInt32(dr["xlid"]) : 0;
-                    int bmid = dr["bmid"] != DBNull.Value ? Convert.ToInt32(dr["bmid"]) : 0;
-                    int gwid = dr["gwid"] != DBNull.Value ? Convert.ToInt32(dr["gwid"]) : 0;
-                    int cjid = dr["cjid"] != DBNull.Value ? Convert.ToInt32(dr["cjid"]) : 0;
-                    string name = dr["xingming"].ToString();
-                    int empId = Convert.ToInt32(dr["id"]);
-
-                    // Filter by sequence
-                    if (selectedSeqIds.Count > 0 && !selectedSeqIds.Contains(xlid)) continue;
-                    // Filter by department
-                    if (selectedDeptIds.Count > 0 && !selectedDeptIds.Contains(bmid)) continue;
-                    // Filter by position
-                    if (selectedPostIds.Count > 0 && !selectedPostIds.Contains(gwid)) continue;
-                    // Filter by level
-                    if (selectedLevelIds.Count > 0 && !selectedLevelIds.Contains(cjid)) continue;
-                    // Filter by search text (employees only)
-                    if (!string.IsNullOrEmpty(searchText) && !name.Contains(searchText)) continue;
-
-                    var child = new ConditionTreeNode {
-                        Name = name,
-                        Id = empId,
-                        NodeType = ConditionNodeType.Item,
-                        Parent = _empRoot,
-                        // Restore checked state from persistent IDs
-                        IsChecked = _persistentEmpIds.Contains(empId)
-                    };
-                    _empRoot.Children.Add(child);
-                }
-                _empRoot.UpdateDisplayText();
-
-            } catch (Exception ex) {
-                // Avoid showing too many error dialogs during initialization or frequent operations
-                System.Diagnostics.Debug.WriteLine($"RefreshCascadingData error: {ex}");
-            }
-        }
-
-        /// <summary>
         /// 通用加载数据方法
         /// </summary>
         private void LoadTreeData(ConditionTreeNode parent, string sql, string displayField, string valueField) {
@@ -327,25 +217,13 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// Restore selection state based on CurrentCondition
+        /// Restore selection state based on CurrentCondition (only for employee and salary items)
         /// </summary>
         private void RestoreSelection() {
-            SetChecks(_seqRoot, CurrentCondition.SequenceIds);
-            
-            // After restoring, need to ensure department and employee lists are correct
-            // But SetChecks only sets IsChecked without triggering Click events
-            // So we need to manually refresh once
+            // Refresh employee list based on filter conditions from main control
             RefreshCascadingData();
-
-            // Set department and employee selections again because RefreshCascadingData may reset nodes
-            SetChecks(_deptRoot, CurrentCondition.DepartmentIds);
-            RefreshCascadingData(); // Department changes may affect employees
             
-            SetChecks(_postRoot, CurrentCondition.PositionIds);
-            
-            // Restore levels (two-level structure)
-            SetChecksRecursive(_levelRoot, CurrentCondition.LevelIds);
-            
+            // Restore employee selections
             SetChecks(_empRoot, CurrentCondition.EmployeeIds);
             
             // Restore salary items (two-level structure)
@@ -393,20 +271,7 @@ namespace CompensationSystemSubInterface {
             if (IsDescendantOf(node, _empRoot)) {
                 UpdatePersistentEmpIds(node);
             }
-
-            // Cascading handling
-            // If operating on Sequence node (or its descendants), refresh Departments and Employees
-            if (IsDescendantOf(node, _seqRoot)) {
-                RefreshCascadingData();
-            }
-            // If operating on Department node (or its descendants), refresh Employees
-            else if (IsDescendantOf(node, _deptRoot)) {
-                RefreshCascadingData();
-            }
-            // If operating on Position or Level node (or their descendants), refresh Employees
-            else if (IsDescendantOf(node, _postRoot) || IsDescendantOf(node, _levelRoot)) {
-                RefreshCascadingData();
-            }
+            // Note: Sequence/department/position/level are now in main control, no cascading needed here
         }
 
         /// <summary>
@@ -561,15 +426,7 @@ namespace CompensationSystemSubInterface {
             if (IsDescendantOf(targetNode, _empRoot)) {
                 UpdatePersistentEmpIds(targetNode);
             }
-
-            // Trigger cascading if needed
-            if (IsDescendantOf(targetNode, _seqRoot) || IsDescendantOf(targetNode, _deptRoot)) {
-                RefreshCascadingData();
-            }
-            // Trigger cascading for Position or Level changes
-            else if (IsDescendantOf(targetNode, _postRoot) || IsDescendantOf(targetNode, _levelRoot)) {
-                RefreshCascadingData();
-            }
+            // Note: Sequence/department/position/level are now in main control, no cascading needed here
         }
 
         private void ApplyActionRecursively(ConditionTreeNode node, Action<ConditionTreeNode> action) {
@@ -598,10 +455,7 @@ namespace CompensationSystemSubInterface {
         }
 
         private void btnApply_Click(object sender, RoutedEventArgs e) {
-            CurrentCondition.SequenceIds = GetCheckedIds(_seqRoot);
-            CurrentCondition.DepartmentIds = GetCheckedIds(_deptRoot);
-            CurrentCondition.PositionIds = GetCheckedIds(_postRoot);
-            CurrentCondition.LevelIds = GetCheckedIdsRecursive(_levelRoot);
+            // Note: Sequence/department/position IDs are managed by main control, not modified here
             // Note: Using _persistentEmpIds to include hidden selected employees during search
             CurrentCondition.EmployeeIds = _persistentEmpIds.ToList();
             // Note: Using _persistentItemIds instead of GetCheckedIdsRecursive to include hidden selected items

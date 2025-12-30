@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 namespace CompensationSystemSubInterface {
     /// <summary>
@@ -34,6 +35,16 @@ namespace CompensationSystemSubInterface {
         private WpfSalaryCondition _wpfCondition = null;
 
         /// <summary>
+        /// WPF 筛选面板
+        /// </summary>
+        private WpfFilterPanel _wpfFilterPanel = null;
+
+        /// <summary>
+        /// ElementHost 用于嵌入 WPF 控件
+        /// </summary>
+        private ElementHost _filterHost = null;
+
+        /// <summary>
         /// 初始化薪资查询用户控件
         /// </summary>
         public UserControl_SalaryStatistics() {
@@ -48,6 +59,7 @@ namespace CompensationSystemSubInterface {
             if (this.DesignMode) return;
 
             InitDateCombos();
+            InitFilterControls(); // 初始化筛选控件数据
 
             // 获取数据库中最近的发薪月份
             DateTime? latest = _service.GetLatestSalaryMonth();
@@ -69,6 +81,43 @@ namespace CompensationSystemSubInterface {
 
             // 自动查询
             PerformQuery();
+        }
+
+        /// <summary>
+        /// 初始化筛选控件（使用 WPF 面板）
+        /// </summary>
+        private void InitFilterControls() {
+            // 创建 WPF 筛选面板
+            _wpfFilterPanel = new WpfFilterPanel();
+            
+            // 加载数据
+            _wpfFilterPanel.LoadSequences();
+            _wpfFilterPanel.LoadDepartments();
+            _wpfFilterPanel.LoadPositions();
+            
+            // 绑定事件
+            _wpfFilterPanel.SequenceSelectionChanged += ids => {
+                _condition.SequenceIds = ids;
+            };
+            _wpfFilterPanel.DepartmentSelectionChanged += ids => {
+                _condition.DepartmentIds = ids;
+            };
+            _wpfFilterPanel.PositionSelectionChanged += ids => {
+                _condition.PositionIds = ids;
+            };
+
+            // 创建 ElementHost 并添加到流式面板
+            _filterHost = new ElementHost {
+                Dock = DockStyle.None,
+                AutoSize = true,
+                Child = _wpfFilterPanel,
+                Margin = new Padding(0, 5, 0, 0), // 微调垂直对齐
+                BackColor = System.Drawing.Color.Transparent
+            };
+            
+            flpnlTop.Controls.Add(_filterHost);
+            // 将筛选控件移动到查询按钮之前 (txtName 之后)
+            flpnlTop.Controls.SetChildIndex(_filterHost, flpnlTop.Controls.IndexOf(txtName) + 1);
         }
 
         /// <summary>

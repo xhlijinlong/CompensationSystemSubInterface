@@ -25,6 +25,7 @@
         private void InitializeComponent() {
             this.pnlBody = new System.Windows.Forms.Panel();
             this.dgvSalary = new System.Windows.Forms.DataGridView();
+            this.pnlTopContainer = new System.Windows.Forms.Panel();
             this.flpnlTop = new System.Windows.Forms.FlowLayoutPanel();
             this.lbDate = new System.Windows.Forms.Label();
             this.cbYear1 = new System.Windows.Forms.ComboBox();
@@ -40,8 +41,10 @@
             this.btnQuery = new System.Windows.Forms.Button();
             this.btnCondition = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
+
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
+            this.pnlTopContainer.SuspendLayout();
             this.flpnlTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,11 +52,11 @@
             // 
             this.pnlBody.Controls.Add(this.dgvSalary);
             this.pnlBody.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlBody.Location = new System.Drawing.Point(0, 60);
+            this.pnlBody.Location = new System.Drawing.Point(0, 50);
             this.pnlBody.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnlBody.Name = "pnlBody";
             this.pnlBody.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.pnlBody.Size = new System.Drawing.Size(1000, 540);
+            this.pnlBody.Size = new System.Drawing.Size(1000, 550);
             this.pnlBody.TabIndex = 1;
             // 
             // dgvSalary
@@ -69,8 +72,17 @@
             this.dgvSalary.ReadOnly = true;
             this.dgvSalary.RowTemplate.Height = 23;
             this.dgvSalary.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSalary.Size = new System.Drawing.Size(988, 530);
+            this.dgvSalary.Size = new System.Drawing.Size(988, 480);
             this.dgvSalary.TabIndex = 0;
+            // 
+            // pnlTopContainer
+            // 
+            this.pnlTopContainer.Controls.Add(this.flpnlTop);
+            this.pnlTopContainer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTopContainer.Location = new System.Drawing.Point(0, 0);
+            this.pnlTopContainer.Name = "pnlTopContainer";
+            this.pnlTopContainer.Size = new System.Drawing.Size(1000, 50);
+            this.pnlTopContainer.TabIndex = 2;
             // 
             // flpnlTop
             // 
@@ -94,8 +106,9 @@
             this.flpnlTop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.flpnlTop.Name = "flpnlTop";
             this.flpnlTop.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.flpnlTop.Size = new System.Drawing.Size(1000, 60);
+            this.flpnlTop.Size = new System.Drawing.Size(1000, 50);
             this.flpnlTop.TabIndex = 0;
+
             // 
             // lbDate
             // 
@@ -249,7 +262,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.pnlBody);
-            this.Controls.Add(this.flpnlTop);
+            this.Controls.Add(this.pnlTopContainer);
             this.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "UserControl_SalaryQuery";
@@ -257,6 +270,7 @@
             this.Load += new System.EventHandler(this.UserControl_SalaryStatistics_Load);
             this.pnlBody.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).EndInit();
+            this.pnlTopContainer.ResumeLayout(false);
             this.flpnlTop.ResumeLayout(false);
             this.flpnlTop.PerformLayout();
             this.ResumeLayout(false);
@@ -265,6 +279,7 @@
 
         #endregion
         private System.Windows.Forms.Panel pnlBody;
+        private System.Windows.Forms.Panel pnlTopContainer;
         private System.Windows.Forms.FlowLayoutPanel flpnlTop;
         private System.Windows.Forms.Label lbDate;
         private System.Windows.Forms.ComboBox cbYear1;

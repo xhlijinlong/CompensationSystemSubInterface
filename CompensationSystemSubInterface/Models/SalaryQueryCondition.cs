@@ -43,7 +43,6 @@ namespace CompensationSystemSubInterface.Models {
                 return (DepartmentIds.Count > 0) ||
                     (SequenceIds.Count > 0) ||
                     (PositionIds.Count > 0) ||
-                    (LevelIds.Count > 0) ||
                     (EmployeeIds.Count > 0) ||
                     (SalaryItemIds.Count > 0);
             }

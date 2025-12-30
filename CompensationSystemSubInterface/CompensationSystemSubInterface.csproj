@@ -142,6 +142,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
     <Reference Include="ZString, Version=2.6.0.0, Culture=neutral, PublicKeyToken=df4c250b14d82627, processorArchitecture=MSIL">
       <HintPath>..\packages\ZString.2.6.0\lib\netstandard2.0\ZString.dll</HintPath>
     </Reference>
@@ -233,6 +234,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ExcelHelper.cs" />
     <Compile Include="Utilities\SqlHelper.cs" />
+    <Compile Include="WpfFilterPanel.xaml.cs">
+      <DependentUpon>WpfFilterPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WpfSalaryCondition.xaml.cs">
       <DependentUpon>WpfSalaryCondition.xaml</DependentUpon>
     </Compile>
@@ -308,6 +312,10 @@
     <Content Include="Sql\ZX_config_yg.sql" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="WpfFilterPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="WpfSalaryCondition.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
