@@ -240,12 +240,13 @@ namespace CompensationSystemSubInterface {
                 _deptRoot.UpdateDisplayText();
 
                 // 2. Refresh employees (depends on sequences, departments, positions, and levels)
-                // Employee filter: (no sequences OR xlid in sequences) AND (no departments OR bmid in departments)
-                //                  AND (no positions OR gwid in positions) AND (no levels OR cjid in levels)
+                // Filter: (no sequences OR xlid in sequences) AND (no departments OR bmid in departments)
+                //         AND (no positions OR gwid in positions) AND (no levels OR cjid in levels)
                 List<int> selectedDeptIds = GetCheckedIds(_deptRoot); // Get selected departments after refresh
                 List<int> selectedPostIds = GetCheckedIdsRecursive(_postRoot); // Get selected positions
                 List<int> selectedLevelIds = GetCheckedIdsRecursive(_levelRoot); // Get selected levels
 
+                // Note: No user input in SQL query - all data comes from database or controlled sources
                 string empSql = "SELECT id, xingming, xlid, bmid, gwid, cjid FROM ZX_config_yg WHERE zaizhi=1 ORDER BY xuhao";
                 DataTable dtEmp = SqlHelper.ExecuteDataTable(empSql);
 
@@ -557,6 +558,7 @@ namespace CompensationSystemSubInterface {
             CurrentCondition.PositionIds = GetCheckedIds(_postRoot);
             CurrentCondition.LevelIds = GetCheckedIdsRecursive(_levelRoot);
             CurrentCondition.EmployeeIds = GetCheckedIds(_empRoot);
+            // Note: Using _persistentItemIds instead of GetCheckedIdsRecursive to include hidden selected items
             CurrentCondition.SalaryItemIds = _persistentItemIds.ToList();
 
             ApplySelect?.Invoke(CurrentCondition);
