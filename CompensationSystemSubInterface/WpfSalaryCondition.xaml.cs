@@ -45,6 +45,9 @@ namespace CompensationSystemSubInterface {
         // Persistent tracking of selected Salary Item IDs (including hidden items)
         private HashSet<int> _persistentItemIds = new HashSet<int>();
 
+        // Persistent tracking of selected Employee IDs (including hidden items during search)
+        private HashSet<int> _persistentEmpIds = new HashSet<int>();
+
         /// <summary>
         /// 初始化薪资筛选条件窗体
         /// </summary>
@@ -57,6 +60,11 @@ namespace CompensationSystemSubInterface {
             // Initialize persistent item IDs from existing condition
             if (CurrentCondition.SalaryItemIds != null) {
                 _persistentItemIds = new HashSet<int>(CurrentCondition.SalaryItemIds);
+            }
+
+            // Initialize persistent employee IDs from existing condition
+            if (CurrentCondition.EmployeeIds != null) {
+                _persistentEmpIds = new HashSet<int>(CurrentCondition.EmployeeIds);
             }
 
             // 绑定数据源
@@ -250,8 +258,15 @@ namespace CompensationSystemSubInterface {
                 string empSql = "SELECT id, xingming, xlid, bmid, gwid, cjid FROM ZX_config_yg WHERE zaizhi=1 ORDER BY xuhao";
                 DataTable dtEmp = SqlHelper.ExecuteDataTable(empSql);
 
-                // Save employee selections
-                var currentSelectedEmpIds = GetCheckedIds(_empRoot);
+                // Update persistent employee IDs from currently visible checked items before clearing
+                foreach (var child in _empRoot.Children) {
+                    if (child.IsChecked == true) {
+                        _persistentEmpIds.Add(child.Id);
+                    } else {
+                        _persistentEmpIds.Remove(child.Id);
+                    }
+                }
+
                 string searchText = txtSearchEmp?.Text?.Trim() ?? string.Empty;
 
                 _empRoot.Children.Clear();
@@ -261,6 +276,7 @@ namespace CompensationSystemSubInterface {
                     int gwid = dr["gwid"] != DBNull.Value ? Convert.ToInt32(dr["gwid"]) : 0;
                     int cjid = dr["cjid"] != DBNull.Value ? Convert.ToInt32(dr["cjid"]) : 0;
                     string name = dr["xingming"].ToString();
+                    int empId = Convert.ToInt32(dr["id"]);
 
                     // Filter by sequence
                     if (selectedSeqIds.Count > 0 && !selectedSeqIds.Contains(xlid)) continue;
@@ -275,10 +291,11 @@ namespace CompensationSystemSubInterface {
 
                     var child = new ConditionTreeNode {
                         Name = name,
-                        Id = Convert.ToInt32(dr["id"]),
+                        Id = empId,
                         NodeType = ConditionNodeType.Item,
                         Parent = _empRoot,
-                        IsChecked = currentSelectedEmpIds.Contains(Convert.ToInt32(dr["id"]))
+                        // Restore checked state from persistent IDs
+                        IsChecked = _persistentEmpIds.Contains(empId)
                     };
                     _empRoot.Children.Add(child);
                 }
@@ -372,6 +389,11 @@ namespace CompensationSystemSubInterface {
                 UpdatePersistentItemIds(node);
             }
 
+            // Update persistent employee IDs for Employees
+            if (IsDescendantOf(node, _empRoot)) {
+                UpdatePersistentEmpIds(node);
+            }
+
             // Cascading handling
             // If operating on Sequence node (or its descendants), refresh Departments and Employees
             if (IsDescendantOf(node, _seqRoot)) {
@@ -401,6 +423,24 @@ namespace CompensationSystemSubInterface {
                 // Recursively update all child items
                 foreach (var child in node.Children) {
                     UpdatePersistentItemIds(child);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Update persistent employee IDs based on checked state changes
+        /// </summary>
+        private void UpdatePersistentEmpIds(ConditionTreeNode node) {
+            if (node.NodeType == ConditionNodeType.Item) {
+                if (node.IsChecked == true) {
+                    _persistentEmpIds.Add(node.Id);
+                } else {
+                    _persistentEmpIds.Remove(node.Id);
+                }
+            } else if (node.NodeType == ConditionNodeType.Category) {
+                // Update all child items
+                foreach (var child in node.Children) {
+                    UpdatePersistentEmpIds(child);
                 }
             }
         }
@@ -517,6 +557,11 @@ namespace CompensationSystemSubInterface {
                 UpdatePersistentItemIds(targetNode);
             }
 
+            // Update persistent employee IDs if this is under Employees
+            if (IsDescendantOf(targetNode, _empRoot)) {
+                UpdatePersistentEmpIds(targetNode);
+            }
+
             // Trigger cascading if needed
             if (IsDescendantOf(targetNode, _seqRoot) || IsDescendantOf(targetNode, _deptRoot)) {
                 RefreshCascadingData();
@@ -557,7 +602,8 @@ namespace CompensationSystemSubInterface {
             CurrentCondition.DepartmentIds = GetCheckedIds(_deptRoot);
             CurrentCondition.PositionIds = GetCheckedIds(_postRoot);
             CurrentCondition.LevelIds = GetCheckedIdsRecursive(_levelRoot);
-            CurrentCondition.EmployeeIds = GetCheckedIds(_empRoot);
+            // Note: Using _persistentEmpIds to include hidden selected employees during search
+            CurrentCondition.EmployeeIds = _persistentEmpIds.ToList();
             // Note: Using _persistentItemIds instead of GetCheckedIdsRecursive to include hidden selected items
             CurrentCondition.SalaryItemIds = _persistentItemIds.ToList();
 
