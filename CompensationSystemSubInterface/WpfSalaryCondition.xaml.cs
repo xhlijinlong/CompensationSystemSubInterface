@@ -31,7 +31,7 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         public ObservableCollection<ConditionTreeNode> TreeRoots { get; set; } = new ObservableCollection<ConditionTreeNode>();
 
-        // 缓存各分类的根节点引用，方便后续操作
+        // Cache root node references for each category for convenient operations
         private ConditionTreeNode _seqRoot;
         private ConditionTreeNode _deptRoot;
         private ConditionTreeNode _postRoot;
@@ -52,8 +52,8 @@ namespace CompensationSystemSubInterface {
             treeConditions.ItemsSource = TreeRoots;
 
             InitializeStructure();
-            LoadStaticData(); // 加载不随级联变化的静态数据（岗位、层级、薪资项目）
-            RefreshCascadingData(); // 加载级联数据（部门、员工）
+            LoadStaticData(); // Load non-cascading static data (positions, levels, salary items)
+            RefreshCascadingData(); // Load cascading data (departments, employees)
 
             RestoreSelection();
         }
@@ -84,24 +84,24 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 加载静态数据（序列、岗位、层级、薪资项目）
+        /// Load static data (sequences, positions, levels, salary items)
         /// </summary>
         private void LoadStaticData() {
             try {
-                // 1. 序列 (基础筛选源)
+                // 1. Sequences (base filter source)
                 LoadTreeData(_seqRoot,
                     "SELECT id, xlname FROM ZX_config_xl WHERE IsEnabled=1 AND DeleteType=0",
                     "xlname", "id");
 
-                // 2. 岗位
+                // 2. Positions
                 LoadTreeData(_postRoot,
                     "SELECT id, gwname FROM ZX_config_gw WHERE IsEnabled=1 AND DeleteType=0 ORDER BY DisplayOrder",
                     "gwname", "id");
 
-                // 3. 层级 (特殊分组处理)
+                // 3. Levels (with special grouping)
                 LoadLevels();
 
-                // 4. 薪资项目 (特殊分组处理)
+                // 4. Salary items (with special grouping)
                 LoadSalaryItems();
 
             } catch (Exception ex) {
@@ -110,29 +110,29 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 加载层级数据并按 1-10, 11-20 分组
+        /// Load levels and group them into ranges of 10 (1-10, 11-20, etc.)
         /// </summary>
         private void LoadLevels() {
             _levelRoot.Children.Clear();
             string sql = "SELECT id, cjname FROM ZX_config_cj WHERE DeleteType=0";
             DataTable dt = SqlHelper.ExecuteDataTable(sql);
 
-            // 内存中分组
+            // Group in memory
             var groups = dt.AsEnumerable()
                 .Select(r => new {
                     Id = Convert.ToInt32(r["id"]),
                     Name = r["cjname"].ToString()
                 })
                 .GroupBy(x => {
-                    // 解析数字，例如 "1级" -> 1
+                    // Parse number from level name (e.g., "1级" -> 1)
                     var match = Regex.Match(x.Name, @"\d+");
                     if (match.Success && int.TryParse(match.Value, out int level)) {
                         int groupStart = ((level - 1) / 10) * 10 + 1;
                         return $"{groupStart}-{groupStart + 9}";
                     }
-                    return "其他";
+                    return "其他"; // "Others" for items that don't match the pattern
                 })
-                .OrderBy(g => g.Key.Length).ThenBy(g => g.Key); // 简单排序
+                .OrderBy(g => g.Key.Length).ThenBy(g => g.Key); // Simple sorting
 
             foreach (var group in groups) {
                 var groupNode = new ConditionTreeNode {
@@ -141,7 +141,7 @@ namespace CompensationSystemSubInterface {
                     Parent = _levelRoot
                 };
 
-                foreach (var item in group.OrderBy(i => i.Id)) { // 假设ID顺序即为层级顺序
+                foreach (var item in group.OrderBy(i => i.Id)) { // Assume ID order represents level order
                     var child = new ConditionTreeNode {
                         Name = item.Name,
                         Id = item.Id,
@@ -157,11 +157,11 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 加载薪资项目并按 QueryType 分组
+        /// Load salary items and group them by QueryType
         /// </summary>
         private void LoadSalaryItems() {
             _itemRoot.Children.Clear();
-            // 注意：增加了 QueryType 列的查询
+            // Note: Added QueryType column to query
             string sql = "SELECT ItemId AS id, ItemName, QueryType FROM ZX_SalaryItems WHERE IsEnabled=1 ORDER BY DisplayOrder ASC";
             DataTable dt = SqlHelper.ExecuteDataTable(sql);
 
@@ -192,29 +192,25 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 刷新级联数据（部门、员工），基于当前选中的序列和部门
+        /// Refresh cascading data (departments, employees) based on current selected sequences and departments
         /// </summary>
         private void RefreshCascadingData() {
             try {
-                // 获取当前选中的序列ID
+                // Get currently selected sequence IDs
                 List<int> selectedSeqIds = GetCheckedIds(_seqRoot);
                 
-                // 1. 刷新部门 (依赖序列)
-                // 仅当序列有选中时进行筛选，否则显示全部（或根据需求逻辑调整）
-                // 需求：选中序列...应用到下面的部门(xlid等于选择序列)
-                // 如果没有选中任何序列，通常显示所有部门，或者空？这里假设显示所有。
-                // 实际上级联通常意味着：如果选了父级，子级只显示相关的。如果不选父级，显示全部。
-                
+                // 1. Refresh departments (depends on sequences)
+                // Filter departments by xlid when sequences are selected
                 string deptSql = "SELECT id, bmname, xlid FROM ZX_config_bm WHERE IsEnabled=1 AND DeleteType=0 ORDER BY DisplayOrder";
                 DataTable dtDept = SqlHelper.ExecuteDataTable(deptSql);
                 
-                // 暂存当前选中的部门ID，以便刷新后恢复（如果还在列表中）
+                // Save currently selected department IDs to restore after refresh
                 var currentSelectedDeptIds = GetCheckedIds(_deptRoot);
                 
                 _deptRoot.Children.Clear();
                 foreach (DataRow dr in dtDept.Rows) {
                     int xlid = dr["xlid"] != DBNull.Value ? Convert.ToInt32(dr["xlid"]) : 0;
-                    // 如果有选序列，且该部门不属于选中序列，则跳过
+                    // Skip if sequences are selected and this department doesn't belong to any selected sequence
                     if (selectedSeqIds.Count > 0 && !selectedSeqIds.Contains(xlid)) continue;
 
                     var child = new ConditionTreeNode {
@@ -222,21 +218,21 @@ namespace CompensationSystemSubInterface {
                         Id = Convert.ToInt32(dr["id"]),
                         NodeType = ConditionNodeType.Item,
                         Parent = _deptRoot,
-                        // 恢复选中状态
+                        // Restore checked state if still in list
                         IsChecked = currentSelectedDeptIds.Contains(Convert.ToInt32(dr["id"]))
                     };
                     _deptRoot.Children.Add(child);
                 }
                 _deptRoot.UpdateDisplayText();
 
-                // 2. 刷新员工 (依赖序列和部门)
-                // 员工筛选条件：(没有选序列 OR xlid in seqs) AND (没有选部门 OR bmid in depts)
-                List<int> selectedDeptIds = GetCheckedIds(_deptRoot); // 获取刷新后的选中部门
+                // 2. Refresh employees (depends on sequences and departments)
+                // Employee filter: (no sequences OR xlid in sequences) AND (no departments OR bmid in departments)
+                List<int> selectedDeptIds = GetCheckedIds(_deptRoot); // Get selected departments after refresh
 
                 string empSql = "SELECT id, xingming, xlid, bmid FROM ZX_config_yg WHERE zaizhi=1 ORDER BY xuhao";
                 DataTable dtEmp = SqlHelper.ExecuteDataTable(empSql);
 
-                // 暂存员工选中状态
+                // Save employee selections
                 var currentSelectedEmpIds = GetCheckedIds(_empRoot);
                 string searchText = txtSearch?.Text?.Trim();
 
@@ -246,11 +242,11 @@ namespace CompensationSystemSubInterface {
                     int bmid = dr["bmid"] != DBNull.Value ? Convert.ToInt32(dr["bmid"]) : 0;
                     string name = dr["xingming"].ToString();
 
-                    // 序列筛选
+                    // Filter by sequence
                     if (selectedSeqIds.Count > 0 && !selectedSeqIds.Contains(xlid)) continue;
-                    // 部门筛选
+                    // Filter by department
                     if (selectedDeptIds.Count > 0 && !selectedDeptIds.Contains(bmid)) continue;
-                    // 模糊搜索筛选 (仅针对员工)
+                    // Filter by search text (employees only)
                     if (!string.IsNullOrEmpty(searchText) && !name.Contains(searchText)) continue;
 
                     var child = new ConditionTreeNode {
@@ -265,8 +261,8 @@ namespace CompensationSystemSubInterface {
                 _empRoot.UpdateDisplayText();
 
             } catch (Exception ex) {
-                // 避免在初始化或频繁操作时弹出过多错误，可以记录日志
-                Console.WriteLine(ex.Message);
+                // Avoid showing too many error dialogs during initialization or frequent operations
+                System.Diagnostics.Debug.WriteLine($"RefreshCascadingData error: {ex.Message}");
             }
         }
 
@@ -290,28 +286,28 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 恢复选中状态
+        /// Restore selection state based on CurrentCondition
         /// </summary>
         private void RestoreSelection() {
             SetChecks(_seqRoot, CurrentCondition.SequenceIds);
             
-            // 恢复后可能触发了级联逻辑，需要确保部门和员工列表正确
-            // 但 SetChecks 只是设置 IsChecked，不触发 Click 事件
-            // 所以我们需要手动调用一次刷新
+            // After restoring, need to ensure department and employee lists are correct
+            // But SetChecks only sets IsChecked without triggering Click events
+            // So we need to manually refresh once
             RefreshCascadingData();
 
-            // 再次设置部门和员工的选中状态，因为 RefreshCascadingData 可能重置了节点
+            // Set department and employee selections again because RefreshCascadingData may reset nodes
             SetChecks(_deptRoot, CurrentCondition.DepartmentIds);
-            RefreshCascadingData(); // 部门变化可能影响员工
+            RefreshCascadingData(); // Department changes may affect employees
             
             SetChecks(_postRoot, CurrentCondition.PositionIds);
             
-            // 恢复层级 (两层结构)
+            // Restore levels (two-level structure)
             SetChecksRecursive(_levelRoot, CurrentCondition.LevelIds);
             
             SetChecks(_empRoot, CurrentCondition.EmployeeIds);
             
-            // 恢复薪资项目 (两层结构)
+            // Restore salary items (two-level structure)
             SetChecksRecursive(_itemRoot, CurrentCondition.SalaryItemIds);
         }
 
@@ -323,7 +319,7 @@ namespace CompensationSystemSubInterface {
             parent.UpdateCheckState();
         }
 
-        // 递归设置选中状态（用于处理分组情况）
+        // Recursively set checked state (for handling grouped nodes)
         private void SetChecksRecursive(ConditionTreeNode parent, List<int> ids) {
             if (ids == null) return;
             foreach (var child in parent.Children) {
@@ -337,40 +333,40 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// CheckBox 点击事件
+        /// CheckBox click event handler
         /// </summary>
         private void CheckBox_Click(object sender, RoutedEventArgs e) {
             var cb = sender as CheckBox;
             var node = cb?.DataContext as ConditionTreeNode;
             if (node == null) return;
 
-            // 处理选中逻辑
+            // Handle check logic
             HandleCheckLogic(node);
 
-            // 级联处理
-            // 如果操作的是 序列 节点 (或其子节点)，刷新 部门 和 员工
+            // Cascading handling
+            // If operating on Sequence node (or its descendants), refresh Departments and Employees
             if (IsDescendantOf(node, _seqRoot)) {
                 RefreshCascadingData();
             }
-            // 如果操作的是 部门 节点 (或其子节点)，刷新 员工
+            // If operating on Department node (or its descendants), refresh Employees
             else if (IsDescendantOf(node, _deptRoot)) {
                 RefreshCascadingData();
             }
         }
 
-        // 递归设置选中
+        // Recursively set checked state
         private void HandleCheckLogic(ConditionTreeNode node) {
             if (node.NodeType == ConditionNodeType.Category || node.NodeType == ConditionNodeType.Group) {
                 bool isChecked = node.IsChecked == true;
                 foreach (var child in node.Children) {
                     child.IsChecked = isChecked;
                     if (child.NodeType == ConditionNodeType.Group) {
-                        HandleCheckLogic(child); // 递归处理深层分组
+                        HandleCheckLogic(child); // Recursively handle deep grouping
                     }
                 }
             } else {
                 node.Parent?.UpdateCheckState();
-                // 如果父级是组，组的父级（Category）也需要更新
+                // If parent is a group, the group's parent (Category) also needs updating
                 if (node.Parent?.Parent != null) {
                     node.Parent.Parent.UpdateCheckState();
                 }
@@ -384,25 +380,25 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 搜索框文本变化事件
+        /// Search textbox text changed event handler
         /// </summary>
         private void txtSearch_TextChanged(object sender, TextChangedEventArgs e) {
             string text = txtSearch.Text.Trim();
             
-            // 1. 触发员工列表刷新（利用 RefreshCascadingData 中的过滤逻辑）
+            // 1. Trigger employee list refresh (uses filter logic in RefreshCascadingData)
             RefreshCascadingData();
 
-            // 2. 筛选薪资项目 (本地筛选)
+            // 2. Filter salary items (local filtering)
             FilterSalaryItems(text);
         }
 
         private void FilterSalaryItems(string keyword) {
-            // 先重新加载所有薪资项目以恢复完整列表
+            // First reload all salary items to restore complete list
             LoadSalaryItems();
             
             if (string.IsNullOrEmpty(keyword)) return;
 
-            // 倒序遍历删除不匹配的节点
+            // Iterate in reverse order to remove non-matching nodes
             for (int i = _itemRoot.Children.Count - 1; i >= 0; i--) {
                 var group = _itemRoot.Children[i];
                 bool groupHasMatch = false;
@@ -418,17 +414,13 @@ namespace CompensationSystemSubInterface {
 
                 if (!groupHasMatch) {
                     _itemRoot.Children.RemoveAt(i);
-                } else {
-                    // 如果组内有匹配项，默认展开（需要 TreeViewItem 样式绑定 IsExpanded，这里简化处理或需在 Model 增加 IsExpanded 属性）
-                    // 假设用户手动展开
                 }
+                // Note: Auto-expand groups with matches would require binding IsExpanded in XAML
+                // This is left for UI implementation
             }
             _itemRoot.UpdateDisplayText();
         }
 
-        // ... (ContextMenu methods remain mostly the same, ensuring they call HandleCheckLogic logic effectively) ...
-
-        
         private void ContextMenu_SelectAll_Click(object sender, RoutedEventArgs e) {
             ProcessContextMenuAction(sender, child => child.IsChecked = true);
         }
@@ -445,28 +437,34 @@ namespace CompensationSystemSubInterface {
             var node = GetContextMenuNode(sender);
             if (node == null) return;
 
-            // 找到操作的目标集合容器（Category 或者 Group）
+            // Find the target container (Category or Group)
             var targetNode = (node.NodeType == ConditionNodeType.Category || node.NodeType == ConditionNodeType.Group) 
                              ? node : node.Parent;
             
             if (targetNode == null) return;
 
-            foreach (var child in targetNode.Children) {
-                action(child);
-                if (child.NodeType == ConditionNodeType.Group) {
-                    // 如果是组，递归应用
-                    foreach(var grandChild in child.Children) action(grandChild);
-                    child.UpdateCheckState();
-                }
-            }
+            // Apply action recursively to all descendants
+            ApplyActionRecursively(targetNode, action);
             targetNode.UpdateCheckState();
             
-            // 如果有更上级
+            // Update parent if exists
             if (targetNode.Parent != null) targetNode.Parent.UpdateCheckState();
 
-            // 触发级联
+            // Trigger cascading if needed
             if (IsDescendantOf(targetNode, _seqRoot) || IsDescendantOf(targetNode, _deptRoot)) {
                 RefreshCascadingData();
+            }
+        }
+
+        private void ApplyActionRecursively(ConditionTreeNode node, Action<ConditionTreeNode> action) {
+            foreach (var child in node.Children) {
+                if (child.NodeType == ConditionNodeType.Item) {
+                    action(child);
+                } else if (child.NodeType == ConditionNodeType.Group) {
+                    // Recursively apply to group's children
+                    ApplyActionRecursively(child, action);
+                    child.UpdateCheckState();
+                }
             }
         }
 
@@ -549,9 +547,9 @@ namespace CompensationSystemSubInterface {
 
         public string DisplayText {
             get {
-                // Category 和 Group 都显示统计
+                // Category and Group both display statistics
                 if ((NodeType == ConditionNodeType.Category || NodeType == ConditionNodeType.Group) && Children.Count > 0) {
-                    // 递归计算选中数（如果包含Group，需要计算Group下的Item）
+                    // Recursively calculate checked count (if contains Groups, need to count Items under Groups)
                     int checkedCount = CountCheckedItems(this);
                     int totalCount = CountTotalItems(this);
                     return $"{Name} ({checkedCount}/{totalCount})";
@@ -590,10 +588,10 @@ namespace CompensationSystemSubInterface {
             if (Children.Count == 0) return;
 
             bool allChecked = Children.All(c => c.IsChecked == true);
-            bool anyChecked = Children.Any(c => c.IsChecked == true || c.IsChecked == null); // 包含半选
+            bool anyChecked = Children.Any(c => c.IsChecked == true || c.IsChecked == null); // Include indeterminate
 
             if (allChecked) IsChecked = true;
-            else if (anyChecked) IsChecked = null;
+            else if (anyChecked) IsChecked = null; // Indeterminate state
             else IsChecked = false;
 
             UpdateDisplayText();
