@@ -402,7 +402,7 @@ namespace CompensationSystemSubInterface {
             // Save currently checked item IDs before reloading
             var currentSelectedItemIds = GetCheckedIdsRecursive(_itemRoot);
             
-            // First reload all salary items to restore complete list
+            // Reload all salary items to restore complete list (important when clearing a previous search)
             LoadSalaryItems();
             
             if (string.IsNullOrEmpty(keyword)) {
