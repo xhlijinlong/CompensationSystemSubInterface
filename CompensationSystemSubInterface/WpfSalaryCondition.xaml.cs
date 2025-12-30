@@ -42,6 +42,9 @@ namespace CompensationSystemSubInterface {
         // Static regex for level parsing (compiled for better performance)
         private static readonly Regex LevelNumberRegex = new Regex(@"\d+", RegexOptions.Compiled);
 
+        // Persistent tracking of selected Salary Item IDs (including hidden items)
+        private HashSet<int> _persistentItemIds = new HashSet<int>();
+
         /// <summary>
         /// 初始化薪资筛选条件窗体
         /// </summary>
@@ -50,6 +53,11 @@ namespace CompensationSystemSubInterface {
             InitializeComponent();
 
             CurrentCondition = existing != null ? existing.Clone() : new SalaryQueryCondition();
+            
+            // Initialize persistent item IDs from existing condition
+            if (CurrentCondition.SalaryItemIds != null) {
+                _persistentItemIds = new HashSet<int>(CurrentCondition.SalaryItemIds);
+            }
 
             // 绑定数据源
             treeConditions.ItemsSource = TreeRoots;
@@ -231,27 +239,36 @@ namespace CompensationSystemSubInterface {
                 }
                 _deptRoot.UpdateDisplayText();
 
-                // 2. Refresh employees (depends on sequences and departments)
+                // 2. Refresh employees (depends on sequences, departments, positions, and levels)
                 // Employee filter: (no sequences OR xlid in sequences) AND (no departments OR bmid in departments)
+                //                  AND (no positions OR gwid in positions) AND (no levels OR cjid in levels)
                 List<int> selectedDeptIds = GetCheckedIds(_deptRoot); // Get selected departments after refresh
+                List<int> selectedPostIds = GetCheckedIdsRecursive(_postRoot); // Get selected positions
+                List<int> selectedLevelIds = GetCheckedIdsRecursive(_levelRoot); // Get selected levels
 
-                string empSql = "SELECT id, xingming, xlid, bmid FROM ZX_config_yg WHERE zaizhi=1 ORDER BY xuhao";
+                string empSql = "SELECT id, xingming, xlid, bmid, gwid, cjid FROM ZX_config_yg WHERE zaizhi=1 ORDER BY xuhao";
                 DataTable dtEmp = SqlHelper.ExecuteDataTable(empSql);
 
                 // Save employee selections
                 var currentSelectedEmpIds = GetCheckedIds(_empRoot);
-                string searchText = txtSearch?.Text?.Trim() ?? string.Empty;
+                string searchText = txtSearchEmp?.Text?.Trim() ?? string.Empty;
 
                 _empRoot.Children.Clear();
                 foreach (DataRow dr in dtEmp.Rows) {
                     int xlid = dr["xlid"] != DBNull.Value ? Convert.ToInt32(dr["xlid"]) : 0;
                     int bmid = dr["bmid"] != DBNull.Value ? Convert.ToInt32(dr["bmid"]) : 0;
+                    int gwid = dr["gwid"] != DBNull.Value ? Convert.ToInt32(dr["gwid"]) : 0;
+                    int cjid = dr["cjid"] != DBNull.Value ? Convert.ToInt32(dr["cjid"]) : 0;
                     string name = dr["xingming"].ToString();
 
                     // Filter by sequence
                     if (selectedSeqIds.Count > 0 && !selectedSeqIds.Contains(xlid)) continue;
                     // Filter by department
                     if (selectedDeptIds.Count > 0 && !selectedDeptIds.Contains(bmid)) continue;
+                    // Filter by position
+                    if (selectedPostIds.Count > 0 && !selectedPostIds.Contains(gwid)) continue;
+                    // Filter by level
+                    if (selectedLevelIds.Count > 0 && !selectedLevelIds.Contains(cjid)) continue;
                     // Filter by search text (employees only)
                     if (!string.IsNullOrEmpty(searchText) && !name.Contains(searchText)) continue;
 
@@ -349,6 +366,11 @@ namespace CompensationSystemSubInterface {
             // Handle check logic
             HandleCheckLogic(node);
 
+            // Update persistent item IDs for Salary Items
+            if (IsDescendantOf(node, _itemRoot)) {
+                UpdatePersistentItemIds(node);
+            }
+
             // Cascading handling
             // If operating on Sequence node (or its descendants), refresh Departments and Employees
             if (IsDescendantOf(node, _seqRoot)) {
@@ -357,6 +379,28 @@ namespace CompensationSystemSubInterface {
             // If operating on Department node (or its descendants), refresh Employees
             else if (IsDescendantOf(node, _deptRoot)) {
                 RefreshCascadingData();
+            }
+            // If operating on Position or Level node (or their descendants), refresh Employees
+            else if (IsDescendantOf(node, _postRoot) || IsDescendantOf(node, _levelRoot)) {
+                RefreshCascadingData();
+            }
+        }
+
+        /// <summary>
+        /// Update persistent item IDs based on checked state changes
+        /// </summary>
+        private void UpdatePersistentItemIds(ConditionTreeNode node) {
+            if (node.NodeType == ConditionNodeType.Item) {
+                if (node.IsChecked == true) {
+                    _persistentItemIds.Add(node.Id);
+                } else {
+                    _persistentItemIds.Remove(node.Id);
+                }
+            } else if (node.NodeType == ConditionNodeType.Category || node.NodeType == ConditionNodeType.Group) {
+                // Recursively update all child items
+                foreach (var child in node.Children) {
+                    UpdatePersistentItemIds(child);
+                }
             }
         }
 
@@ -386,28 +430,29 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// Search textbox text changed event handler
+        /// Employee search textbox text changed event handler
         /// </summary>
-        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e) {
-            string text = txtSearch.Text.Trim();
-            
-            // 1. Trigger employee list refresh (uses filter logic in RefreshCascadingData)
+        private void txtSearchEmp_TextChanged(object sender, TextChangedEventArgs e) {
+            // Trigger employee list refresh (uses filter logic in RefreshCascadingData)
             RefreshCascadingData();
+        }
 
-            // 2. Filter salary items (local filtering)
+        /// <summary>
+        /// Salary item search textbox text changed event handler
+        /// </summary>
+        private void txtSearchItem_TextChanged(object sender, TextChangedEventArgs e) {
+            string text = txtSearchItem.Text.Trim();
+            // Filter salary items (local filtering)
             FilterSalaryItems(text);
         }
 
         private void FilterSalaryItems(string keyword) {
-            // Save currently checked item IDs before reloading
-            var currentSelectedItemIds = GetCheckedIdsRecursive(_itemRoot);
-            
             // Reload all salary items to restore complete list (important when clearing a previous search)
             LoadSalaryItems();
             
             if (string.IsNullOrEmpty(keyword)) {
-                // No filter, just restore checked state
-                SetChecksRecursive(_itemRoot, currentSelectedItemIds);
+                // No filter, just restore checked state from persistent IDs
+                SetChecksRecursive(_itemRoot, _persistentItemIds.ToList());
                 return;
             }
 
@@ -432,8 +477,8 @@ namespace CompensationSystemSubInterface {
                 // This is left for UI implementation
             }
             
-            // Restore checked state after filtering
-            SetChecksRecursive(_itemRoot, currentSelectedItemIds);
+            // Restore checked state from persistent IDs after filtering
+            SetChecksRecursive(_itemRoot, _persistentItemIds.ToList());
             _itemRoot.UpdateDisplayText();
         }
 
@@ -466,8 +511,17 @@ namespace CompensationSystemSubInterface {
             // Update parent if exists
             if (targetNode.Parent != null) targetNode.Parent.UpdateCheckState();
 
+            // Update persistent item IDs if this is under Salary Items
+            if (IsDescendantOf(targetNode, _itemRoot)) {
+                UpdatePersistentItemIds(targetNode);
+            }
+
             // Trigger cascading if needed
             if (IsDescendantOf(targetNode, _seqRoot) || IsDescendantOf(targetNode, _deptRoot)) {
+                RefreshCascadingData();
+            }
+            // Trigger cascading for Position or Level changes
+            else if (IsDescendantOf(targetNode, _postRoot) || IsDescendantOf(targetNode, _levelRoot)) {
                 RefreshCascadingData();
             }
         }
@@ -503,7 +557,7 @@ namespace CompensationSystemSubInterface {
             CurrentCondition.PositionIds = GetCheckedIds(_postRoot);
             CurrentCondition.LevelIds = GetCheckedIdsRecursive(_levelRoot);
             CurrentCondition.EmployeeIds = GetCheckedIds(_empRoot);
-            CurrentCondition.SalaryItemIds = GetCheckedIdsRecursive(_itemRoot);
+            CurrentCondition.SalaryItemIds = _persistentItemIds.ToList();
 
             ApplySelect?.Invoke(CurrentCondition);
         }
