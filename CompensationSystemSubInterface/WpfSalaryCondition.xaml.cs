@@ -399,10 +399,17 @@ namespace CompensationSystemSubInterface {
         }
 
         private void FilterSalaryItems(string keyword) {
+            // Save currently checked item IDs before reloading
+            var currentSelectedItemIds = GetCheckedIdsRecursive(_itemRoot);
+            
             // First reload all salary items to restore complete list
             LoadSalaryItems();
             
-            if (string.IsNullOrEmpty(keyword)) return;
+            if (string.IsNullOrEmpty(keyword)) {
+                // No filter, just restore checked state
+                SetChecksRecursive(_itemRoot, currentSelectedItemIds);
+                return;
+            }
 
             // Iterate in reverse order to remove non-matching nodes
             for (int i = _itemRoot.Children.Count - 1; i >= 0; i--) {
@@ -424,6 +431,9 @@ namespace CompensationSystemSubInterface {
                 // Note: Auto-expand groups with matches would require binding IsExpanded in XAML
                 // This is left for UI implementation
             }
+            
+            // Restore checked state after filtering
+            SetChecksRecursive(_itemRoot, currentSelectedItemIds);
             _itemRoot.UpdateDisplayText();
         }
 
