@@ -39,6 +39,9 @@ namespace CompensationSystemSubInterface {
         private ConditionTreeNode _empRoot;
         private ConditionTreeNode _itemRoot;
 
+        // Static regex for level parsing (compiled for better performance)
+        private static readonly Regex LevelNumberRegex = new Regex(@"\d+", RegexOptions.Compiled);
+
         /// <summary>
         /// 初始化薪资筛选条件窗体
         /// </summary>
@@ -125,7 +128,7 @@ namespace CompensationSystemSubInterface {
                 })
                 .GroupBy(x => {
                     // Parse number from level name (e.g., "1级" -> 1)
-                    var match = Regex.Match(x.Name, @"\d+");
+                    var match = LevelNumberRegex.Match(x.Name);
                     if (match.Success && int.TryParse(match.Value, out int level)) {
                         int groupStart = ((level - 1) / 10) * 10 + 1;
                         return $"{groupStart}-{groupStart + 9}";
@@ -166,8 +169,11 @@ namespace CompensationSystemSubInterface {
             DataTable dt = SqlHelper.ExecuteDataTable(sql);
 
             var groups = dt.AsEnumerable()
-                .GroupBy(r => r["QueryType"] == DBNull.Value || string.IsNullOrWhiteSpace(r["QueryType"].ToString()) 
-                              ? "其他" : r["QueryType"].ToString());
+                .GroupBy(r => {
+                    var queryType = r["QueryType"];
+                    return queryType == DBNull.Value || string.IsNullOrWhiteSpace(queryType.ToString()) 
+                              ? "其他" : queryType.ToString();
+                });
 
             foreach (var group in groups) {
                 var groupNode = new ConditionTreeNode {
@@ -234,7 +240,7 @@ namespace CompensationSystemSubInterface {
 
                 // Save employee selections
                 var currentSelectedEmpIds = GetCheckedIds(_empRoot);
-                string searchText = txtSearch?.Text?.Trim();
+                string searchText = txtSearch?.Text?.Trim() ?? string.Empty;
 
                 _empRoot.Children.Clear();
                 foreach (DataRow dr in dtEmp.Rows) {
@@ -262,7 +268,7 @@ namespace CompensationSystemSubInterface {
 
             } catch (Exception ex) {
                 // Avoid showing too many error dialogs during initialization or frequent operations
-                System.Diagnostics.Debug.WriteLine($"RefreshCascadingData error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"RefreshCascadingData error: {ex}");
             }
         }
 
