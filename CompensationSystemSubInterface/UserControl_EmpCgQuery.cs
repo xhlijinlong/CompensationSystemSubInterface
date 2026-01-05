@@ -45,6 +45,11 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         public UserControl_EmpCgQuery() {
             InitializeComponent();
+            
+            // 当控件销毁时关闭WPF弹窗
+            this.HandleDestroyed += (s, e) => {
+                _wpfCondition?.Close();
+            };
         }
 
         /// <summary>

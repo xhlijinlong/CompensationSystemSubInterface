@@ -49,6 +49,11 @@ namespace CompensationSystemSubInterface {
             InitializeComponent();
             // 员工信息表不需要复杂的行颜色逻辑 (RowPrePaint)，只需交替色即可
             //dgvSalary.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
+            
+            // 当控件销毁时关闭WPF弹窗
+            this.HandleDestroyed += (s, e) => {
+                _wpfCondition?.Close();
+            };
         }
 
         /*/// <summary>

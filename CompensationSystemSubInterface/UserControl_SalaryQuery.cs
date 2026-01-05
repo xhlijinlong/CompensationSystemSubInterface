@@ -49,6 +49,11 @@ namespace CompensationSystemSubInterface {
         public UserControl_SalaryQuery() {
             InitializeComponent();
             dgvSalary.RowPrePaint += dgvSalary_RowPrePaint; // 绑定行绘制前事件
+            
+            // 当控件销毁时关闭WPF弹窗
+            this.HandleDestroyed += (s, e) => {
+                _wpfCondition?.Close();
+            };
         }
 
         /// <summary>

@@ -32,7 +32,7 @@ namespace CompensationSystemSubInterface {
         /// <summary>
         /// 高级筛选条件窗体实例（WPF版本）
         /// </summary>
-        private WpfPfmcCondition _wpfCondition = null;
+        private WpfEmpCondition _wpfCondition = null;
 
         // WPF 筛选树控件
         private WpfFilterPanel _treeYear;
@@ -47,6 +47,11 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         public UserControl_PfmcQuery() {
             InitializeComponent();
+            
+            // 当控件销毁时关闭WPF弹窗
+            this.HandleDestroyed += (s, e) => {
+                _wpfCondition?.Close();
+            };
         }
 
         /// <summary>
@@ -199,9 +204,10 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void btnCondition_Click(object sender, EventArgs e) {
             if (_wpfCondition == null) {
-                _wpfCondition = new WpfPfmcCondition(_condition);
-                _wpfCondition.ApplySelect += (newCond) => {
-                    _condition = newCond;
+                // 使用通用的 WpfEmpCondition，不传部门筛选条件
+                _wpfCondition = new WpfEmpCondition(_condition.EmployeeIds, null);
+                _wpfCondition.ApplySelect += (empIds) => {
+                    _condition.EmployeeIds = empIds;
                     btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";
                     PerformQuery();
                 };
