@@ -335,7 +335,7 @@ namespace CompensationSystemSubInterface {
 
                 _wpfCondition.ApplySelect += (newCond) => {
                     _condition = newCond;
-                    btnCondition.Text = _condition.HasFilter ? "条件设置 *" : "条件设置";
+                    btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";
                     PerformQuery();
                 };
 

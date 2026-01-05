@@ -204,7 +204,7 @@ namespace CompensationSystemSubInterface {
                 _wpfCondition = new WpfEmployeeCondition(_condition.EmployeeIds, _condition.DepartmentIds);
                 _wpfCondition.ApplySelect += (empIds) => {
                     _condition.EmployeeIds = empIds;
-                    btnCondition.Text = _condition.HasFilter ? "条件设置 *" : "条件设置";
+                    btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";
                     PerformQuery();
                 };
                 
