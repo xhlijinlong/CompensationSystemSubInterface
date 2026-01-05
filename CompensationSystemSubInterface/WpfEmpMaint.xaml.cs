@@ -35,7 +35,7 @@ namespace CompensationSystemSubInterface {
         /// <summary>
         /// 当前员工的详细信息对象（用于数据绑定和回显）
         /// </summary>
-        private EmployeeDetail _currentEmp;
+        private EmpDetail _currentEmp;
 
         /// <summary>
         /// 事件：请求打开员工变动窗口
@@ -154,7 +154,7 @@ namespace CompensationSystemSubInterface {
         private void btnSave_Click(object sender, RoutedEventArgs e) {
             try {
                 // 1. 收集界面数据到实体对象
-                EmployeeDetail empToSave = new EmployeeDetail {
+                EmpDetail empToSave = new EmpDetail {
                     Id = _empId,
                     Name = txtNameHeader.Text,
 

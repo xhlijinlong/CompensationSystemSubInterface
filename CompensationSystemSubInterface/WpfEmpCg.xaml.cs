@@ -36,7 +36,7 @@ namespace CompensationSystemSubInterface {
         /// 员工原始数据（变动前的组织信息）
         /// 用于显示原部门、原序列、原职务、原层级等信息
         /// </summary>
-        private EmployeeDetail _oldData;
+        private EmpDetail _oldData;
 
         /// <summary>
         /// 构造函数：初始化员工变动窗口

@@ -27,12 +27,12 @@ namespace CompensationSystemSubInterface {
         /// <summary>
         /// 当前的查询筛选条件
         /// </summary>
-        private EmpQueryCondition _condition = new EmpQueryCondition();
+        private EmpCondition _condition = new EmpCondition();
 
         /// <summary>
         /// 高级筛选条件窗体实例（WPF版本）
         /// </summary>
-        private WpfEmployeeCondition _wpfCondition = null;
+        private WpfEmpCondition _wpfCondition = null;
 
         // WPF 筛选树控件
         private WpfFilterPanel _treeDept;
@@ -201,7 +201,7 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void btnCondition_Click(object sender, EventArgs e) {
             if (_wpfCondition == null) {
-                _wpfCondition = new WpfEmployeeCondition(_condition.EmployeeIds, _condition.DepartmentIds);
+                _wpfCondition = new WpfEmpCondition(_condition.EmployeeIds, _condition.DepartmentIds);
                 _wpfCondition.ApplySelect += (empIds) => {
                     _condition.EmployeeIds = empIds;
                     btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";

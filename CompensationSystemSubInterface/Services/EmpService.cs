@@ -26,7 +26,7 @@ namespace CompensationSystemSubInterface.Services {
         /// <param name="keyword">关键字搜索（姓名或员工编号）</param>
         /// <param name="cond">高级筛选条件（部门、员工）</param>
         /// <returns>包含员工信息的数据表</returns>
-        public DataTable GetEmpData(string keyword, EmpQueryCondition cond) {
+        public DataTable GetEmpData(string keyword, EmpCondition cond) {
             StringBuilder sb = new StringBuilder();
 
             // 拼接 SQL 语句 (直接使用你提供的 SQL)
@@ -141,7 +141,7 @@ namespace CompensationSystemSubInterface.Services {
         /// <param name="keyword">关键字搜索（姓名或员工编号）</param>
         /// <param name="cond">高级筛选条件（部门、员工）</param>
         /// <returns>包含员工信息的数据表</returns>
-        public DataTable GetEmpMaintData(string keyword, EmpMaintCondition cond) {
+        public DataTable GetEmpMaintData(string keyword, EmpCondition cond) {
             StringBuilder sb = new StringBuilder();
 
             // 拼接 SQL 语句 (直接使用你提供的 SQL)
@@ -258,7 +258,7 @@ namespace CompensationSystemSubInterface.Services {
         /// <param name="keyword">关键字搜索（姓名或员工编号）</param>
         /// <param name="cond">高级筛选条件（部门、员工）</param>
         /// <returns>包含员工变动记录的数据表</returns>
-        public DataTable GetEmpCgData(DateTime startDate, DateTime endDate, string keyword, EmpCgQueryCondition cond) {
+        public DataTable GetEmpCgData(DateTime startDate, DateTime endDate, string keyword, EmpCondition cond) {
             StringBuilder sb = new StringBuilder();
 
             sb.Append(@"
@@ -396,7 +396,7 @@ namespace CompensationSystemSubInterface.Services {
         /// 更新员工基本信息 (包含敏感信息的加密处理)
         /// </summary>
         /// <param name="emp">员工详细信息对象，包含所有需要更新的字段</param>
-        public void UpdateEmpBasicInfo(EmployeeDetail emp) {
+        public void UpdateEmpBasicInfo(EmpDetail emp) {
             // 1. 加密敏感字段 (保持不变)
             string encIdCard = "";
             if (!string.IsNullOrEmpty(emp.IdCard)) {
@@ -609,12 +609,12 @@ namespace CompensationSystemSubInterface.Services {
         /// </summary>
         /// <param name="empId">员工ID</param>
         /// <returns>员工详细信息对象，如果不存在则返回null</returns>
-        public EmployeeDetail GetEmpDetailObj(int empId) {
+        public EmpDetail GetEmpDetailObj(int empId) {
             DataRow row = GetEmpDetail(empId); // 调用你之前写好的 SQL 方法
             if (row == null) return null;
 
             // 手动映射，或者使用 AutoMapper
-            return new EmployeeDetail {
+            return new EmpDetail {
                 Id = Convert.ToInt32(row["id"]),
                 EmployeeNo = row["yuangongbh"].ToString(),
                 Name = row["xingming"].ToString(),

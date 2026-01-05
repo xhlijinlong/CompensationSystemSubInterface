@@ -151,11 +151,9 @@
     <Compile Include="common\AppConfig.cs" />
     <Compile Include="common\LogManager.cs" />
     <Compile Include="Models\ComboItem.cs" />
-    <Compile Include="Models\EmployeeDetail.cs" />
-    <Compile Include="Models\EmpMaintCondition.cs" />
+    <Compile Include="Models\EmpCondition.cs" />
+    <Compile Include="Models\EmpDetail.cs" />
     <Compile Include="Models\PfmcQueryCondition.cs" />
-    <Compile Include="Models\EmpCgQueryCondition.cs" />
-    <Compile Include="Models\EmpQueryCondition.cs" />
     <Compile Include="Models\SalaryQueryCondition.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

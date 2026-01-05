@@ -1,4 +1,4 @@
-<Window x:Class="CompensationSystemSubInterface.WpfEmployeeCondition"
+<Window x:Class="CompensationSystemSubInterface.WpfEmpCondition"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="条件设置" Height="500" Width="350"

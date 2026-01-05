@@ -13,7 +13,7 @@ namespace CompensationSystemSubInterface {
     /// 通用员工筛选条件窗体（WPF版本）
     /// 只包含员工筛选功能，带搜索框
     /// </summary>
-    public partial class WpfEmployeeCondition : Window {
+    public partial class WpfEmpCondition : Window {
         /// <summary>
         /// 获取当前选中的员工ID列表
         /// </summary>
@@ -43,7 +43,7 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         /// <param name="existingIds">现有的员工ID列表</param>
         /// <param name="departmentIds">部门筛选条件（可选）</param>
-        public WpfEmployeeCondition(List<int> existingIds, List<int> departmentIds = null) {
+        public WpfEmpCondition(List<int> existingIds, List<int> departmentIds = null) {
             InitializeComponent();
 
             // 初始化持久化ID

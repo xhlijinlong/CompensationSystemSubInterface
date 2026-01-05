@@ -8,7 +8,7 @@ namespace CompensationSystemSubInterface.Models {
     /// <summary>
     /// 员工详细信息实体 (用于WPF绑定)
     /// </summary>
-    public class EmployeeDetail {
+    public class EmpDetail {
         /// <summary>
         /// 员工ID (主键)
         /// </summary>
