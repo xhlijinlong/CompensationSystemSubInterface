@@ -34,15 +34,18 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private WpfSalaryCondition _wpfCondition = null;
 
-        /// <summary>
-        /// WPF 筛选面板
-        /// </summary>
-        private WpfFilterPanel _wpfFilterPanel = null;
+        // WPF 筛选树控件
+        private WpfFilterPanel _treeSeq;
+        private WpfFilterPanel _treeDept;
+        private WpfFilterPanel _treePost;
 
-        /// <summary>
-        /// ElementHost 用于嵌入 WPF 控件
-        /// </summary>
-        private ElementHost _filterHost = null;
+        // 下拉弹窗
+        private ToolStripDropDown _popupSeq;
+        private ToolStripDropDown _popupDept;
+        private ToolStripDropDown _popupPost;
+
+        // 避免重复事件绑定的标志（虽然这里不需要，因为事件在 InitializeComponent 中绑定了）
+        // 但我们需要确保 Popup 已初始化
 
         /// <summary>
         /// 初始化薪资查询用户控件
@@ -84,40 +87,97 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 初始化筛选控件（使用 WPF 面板）
+        /// 初始化筛选控件（使用 ToolStripDropDown + ElementHost）
         /// </summary>
         private void InitFilterControls() {
-            // 创建 WPF 筛选面板
-            _wpfFilterPanel = new WpfFilterPanel();
-            
-            // 加载数据
-            _wpfFilterPanel.LoadSequences();
-            _wpfFilterPanel.LoadDepartments();
-            _wpfFilterPanel.LoadPositions();
-            
-            // 绑定事件
-            _wpfFilterPanel.SequenceSelectionChanged += ids => {
+            // 1. 初始化序列树
+            _treeSeq = new WpfFilterPanel();
+            _treeSeq.LoadSequences();
+            _treeSeq.SelectionChanged += ids => {
                 _condition.SequenceIds = ids;
+                UpdateButtonText(btnSeq, "序列", _treeSeq);
+                // 级联更新部门
+                _treeDept.LoadDepartments(ids);
+                UpdateButtonText(btnDept, "部门", _treeDept); // 部门列表变了，选中状态也重置了，需更新文字
+                _condition.DepartmentIds = _treeDept.GetSelectedIds(); // 同步清空条件
+                // 同步更新条件设置窗体中的员工列表
+                RefreshConditionWindowEmployees();
             };
-            _wpfFilterPanel.DepartmentSelectionChanged += ids => {
+            _popupSeq = CreatePopup(_treeSeq, 200, 300);
+            
+            // 2. 初始化部门树
+            _treeDept = new WpfFilterPanel();
+            _treeDept.LoadDepartments(null); // 初始加载所有部门
+            _treeDept.SelectionChanged += ids => {
                 _condition.DepartmentIds = ids;
+                UpdateButtonText(btnDept, "部门", _treeDept);
+                // 同步更新条件设置窗体中的员工列表
+                RefreshConditionWindowEmployees();
             };
-            _wpfFilterPanel.PositionSelectionChanged += ids => {
-                _condition.PositionIds = ids;
-            };
+            _popupDept = CreatePopup(_treeDept, 250, 300);
 
-            // 创建 ElementHost 并添加到流式面板
-            _filterHost = new ElementHost {
-                Dock = DockStyle.None,
-                AutoSize = true,
-                Child = _wpfFilterPanel,
-                Margin = new Padding(0, 5, 0, 0), // 微调垂直对齐
-                BackColor = System.Drawing.Color.Transparent
+            // 3. 初始化岗位树
+            _treePost = new WpfFilterPanel();
+            _treePost.LoadPositions();
+            _treePost.SelectionChanged += ids => {
+                _condition.PositionIds = ids;
+                UpdateButtonText(btnPost, "岗位", _treePost);
+                // 同步更新条件设置窗体中的员工列表
+                RefreshConditionWindowEmployees();
+            };
+            _popupPost = CreatePopup(_treePost, 200, 300);
+
+            // 初始化按钮文本
+            UpdateButtonText(btnSeq, "序列", _treeSeq);
+            UpdateButtonText(btnDept, "部门", _treeDept);
+            UpdateButtonText(btnPost, "岗位", _treePost);
+        }
+
+        /// <summary>
+        /// 当外部筛选条件变化时，同步更新条件设置窗体中的员工列表
+        /// </summary>
+        private void RefreshConditionWindowEmployees() {
+            _wpfCondition?.RefreshFilterConditions(
+                _condition.SequenceIds,
+                _condition.DepartmentIds,
+                _condition.PositionIds
+            );
+        }
+
+        /// <summary>
+        /// 创建包含 WPF 控件的下拉弹窗
+        /// </summary>
+        private ToolStripDropDown CreatePopup(WpfFilterPanel treeContent, int width, int height) {
+            ElementHost host = new ElementHost {
+                AutoSize = false,
+                Size = new System.Drawing.Size(width, height),
+                Child = treeContent,
+                Dock = DockStyle.Fill
             };
             
-            flpnlTop.Controls.Add(_filterHost);
-            // 将筛选控件移动到查询按钮之前 (txtName 之后)
-            flpnlTop.Controls.SetChildIndex(_filterHost, flpnlTop.Controls.IndexOf(txtName) + 1);
+            ToolStripControlHost tsHost = new ToolStripControlHost(host);
+            tsHost.Margin = Padding.Empty;
+            tsHost.Padding = Padding.Empty;
+            tsHost.AutoSize = false;
+            tsHost.Size = new System.Drawing.Size(width, height);
+
+            ToolStripDropDown popup = new ToolStripDropDown();
+            popup.Margin = Padding.Empty;
+            popup.Padding = Padding.Empty;
+            popup.Items.Add(tsHost);
+            return popup;
+        }
+
+        /// <summary>
+        /// 更新按钮文本
+        /// </summary>
+        private void UpdateButtonText(Button btn, string name, WpfFilterPanel tree) {
+            int count = tree.GetSelectedCount();
+            bool isAll = tree.IsAllSelected();
+            
+            if (count == 0) btn.Text = name; // 显示原名，未选择任何项
+            else if (isAll) btn.Text = name; // 全选时也显示原名
+            else btn.Text = $"{name}*"; // 部分选择时显示星号
         }
 
         /// <summary>
@@ -258,11 +318,9 @@ namespace CompensationSystemSubInterface {
                     dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.AliceBlue; // 个人小计
                 } else if (type == 2) {
                     // 部门小计
-                    //dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGray;
                     dgvSalary.Rows[e.RowIndex].DefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold);
                 } else if (type == 3) {
                     // 全厂总计
-                    //dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGray;
                     dgvSalary.Rows[e.RowIndex].DefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold);
                 }
             }
@@ -322,6 +380,24 @@ namespace CompensationSystemSubInterface {
                     MessageBox.Show("导出失败: " + ex.Message + "\n请检查文件是否被占用。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 }
+            }
+        }
+
+        private void btnSeq_Click(object sender, EventArgs e) {
+            if (_popupSeq != null) {
+                _popupSeq.Show(btnSeq, 0, btnSeq.Height);
+            }
+        }
+
+        private void btnDept_Click(object sender, EventArgs e) {
+             if (_popupDept != null) {
+                _popupDept.Show(btnDept, 0, btnDept.Height);
+            }
+        }
+
+        private void btnPost_Click(object sender, EventArgs e) {
+             if (_popupPost != null) {
+                _popupPost.Show(btnPost, 0, btnPost.Height);
             }
         }
     }

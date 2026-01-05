@@ -41,7 +41,9 @@
             this.btnQuery = new System.Windows.Forms.Button();
             this.btnCondition = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
-
+            this.btnSeq = new System.Windows.Forms.Button();
+            this.btnDept = new System.Windows.Forms.Button();
+            this.btnPost = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.pnlTopContainer.SuspendLayout();
@@ -72,7 +74,7 @@
             this.dgvSalary.ReadOnly = true;
             this.dgvSalary.RowTemplate.Height = 23;
             this.dgvSalary.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSalary.Size = new System.Drawing.Size(988, 480);
+            this.dgvSalary.Size = new System.Drawing.Size(988, 540);
             this.dgvSalary.TabIndex = 0;
             // 
             // pnlTopContainer
@@ -97,8 +99,11 @@
             this.flpnlTop.Controls.Add(this.lbMonth2);
             this.flpnlTop.Controls.Add(this.lbName);
             this.flpnlTop.Controls.Add(this.txtName);
-            this.flpnlTop.Controls.Add(this.btnQuery);
+            this.flpnlTop.Controls.Add(this.btnSeq);
+            this.flpnlTop.Controls.Add(this.btnDept);
+            this.flpnlTop.Controls.Add(this.btnPost);
             this.flpnlTop.Controls.Add(this.btnCondition);
+            this.flpnlTop.Controls.Add(this.btnQuery);
             this.flpnlTop.Controls.Add(this.btnExport);
             this.flpnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.flpnlTop.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -108,7 +113,6 @@
             this.flpnlTop.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.flpnlTop.Size = new System.Drawing.Size(1000, 50);
             this.flpnlTop.TabIndex = 0;
-
             // 
             // lbDate
             // 
@@ -128,13 +132,13 @@
             this.cbYear1.Location = new System.Drawing.Point(62, 16);
             this.cbYear1.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.cbYear1.Name = "cbYear1";
-            this.cbYear1.Size = new System.Drawing.Size(85, 21);
+            this.cbYear1.Size = new System.Drawing.Size(65, 21);
             this.cbYear1.TabIndex = 1;
             // 
             // lbYear1
             // 
             this.lbYear1.AutoSize = true;
-            this.lbYear1.Location = new System.Drawing.Point(153, 16);
+            this.lbYear1.Location = new System.Drawing.Point(133, 16);
             this.lbYear1.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.lbYear1.Name = "lbYear1";
             this.lbYear1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -146,16 +150,16 @@
             // 
             this.cbMonth1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbMonth1.FormattingEnabled = true;
-            this.cbMonth1.Location = new System.Drawing.Point(188, 16);
+            this.cbMonth1.Location = new System.Drawing.Point(168, 16);
             this.cbMonth1.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.cbMonth1.Name = "cbMonth1";
-            this.cbMonth1.Size = new System.Drawing.Size(50, 21);
+            this.cbMonth1.Size = new System.Drawing.Size(45, 21);
             this.cbMonth1.TabIndex = 3;
             // 
             // lbMonth1
             // 
             this.lbMonth1.AutoSize = true;
-            this.lbMonth1.Location = new System.Drawing.Point(244, 16);
+            this.lbMonth1.Location = new System.Drawing.Point(219, 16);
             this.lbMonth1.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.lbMonth1.Name = "lbMonth1";
             this.lbMonth1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -167,16 +171,16 @@
             // 
             this.cbYear2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbYear2.FormattingEnabled = true;
-            this.cbYear2.Location = new System.Drawing.Point(293, 16);
+            this.cbYear2.Location = new System.Drawing.Point(268, 16);
             this.cbYear2.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.cbYear2.Name = "cbYear2";
-            this.cbYear2.Size = new System.Drawing.Size(85, 21);
+            this.cbYear2.Size = new System.Drawing.Size(65, 21);
             this.cbYear2.TabIndex = 5;
             // 
             // lbYear2
             // 
             this.lbYear2.AutoSize = true;
-            this.lbYear2.Location = new System.Drawing.Point(384, 16);
+            this.lbYear2.Location = new System.Drawing.Point(339, 16);
             this.lbYear2.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.lbYear2.Name = "lbYear2";
             this.lbYear2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -188,16 +192,16 @@
             // 
             this.cbMonth2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbMonth2.FormattingEnabled = true;
-            this.cbMonth2.Location = new System.Drawing.Point(419, 16);
+            this.cbMonth2.Location = new System.Drawing.Point(374, 16);
             this.cbMonth2.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.cbMonth2.Name = "cbMonth2";
-            this.cbMonth2.Size = new System.Drawing.Size(50, 21);
+            this.cbMonth2.Size = new System.Drawing.Size(45, 21);
             this.cbMonth2.TabIndex = 7;
             // 
             // lbMonth2
             // 
             this.lbMonth2.AutoSize = true;
-            this.lbMonth2.Location = new System.Drawing.Point(475, 16);
+            this.lbMonth2.Location = new System.Drawing.Point(425, 16);
             this.lbMonth2.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.lbMonth2.Name = "lbMonth2";
             this.lbMonth2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -208,7 +212,7 @@
             // lbName
             // 
             this.lbName.AutoSize = true;
-            this.lbName.Location = new System.Drawing.Point(510, 16);
+            this.lbName.Location = new System.Drawing.Point(460, 16);
             this.lbName.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.lbName.Name = "lbName";
             this.lbName.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -218,18 +222,18 @@
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(566, 16);
+            this.txtName.Location = new System.Drawing.Point(516, 16);
             this.txtName.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(85, 23);
+            this.txtName.Size = new System.Drawing.Size(65, 23);
             this.txtName.TabIndex = 10;
             // 
             // btnQuery
             // 
-            this.btnQuery.Location = new System.Drawing.Point(657, 16);
+            this.btnQuery.Location = new System.Drawing.Point(856, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
-            this.btnQuery.Size = new System.Drawing.Size(75, 25);
+            this.btnQuery.Size = new System.Drawing.Size(55, 25);
             this.btnQuery.TabIndex = 11;
             this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = true;
@@ -237,10 +241,10 @@
             // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(738, 16);
+            this.btnCondition.Location = new System.Drawing.Point(770, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
-            this.btnCondition.Size = new System.Drawing.Size(85, 25);
+            this.btnCondition.Size = new System.Drawing.Size(80, 25);
             this.btnCondition.TabIndex = 12;
             this.btnCondition.Text = "条件设置";
             this.btnCondition.UseVisualStyleBackColor = true;
@@ -248,7 +252,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(829, 16);
+            this.btnExport.Location = new System.Drawing.Point(6, 63);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 25);
@@ -257,7 +261,40 @@
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
-            // UserControl_SalaryQuery
+            // btnSeq
+            // 
+            this.btnSeq.Location = new System.Drawing.Point(587, 16);
+            this.btnSeq.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnSeq.Name = "btnSeq";
+            this.btnSeq.Size = new System.Drawing.Size(55, 25);
+            this.btnSeq.TabIndex = 14;
+            this.btnSeq.Text = "序列";
+            this.btnSeq.UseVisualStyleBackColor = true;
+            this.btnSeq.Click += new System.EventHandler(this.btnSeq_Click);
+            // 
+            // btnDept
+            // 
+            this.btnDept.Location = new System.Drawing.Point(648, 16);
+            this.btnDept.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnDept.Name = "btnDept";
+            this.btnDept.Size = new System.Drawing.Size(55, 25);
+            this.btnDept.TabIndex = 15;
+            this.btnDept.Text = "部门";
+            this.btnDept.UseVisualStyleBackColor = true;
+            this.btnDept.Click += new System.EventHandler(this.btnDept_Click);
+            // 
+            // btnPost
+            // 
+            this.btnPost.Location = new System.Drawing.Point(709, 16);
+            this.btnPost.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnPost.Name = "btnPost";
+            this.btnPost.Size = new System.Drawing.Size(55, 25);
+            this.btnPost.TabIndex = 16;
+            this.btnPost.Text = "岗位";
+            this.btnPost.UseVisualStyleBackColor = true;
+            this.btnPost.Click += new System.EventHandler(this.btnPost_Click);
+            // 
+            // UserControl_SalaryStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -265,7 +302,7 @@
             this.Controls.Add(this.pnlTopContainer);
             this.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Name = "UserControl_SalaryQuery";
+            this.Name = "UserControl_SalaryStatistics";
             this.Size = new System.Drawing.Size(1000, 600);
             this.Load += new System.EventHandler(this.UserControl_SalaryStatistics_Load);
             this.pnlBody.ResumeLayout(false);
@@ -296,5 +333,8 @@
         private System.Windows.Forms.Button btnCondition;
         private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.DataGridView dgvSalary;
+        private System.Windows.Forms.Button btnSeq;
+        private System.Windows.Forms.Button btnDept;
+        private System.Windows.Forms.Button btnPost;
     }
 }

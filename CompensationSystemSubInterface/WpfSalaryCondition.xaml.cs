@@ -454,6 +454,20 @@ namespace CompensationSystemSubInterface {
             RefreshCascadingData();
         }
 
+        /// <summary>
+        /// 外部调用：更新筛选条件并刷新员工列表
+        /// 当主界面的序列/部门/岗位筛选条件变化时调用此方法
+        /// </summary>
+        /// <param name="sequenceIds">新的序列ID列表</param>
+        /// <param name="departmentIds">新的部门ID列表</param>
+        /// <param name="positionIds">新的岗位ID列表</param>
+        public void RefreshFilterConditions(List<int> sequenceIds, List<int> departmentIds, List<int> positionIds) {
+            CurrentCondition.SequenceIds = sequenceIds;
+            CurrentCondition.DepartmentIds = departmentIds;
+            CurrentCondition.PositionIds = positionIds;
+            RefreshCascadingData();
+        }
+
         private void btnApply_Click(object sender, RoutedEventArgs e) {
             // Note: Sequence/department/position IDs are managed by main control, not modified here
             // Note: Using _persistentEmpIds to include hidden selected employees during search
