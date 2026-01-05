@@ -38,12 +38,12 @@
             this.lbMonth2 = new System.Windows.Forms.Label();
             this.lbName = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.btnQuery = new System.Windows.Forms.Button();
-            this.btnCondition = new System.Windows.Forms.Button();
-            this.btnExport = new System.Windows.Forms.Button();
             this.btnSeq = new System.Windows.Forms.Button();
             this.btnDept = new System.Windows.Forms.Button();
             this.btnPost = new System.Windows.Forms.Button();
+            this.btnCondition = new System.Windows.Forms.Button();
+            this.btnQuery = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.pnlTopContainer.SuspendLayout();
@@ -58,7 +58,7 @@
             this.pnlBody.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnlBody.Name = "pnlBody";
             this.pnlBody.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.pnlBody.Size = new System.Drawing.Size(1000, 550);
+            this.pnlBody.Size = new System.Drawing.Size(1200, 550);
             this.pnlBody.TabIndex = 1;
             // 
             // dgvSalary
@@ -74,7 +74,7 @@
             this.dgvSalary.ReadOnly = true;
             this.dgvSalary.RowTemplate.Height = 23;
             this.dgvSalary.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSalary.Size = new System.Drawing.Size(988, 540);
+            this.dgvSalary.Size = new System.Drawing.Size(1188, 540);
             this.dgvSalary.TabIndex = 0;
             // 
             // pnlTopContainer
@@ -83,7 +83,7 @@
             this.pnlTopContainer.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTopContainer.Location = new System.Drawing.Point(0, 0);
             this.pnlTopContainer.Name = "pnlTopContainer";
-            this.pnlTopContainer.Size = new System.Drawing.Size(1000, 50);
+            this.pnlTopContainer.Size = new System.Drawing.Size(1200, 50);
             this.pnlTopContainer.TabIndex = 2;
             // 
             // flpnlTop
@@ -111,7 +111,7 @@
             this.flpnlTop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.flpnlTop.Name = "flpnlTop";
             this.flpnlTop.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.flpnlTop.Size = new System.Drawing.Size(1000, 50);
+            this.flpnlTop.Size = new System.Drawing.Size(1200, 50);
             this.flpnlTop.TabIndex = 0;
             // 
             // lbDate
@@ -228,39 +228,6 @@
             this.txtName.Size = new System.Drawing.Size(65, 23);
             this.txtName.TabIndex = 10;
             // 
-            // btnQuery
-            // 
-            this.btnQuery.Location = new System.Drawing.Point(856, 16);
-            this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnQuery.Name = "btnQuery";
-            this.btnQuery.Size = new System.Drawing.Size(55, 25);
-            this.btnQuery.TabIndex = 11;
-            this.btnQuery.Text = "查询";
-            this.btnQuery.UseVisualStyleBackColor = true;
-            this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
-            // 
-            // btnCondition
-            // 
-            this.btnCondition.Location = new System.Drawing.Point(770, 16);
-            this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnCondition.Name = "btnCondition";
-            this.btnCondition.Size = new System.Drawing.Size(80, 25);
-            this.btnCondition.TabIndex = 12;
-            this.btnCondition.Text = "条件设置";
-            this.btnCondition.UseVisualStyleBackColor = true;
-            this.btnCondition.Click += new System.EventHandler(this.btnCondition_Click);
-            // 
-            // btnExport
-            // 
-            this.btnExport.Location = new System.Drawing.Point(6, 63);
-            this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(95, 25);
-            this.btnExport.TabIndex = 13;
-            this.btnExport.Text = "导出Excel";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
             // btnSeq
             // 
             this.btnSeq.Location = new System.Drawing.Point(587, 16);
@@ -294,6 +261,39 @@
             this.btnPost.UseVisualStyleBackColor = true;
             this.btnPost.Click += new System.EventHandler(this.btnPost_Click);
             // 
+            // btnCondition
+            // 
+            this.btnCondition.Location = new System.Drawing.Point(770, 16);
+            this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnCondition.Name = "btnCondition";
+            this.btnCondition.Size = new System.Drawing.Size(80, 25);
+            this.btnCondition.TabIndex = 12;
+            this.btnCondition.Text = "条件设置";
+            this.btnCondition.UseVisualStyleBackColor = true;
+            this.btnCondition.Click += new System.EventHandler(this.btnCondition_Click);
+            // 
+            // btnQuery
+            // 
+            this.btnQuery.Location = new System.Drawing.Point(856, 16);
+            this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnQuery.Name = "btnQuery";
+            this.btnQuery.Size = new System.Drawing.Size(55, 25);
+            this.btnQuery.TabIndex = 11;
+            this.btnQuery.Text = "查询";
+            this.btnQuery.UseVisualStyleBackColor = true;
+            this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(917, 16);
+            this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(95, 25);
+            this.btnExport.TabIndex = 13;
+            this.btnExport.Text = "导出Excel";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
             // UserControl_SalaryStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -303,7 +303,7 @@
             this.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "UserControl_SalaryStatistics";
-            this.Size = new System.Drawing.Size(1000, 600);
+            this.Size = new System.Drawing.Size(1200, 600);
             this.Load += new System.EventHandler(this.UserControl_SalaryStatistics_Load);
             this.pnlBody.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).EndInit();

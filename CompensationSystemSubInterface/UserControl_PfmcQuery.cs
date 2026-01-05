@@ -182,5 +182,13 @@ namespace CompensationSystemSubInterface {
                 }
             }
         }
+
+        private void btnYear_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnRslt_Click(object sender, EventArgs e) {
+
+        }
     }
 }

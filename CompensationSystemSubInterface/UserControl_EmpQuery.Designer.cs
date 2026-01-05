@@ -36,6 +36,7 @@
             this.btnQuery = new System.Windows.Forms.Button();
             this.btnCondition = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
+            this.btnDept = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -49,7 +50,7 @@
             this.pnlBody.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnlBody.Name = "pnlBody";
             this.pnlBody.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.pnlBody.Size = new System.Drawing.Size(1000, 540);
+            this.pnlBody.Size = new System.Drawing.Size(1200, 540);
             this.pnlBody.TabIndex = 1;
             // 
             // dgvSalary
@@ -65,15 +66,16 @@
             this.dgvSalary.ReadOnly = true;
             this.dgvSalary.RowTemplate.Height = 23;
             this.dgvSalary.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSalary.Size = new System.Drawing.Size(988, 530);
+            this.dgvSalary.Size = new System.Drawing.Size(1188, 530);
             this.dgvSalary.TabIndex = 0;
             // 
             // flpnlTop
             // 
             this.flpnlTop.Controls.Add(this.lbName);
             this.flpnlTop.Controls.Add(this.txtName);
-            this.flpnlTop.Controls.Add(this.btnQuery);
+            this.flpnlTop.Controls.Add(this.btnDept);
             this.flpnlTop.Controls.Add(this.btnCondition);
+            this.flpnlTop.Controls.Add(this.btnQuery);
             this.flpnlTop.Controls.Add(this.btnExport);
             this.flpnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.flpnlTop.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -81,7 +83,7 @@
             this.flpnlTop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.flpnlTop.Name = "flpnlTop";
             this.flpnlTop.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.flpnlTop.Size = new System.Drawing.Size(1000, 60);
+            this.flpnlTop.Size = new System.Drawing.Size(1200, 60);
             this.flpnlTop.TabIndex = 0;
             // 
             // lbName
@@ -100,15 +102,15 @@
             this.txtName.Location = new System.Drawing.Point(62, 16);
             this.txtName.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(85, 23);
+            this.txtName.Size = new System.Drawing.Size(65, 23);
             this.txtName.TabIndex = 10;
             // 
             // btnQuery
             // 
-            this.btnQuery.Location = new System.Drawing.Point(153, 16);
+            this.btnQuery.Location = new System.Drawing.Point(280, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
-            this.btnQuery.Size = new System.Drawing.Size(75, 25);
+            this.btnQuery.Size = new System.Drawing.Size(55, 25);
             this.btnQuery.TabIndex = 11;
             this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = true;
@@ -116,10 +118,10 @@
             // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(234, 16);
+            this.btnCondition.Location = new System.Drawing.Point(194, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
-            this.btnCondition.Size = new System.Drawing.Size(85, 25);
+            this.btnCondition.Size = new System.Drawing.Size(80, 25);
             this.btnCondition.TabIndex = 12;
             this.btnCondition.Text = "条件设置";
             this.btnCondition.UseVisualStyleBackColor = true;
@@ -127,7 +129,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(325, 16);
+            this.btnExport.Location = new System.Drawing.Point(341, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 25);
@@ -136,7 +138,18 @@
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
-            // UserControl_EmpInfoQuery
+            // btnDept
+            // 
+            this.btnDept.Location = new System.Drawing.Point(133, 16);
+            this.btnDept.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnDept.Name = "btnDept";
+            this.btnDept.Size = new System.Drawing.Size(55, 25);
+            this.btnDept.TabIndex = 14;
+            this.btnDept.Text = "部门";
+            this.btnDept.UseVisualStyleBackColor = true;
+            this.btnDept.Click += new System.EventHandler(this.btnDept_Click);
+            // 
+            // UserControl_EmpQuery
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -144,8 +157,8 @@
             this.Controls.Add(this.flpnlTop);
             this.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Name = "UserControl_EmpInfoQuery";
-            this.Size = new System.Drawing.Size(1000, 600);
+            this.Name = "UserControl_EmpQuery";
+            this.Size = new System.Drawing.Size(1200, 600);
             this.Load += new System.EventHandler(this.UserControl_EmpQuery_Load);
             this.pnlBody.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).EndInit();
@@ -164,5 +177,6 @@
         private System.Windows.Forms.Button btnCondition;
         private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.DataGridView dgvSalary;
+        private System.Windows.Forms.Button btnDept;
     }
 }

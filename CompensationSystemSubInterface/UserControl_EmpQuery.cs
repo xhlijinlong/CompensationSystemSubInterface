@@ -177,5 +177,9 @@ namespace CompensationSystemSubInterface {
                 }
             }
         }
+
+        private void btnDept_Click(object sender, EventArgs e) {
+
+        }
     }
 }

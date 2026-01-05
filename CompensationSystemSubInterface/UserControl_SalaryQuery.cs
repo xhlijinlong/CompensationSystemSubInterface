@@ -268,5 +268,17 @@ namespace CompensationSystemSubInterface {
                 }
             }
         }
+
+        private void btnSeq_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnDept_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnPost_Click(object sender, EventArgs e) {
+
+        }
     }
 }

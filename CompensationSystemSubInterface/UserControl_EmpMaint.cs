@@ -275,5 +275,9 @@ namespace CompensationSystemSubInterface {
                 PerformQuery(); // 刷新列表
             }
         }
+
+        private void btnDept_Click(object sender, EventArgs e) {
+
+        }
     }
 }
