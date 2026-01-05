@@ -12,14 +12,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 namespace CompensationSystemSubInterface {
     /// <summary>
-    /// 员工信息查询用户控件，提供员工信息查询、筛选和导出功能
+    /// 员工绩效查询用户控件，提供绩效数据查询、筛选和导出功能
     /// </summary>
     public partial class UserControl_PfmcQuery : UserControl {
         /// <summary>
-        /// 员工服务实例
+        /// 绩效服务实例
         /// </summary>
         private PfmcService _service = new PfmcService();
 
@@ -29,17 +30,23 @@ namespace CompensationSystemSubInterface {
         private PfmcQueryCondition _condition = new PfmcQueryCondition();
 
         /// <summary>
-        /// 员工筛选条件窗体实例
+        /// 高级筛选条件窗体实例（WPF版本）
         /// </summary>
-        private FrmPfmcCondition _frmCondition = null;
+        private WpfPfmcCondition _wpfCondition = null;
+
+        // WPF 筛选树控件
+        private WpfFilterPanel _treeYear;
+        private WpfFilterPanel _treeRslt;
+
+        // 下拉弹窗
+        private ToolStripDropDown _popupYear;
+        private ToolStripDropDown _popupRslt;
 
         /// <summary>
-        /// 初始化员工信息查询用户控件
+        /// 初始化绩效查询用户控件
         /// </summary>
         public UserControl_PfmcQuery() {
             InitializeComponent();
-            // 员工信息表不需要复杂的行颜色逻辑 (RowPrePaint)，只需交替色即可
-            //dgvSalary.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
         }
 
         /// <summary>
@@ -47,8 +54,75 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void UserControl_PfmcQuery_Load(object sender, EventArgs e) {
             if (this.DesignMode) return;
+            
+            InitFilterControls(); // 初始化筛选控件数据
+            
             // 加载时默认查询所有
             PerformQuery();
+        }
+
+        /// <summary>
+        /// 初始化筛选控件（使用 ToolStripDropDown + ElementHost）
+        /// </summary>
+        private void InitFilterControls() {
+            // 1. 初始化年度树
+            _treeYear = new WpfFilterPanel();
+            _treeYear.LoadYears();
+            _treeYear.SelectionChanged += ids => {
+                _condition.Years = ids;
+                UpdateButtonText(btnYear, "年度", _treeYear);
+            };
+            _popupYear = CreatePopup(_treeYear, 150, 200);
+            
+            // 2. 初始化结果树
+            _treeRslt = new WpfFilterPanel();
+            _treeRslt.LoadResults();
+            _treeRslt.SelectionChanged += ids => {
+                // 结果使用文本而不是ID
+                _condition.Results = _treeRslt.GetSelectedTexts();
+                UpdateButtonText(btnRslt, "结果", _treeRslt);
+            };
+            _popupRslt = CreatePopup(_treeRslt, 150, 180);
+
+            // 初始化按钮文本
+            UpdateButtonText(btnYear, "年度", _treeYear);
+            UpdateButtonText(btnRslt, "结果", _treeRslt);
+        }
+
+        /// <summary>
+        /// 创建包含 WPF 控件的下拉弹窗
+        /// </summary>
+        private ToolStripDropDown CreatePopup(WpfFilterPanel treeContent, int width, int height) {
+            ElementHost host = new ElementHost {
+                AutoSize = false,
+                Size = new System.Drawing.Size(width, height),
+                Child = treeContent,
+                Dock = DockStyle.Fill
+            };
+            
+            ToolStripControlHost tsHost = new ToolStripControlHost(host);
+            tsHost.Margin = Padding.Empty;
+            tsHost.Padding = Padding.Empty;
+            tsHost.AutoSize = false;
+            tsHost.Size = new System.Drawing.Size(width, height);
+
+            ToolStripDropDown popup = new ToolStripDropDown();
+            popup.Margin = Padding.Empty;
+            popup.Padding = Padding.Empty;
+            popup.Items.Add(tsHost);
+            return popup;
+        }
+
+        /// <summary>
+        /// 更新按钮文本
+        /// </summary>
+        private void UpdateButtonText(Button btn, string name, WpfFilterPanel tree) {
+            int count = tree.GetSelectedCount();
+            bool isAll = tree.IsAllSelected();
+            
+            if (count == 0) btn.Text = name;
+            else if (isAll) btn.Text = name;
+            else btn.Text = $"{name}*";
         }
 
         /// <summary>
@@ -59,12 +133,9 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 执行员工信息查询并显示结果
+        /// 执行绩效查询并显示结果
         /// </summary>
         private void PerformQuery() {
-
-
-
             try {
                 this.Cursor = Cursors.WaitCursor;
 
@@ -76,11 +147,8 @@ namespace CompensationSystemSubInterface {
                 dgvSalary.DataSource = report;
                 FormatGrid();
 
-                // 3. 格式化界面
-                FormatGrid();
-
             } catch (Exception ex) {
-                LogManager.Error("查询员工信息失败", ex);
+                LogManager.Error("查询绩效信息失败", ex);
                 MessageBox.Show("查询出错: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             } finally {
                 this.Cursor = Cursors.Default;
@@ -120,18 +188,7 @@ namespace CompensationSystemSubInterface {
                     col.DefaultCellStyle.Format = "yyyy-MM-dd";
                     col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
-
-                // 处理日期列格式 (只显示 yyyy-MM-dd HH:mm:ss)
-                //if (col.Name == "打卡时间") {
-                //    col.DefaultCellStyle.Format = "yyyy-MM-dd HH:mm:ss";
-                //    col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                //}
             }
-
-            // 冻结前几列 (员工号、姓名、部门)
-            /*if (dgvSalary.Columns.Count > 3) {
-                if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].Frozen = true;
-            }*/
 
             // 冻结前两列
             if (dgvSalary.Columns.Count > 2) dgvSalary.Columns[1].Frozen = true;
@@ -141,17 +198,22 @@ namespace CompensationSystemSubInterface {
         /// 条件设置按钮点击事件处理，打开或激活员工筛选条件窗体
         /// </summary>
         private void btnCondition_Click(object sender, EventArgs e) {
-            if (_frmCondition == null || _frmCondition.IsDisposed) {
-                _frmCondition = new FrmPfmcCondition(_condition);
-                _frmCondition.ApplySelect += (newCond) => {
+            if (_wpfCondition == null) {
+                _wpfCondition = new WpfPfmcCondition(_condition);
+                _wpfCondition.ApplySelect += (newCond) => {
                     _condition = newCond;
                     btnCondition.Text = _condition.HasFilter ? "条件设置 *" : "条件设置";
                     PerformQuery();
                 };
-                _frmCondition.Show(this);
+                
+                _wpfCondition.Closed += (s, args) => {
+                    _wpfCondition = null;
+                };
+                
+                _wpfCondition.Show();
             } else {
-                _frmCondition.WindowState = FormWindowState.Normal;
-                _frmCondition.Activate();
+                _wpfCondition.WindowState = System.Windows.WindowState.Normal;
+                _wpfCondition.Activate();
             }
         }
 
@@ -177,18 +239,22 @@ namespace CompensationSystemSubInterface {
                         System.Diagnostics.Process.Start(sfd.FileName);
                     }
                 } catch (Exception ex) {
-                    LogManager.Error("导出员工信息失败", ex);
+                    LogManager.Error("导出绩效信息失败", ex);
                     MessageBox.Show("导出失败: " + ex.Message + "\n请检查文件是否被占用。", "错误");
                 }
             }
         }
 
         private void btnYear_Click(object sender, EventArgs e) {
-
+            if (_popupYear != null) {
+                _popupYear.Show(btnYear, 0, btnYear.Height);
+            }
         }
 
         private void btnRslt_Click(object sender, EventArgs e) {
-
+            if (_popupRslt != null) {
+                _popupRslt.Show(btnRslt, 0, btnRslt.Height);
+            }
         }
     }
 }

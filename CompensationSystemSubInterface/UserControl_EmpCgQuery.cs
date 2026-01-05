@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 namespace CompensationSystemSubInterface {
     /// <summary>
@@ -29,9 +30,15 @@ namespace CompensationSystemSubInterface {
         private EmpCgQueryCondition _condition = new EmpCgQueryCondition();
 
         /// <summary>
-        /// 员工变动筛选条件窗体实例
+        /// 高级筛选条件窗体实例（WPF版本）
         /// </summary>
-        private FrmEmpCgCondition _frmCondition = null;
+        private WpfEmployeeCondition _wpfCondition = null;
+
+        // WPF 筛选树控件
+        private WpfFilterPanel _treeDept;
+
+        // 下拉弹窗
+        private ToolStripDropDown _popupDept;
 
         /// <summary>
         /// 初始化员工变动查询用户控件
@@ -45,7 +52,10 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void UserControl_EmpCgQuery_Load(object sender, EventArgs e) {
             if (this.DesignMode) return;
+            
             InitDateCombos();
+            InitFilterControls(); // 初始化筛选控件数据
+            
             // 默认查最近一个月，或者今年
             cbYear1.Text = DateTime.Now.Year.ToString();
             cbMonth1.Text = "01";
@@ -69,6 +79,68 @@ namespace CompensationSystemSubInterface {
                 cbMonth1.Items.Add(m);
                 cbMonth2.Items.Add(m);
             }
+        }
+
+        /// <summary>
+        /// 初始化筛选控件（使用 ToolStripDropDown + ElementHost）
+        /// </summary>
+        private void InitFilterControls() {
+            // 初始化部门树
+            _treeDept = new WpfFilterPanel();
+            _treeDept.LoadDepartments(null);
+            _treeDept.SelectionChanged += ids => {
+                _condition.DepartmentIds = ids;
+                UpdateButtonText(btnDept, "部门", _treeDept);
+                // 同步更新条件设置窗体中的员工列表
+                RefreshConditionWindowEmployees();
+            };
+            _popupDept = CreatePopup(_treeDept, 250, 300);
+
+            // 初始化按钮文本
+            UpdateButtonText(btnDept, "部门", _treeDept);
+        }
+
+        /// <summary>
+        /// 当外部筛选条件变化时，同步更新条件设置窗体中的员工列表
+        /// </summary>
+        private void RefreshConditionWindowEmployees() {
+            _wpfCondition?.RefreshFilterConditions(_condition.DepartmentIds);
+        }
+
+        /// <summary>
+        /// 创建包含 WPF 控件的下拉弹窗
+        /// </summary>
+        private ToolStripDropDown CreatePopup(WpfFilterPanel treeContent, int width, int height) {
+            ElementHost host = new ElementHost {
+                AutoSize = false,
+                Size = new System.Drawing.Size(width, height),
+                Child = treeContent,
+                Dock = DockStyle.Fill
+            };
+            
+            ToolStripControlHost tsHost = new ToolStripControlHost(host);
+            tsHost.Margin = Padding.Empty;
+            tsHost.Padding = Padding.Empty;
+            tsHost.AutoSize = false;
+            tsHost.Size = new System.Drawing.Size(width, height);
+
+            ToolStripDropDown popup = new ToolStripDropDown();
+            popup.Margin = Padding.Empty;
+            popup.Padding = Padding.Empty;
+            popup.Items.Add(tsHost);
+            return popup;
+        }
+
+        /// <summary>
+        /// 更新按钮文本
+        /// </summary>
+        private void UpdateButtonText(Button btn, string name, WpfFilterPanel tree) {
+            int count = tree.GetSelectedCount();
+            bool isAll = tree.IsAllSelected();
+            
+            if (count == 0) btn.Text = name;
+            else if (isAll) btn.Text = name;
+            else btn.Text = $"{name}*";
         }
 
         /// <summary>
@@ -141,8 +213,6 @@ namespace CompensationSystemSubInterface {
                 if (col.Name.Contains("时间") || col.Name.Contains("日期")) {
                     col.DefaultCellStyle.Format = "yyyy-MM-dd";
                 }
-
-                //col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter; // 内容居中
             }
 
             // 冻结
@@ -150,21 +220,25 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 条件设置按钮点击事件处理，打开或激活员工变动筛选条件窗体
+        /// 条件设置按钮点击事件处理，打开或激活员工筛选条件窗体
         /// </summary>
         private void btnCondition_Click(object sender, EventArgs e) {
-            if (_frmCondition == null || _frmCondition.IsDisposed) {
-                _frmCondition = new FrmEmpCgCondition(_condition);
-                _frmCondition.ApplySelect += (newCond) => {
-                    _condition = newCond;
+            if (_wpfCondition == null) {
+                _wpfCondition = new WpfEmployeeCondition(_condition.EmployeeIds, _condition.DepartmentIds);
+                _wpfCondition.ApplySelect += (empIds) => {
+                    _condition.EmployeeIds = empIds;
                     btnCondition.Text = _condition.HasFilter ? "条件设置 *" : "条件设置";
                     PerformQuery();
                 };
-                //_frmCondition.Show(this);
-                _frmCondition.Show();
+                
+                _wpfCondition.Closed += (s, args) => {
+                    _wpfCondition = null;
+                };
+                
+                _wpfCondition.Show();
             } else {
-                _frmCondition.WindowState = FormWindowState.Normal;
-                _frmCondition.Activate();
+                _wpfCondition.WindowState = System.Windows.WindowState.Normal;
+                _wpfCondition.Activate();
             }
         }
 
@@ -195,7 +269,9 @@ namespace CompensationSystemSubInterface {
         }
 
         private void btnDept_Click(object sender, EventArgs e) {
-
+            if (_popupDept != null) {
+                _popupDept.Show(btnDept, 0, btnDept.Height);
+            }
         }
     }
 }

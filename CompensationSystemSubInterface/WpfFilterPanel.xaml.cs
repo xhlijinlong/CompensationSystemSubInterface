@@ -81,6 +81,44 @@ namespace CompensationSystemSubInterface {
             BindTree();
         }
 
+        public void LoadYears() {
+            _root = new FilterTreeNode { DisplayText = "全部年度", IsThreeState = true, FontWeight = FontWeights.Bold };
+
+            int curYear = DateTime.Now.Year;
+            for (int i = 0; i < 5; i++) {
+                int year = curYear - i;
+                _root.Children.Add(new FilterTreeNode {
+                    Id = year,
+                    DisplayText = year.ToString() + "年",
+                    Parent = _root
+                });
+            }
+            BindTree();
+        }
+
+        public void LoadResults() {
+            _root = new FilterTreeNode { DisplayText = "全部结果", IsThreeState = true, FontWeight = FontWeights.Bold };
+
+            string[] results = new[] { "优秀", "合格", "基本合格", "不合格" };
+            int id = 1;
+            foreach (var result in results) {
+                _root.Children.Add(new FilterTreeNode {
+                    Id = id++,
+                    DisplayText = result,
+                    Parent = _root
+                });
+            }
+            BindTree();
+        }
+
+        /// <summary>
+        /// 获取选中项的显示文本列表（用于考核结果等字符串类型筛选）
+        /// </summary>
+        public List<string> GetSelectedTexts() {
+            if (_root == null) return new List<string>();
+            return _root.Children.Where(x => x.IsChecked == true).Select(x => x.DisplayText).ToList();
+        }
+
         private void BindTree() {
             treeMain.ItemsSource = new ObservableCollection<FilterTreeNode> { _root };
         }
