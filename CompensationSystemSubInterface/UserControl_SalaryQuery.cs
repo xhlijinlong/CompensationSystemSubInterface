@@ -293,15 +293,29 @@ namespace CompensationSystemSubInterface {
 
             if (dgvSalary.Columns.Contains("EmployeeName")) {
                 dgvSalary.Columns["EmployeeName"].HeaderText = "姓名";
-                dgvSalary.Columns["EmployeeName"].Width = 100;
+                dgvSalary.Columns["EmployeeName"].Width = 80;
                 dgvSalary.Columns["EmployeeName"].Frozen = true; // 冻结姓名列
             }
 
-            // 3. 隐藏不需要显示的列
-            if (dgvSalary.Columns.Contains("DeptName")) {
-                dgvSalary.Columns["DeptName"].Visible = false;
+            if (dgvSalary.Columns.Contains("EmployeeNo")) {
+                dgvSalary.Columns["EmployeeNo"].HeaderText = "编号";
+                dgvSalary.Columns["EmployeeNo"].Width = 90;
+                dgvSalary.Columns["EmployeeNo"].DisplayIndex = dgvSalary.Columns["EmployeeName"].DisplayIndex + 1;
             }
 
+            if (dgvSalary.Columns.Contains("DeptName")) {
+                dgvSalary.Columns["DeptName"].HeaderText = "部门";
+                dgvSalary.Columns["DeptName"].Width = 100;
+                dgvSalary.Columns["DeptName"].DisplayIndex = dgvSalary.Columns["EmployeeNo"].DisplayIndex + 1;
+            }
+
+            if (dgvSalary.Columns.Contains("PositionName")) {
+                dgvSalary.Columns["PositionName"].HeaderText = "岗位";
+                dgvSalary.Columns["PositionName"].Width = 80;
+                dgvSalary.Columns["PositionName"].DisplayIndex = dgvSalary.Columns["DeptName"].DisplayIndex + 1;
+            }
+
+            // 3. 隐藏不需要显示的列
             if (dgvSalary.Columns.Contains("RowType")) {
                 dgvSalary.Columns["RowType"].Visible = false;
             }

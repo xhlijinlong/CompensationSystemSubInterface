@@ -45,8 +45,8 @@ namespace CompensationSystemSubInterface.Services {
         public DataTable GetRawSalaryData(DateTime startDate, DateTime endDate, string keyword, SalaryQueryCondition cond) {
             StringBuilder sb = new StringBuilder();
             sb.Append(@"
-                SELECT h.SalaryMonth, yg.id AS EmployeeId, yg.xingming AS EmployeeName,
-                       si.ItemId, si.ItemName, d.Amount, bm.bmname AS DeptName,
+                SELECT h.SalaryMonth, yg.id AS EmployeeId, yg.yuangongbh AS EmployeeNo, yg.xingming AS EmployeeName,
+                       si.ItemId, si.ItemName, d.Amount, bm.bmname AS DeptName, gw.gwname AS PositionName,
                        h.DisplayOrder, si.DisplayOrder AS ItemOrder
                 FROM ZX_SalaryHeaders h
                 JOIN ZX_SalaryDetails d ON h.SalaryId = d.SalaryId
@@ -142,8 +142,10 @@ namespace CompensationSystemSubInterface.Services {
             }
 
             dt.Columns.Add("MonthStr", typeof(string));
-            dt.Columns.Add("DeptName", typeof(string));
             dt.Columns.Add("EmployeeName", typeof(string));
+            dt.Columns.Add("EmployeeNo", typeof(string));
+            dt.Columns.Add("DeptName", typeof(string));
+            dt.Columns.Add("PositionName", typeof(string));
 
             // 添加动态列 (按照 allItems 的原生顺序添加)
             foreach (int id in finalColIds) {
@@ -189,8 +191,10 @@ namespace CompensationSystemSubInterface.Services {
                     foreach (var monthGroup in monthGroups) {
                         DataRow row = dt.NewRow();
                         row["MonthStr"] = monthGroup.Key.ToString("yyyy年MM月");
-                        row["DeptName"] = deptName;
                         row["EmployeeName"] = empGroup.Key.Name;
+                        row["EmployeeNo"] = monthGroup.First().Field<string>("EmployeeNo");
+                        row["DeptName"] = deptName;
+                        row["PositionName"] = monthGroup.First().Field<string>("PositionName");
                         row["RowType"] = 0; // 明细
 
                         decimal rowSum = 0;
@@ -216,7 +220,7 @@ namespace CompensationSystemSubInterface.Services {
 
                     // --- 个人小计 ---
                     DataRow subEmp = dt.NewRow();
-                    subEmp["DeptName"] = deptName;
+                    // 小计行不显示部门等信息
                     subEmp["EmployeeName"] = "小计";
                     subEmp["RowType"] = 1;
                     foreach (var kv in empTotals) {
@@ -317,8 +321,10 @@ namespace CompensationSystemSubInterface.Services {
 
             // 构建 DataTable 结构 (增加序号列)
             dt.Columns.Add("Seq", typeof(int)); // 序号
-            dt.Columns.Add("DeptName", typeof(string));
             dt.Columns.Add("EmployeeName", typeof(string));
+            dt.Columns.Add("EmployeeNo", typeof(string));
+            dt.Columns.Add("DeptName", typeof(string));
+            dt.Columns.Add("PositionName", typeof(string));
 
             foreach (int id in finalColIds) {
                 string colName = "Item_" + id;
@@ -359,8 +365,10 @@ namespace CompensationSystemSubInterface.Services {
                     // --- 直接创建一行员工数据，不再有月份循环 ---
                     DataRow row = dt.NewRow();
                     row["Seq"] = serialNumber++; // 填充序号
-                    row["DeptName"] = deptName;
                     row["EmployeeName"] = empGroup.Key.Name;
+                    row["EmployeeNo"] = empGroup.First().Field<string>("EmployeeNo");
+                    row["DeptName"] = deptName;
+                    row["PositionName"] = empGroup.First().Field<string>("PositionName");
                     row["RowType"] = 0; // 普通数据行
 
                     decimal rowSum = 0;
