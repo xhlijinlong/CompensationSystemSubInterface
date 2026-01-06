@@ -188,11 +188,6 @@ namespace CompensationSystemSubInterface {
                     col.DefaultCellStyle.Format = "yyyy-MM-dd";
                     col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
-
-                if (col.Name.Contains("身份证起始") || col.Name.Contains("身份证截止")) {
-                    col.DefaultCellStyle.Format = "yyyy-MM-dd";
-                    col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                }
             }
 
             // 冻结前几列 (员工号、姓名、部门)

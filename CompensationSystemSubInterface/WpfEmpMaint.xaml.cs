@@ -112,15 +112,11 @@ namespace CompensationSystemSubInterface {
                 txtAge.Text = _currentEmp.Age.ToString();
                 dpBirthday.SelectedDate = _currentEmp.Birthday;
                 txtIdCard.Text = _currentEmp.IdCard;
-                dpIdStart.SelectedDate = _currentEmp.IdStart;
-                dpIdEnd.SelectedDate = _currentEmp.IdEnd;
 
                 // === 2. 组织职务 (锁定区域) ===
                 cbSequence.SelectedValue = _currentEmp.SeqId;
                 cbJob.SelectedValue = _currentEmp.JobId;
                 cbLevel.SelectedValue = _currentEmp.LevelId;
-
-                txtPersonType.Text = _currentEmp.PersonType; // 文本框赋值
 
                 dpWorkStart.SelectedDate = _currentEmp.WorkStart;
                 dpJoinDate.SelectedDate = _currentEmp.JoinDate;
@@ -139,8 +135,6 @@ namespace CompensationSystemSubInterface {
                 // === 4. 联系 ===
                 txtPhone.Text = _currentEmp.Phone;
                 txtBankCard.Text = _currentEmp.BankCard;
-                txtHujiAddr.Text = _currentEmp.HujiAddr;
-                txtCurrentAddr.Text = _currentEmp.CurrentAddr;
 
             } catch (Exception ex) {
                 MessageBox.Show("加载数据失败: " + ex.Message);
@@ -166,11 +160,7 @@ namespace CompensationSystemSubInterface {
                     Zodiac = txtZodiac.Text,
                     // 尝试解析年龄，防止空值报错
                     Age = int.TryParse(txtAge.Text, out int age) ? age : 0,
-                    Birthday = dpBirthday.SelectedDate, // ★ 新增收集
-
-                    // 证件有效期
-                    IdStart = dpIdStart.SelectedDate,   // ★ 新增收集
-                    IdEnd = dpIdEnd.SelectedDate,       // ★ 新增收集
+                    Birthday = dpBirthday.SelectedDate,
 
                     // 敏感信息
                     IdCard = txtIdCard.Text,
@@ -178,24 +168,20 @@ namespace CompensationSystemSubInterface {
 
                     // 联系信息
                     Phone = txtPhone.Text,
-                    HujiAddr = txtHujiAddr.Text,
-                    CurrentAddr = txtCurrentAddr.Text,
 
-                    // 人员与工作时间
-                    PersonType = txtPersonType.Text,
-                    WorkStart = dpWorkStart.SelectedDate, // ★ 新增收集
-                    JoinDate = dpJoinDate.SelectedDate,   // ★ 新增收集
-                    PostDate = dpPostDate.SelectedDate,   // ★ 新增收集
-                                                          // ResignDate 通常不在此修改
+                    // 工作时间
+                    WorkStart = dpWorkStart.SelectedDate,
+                    JoinDate = dpJoinDate.SelectedDate,
+                    PostDate = dpPostDate.SelectedDate,
 
                     // 学历技能
                     Education = txtEducation.Text,
                     Degree = txtDegree.Text,
                     TechSpecialty = txtTech.Text,
                     TitleLevel = txtTitleLevel.Text,
-                    TitleDate = dpTitleDate.SelectedDate, // ★ 新增收集
+                    TitleDate = dpTitleDate.SelectedDate,
                     Skill = txtSkill.Text,
-                    SkillDate = dpSkillDate.SelectedDate  // ★ 新增收集
+                    SkillDate = dpSkillDate.SelectedDate
                 };
 
                 // 2. 调用 Service 保存

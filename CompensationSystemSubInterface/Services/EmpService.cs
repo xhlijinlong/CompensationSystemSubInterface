@@ -55,13 +55,8 @@ namespace CompensationSystemSubInterface.Services {
                     NULLIF(yg.jinengsj, '1900-01-01') AS '技能时间',
                     yg.lianxidh AS '联系电话',
                     yg.nianling AS '年龄',
-                    yg.renyuanlb AS '人员类别',
                     yg.shuxing AS '属相',
                     yg.hunyinzk AS '婚姻状况',
-                    NULLIF(yg.qishisfzrq, '1900-01-01') AS '身份证起始',
-                    NULLIF(yg.jieshusfzrq, '1900-01-01') AS '身份证截止',
-                    yg.hujidz AS '户籍地址',
-                    yg.xianzhuzhi AS '现住址',
                     yg.gongzikh AS '工资卡号',
                     NULLIF(yg.lizhisj, '1900-01-01') AS '离职日期',
                     yg.id, yg.bmid, yg.xlid, yg.gwid, yg.cjid
@@ -170,13 +165,8 @@ namespace CompensationSystemSubInterface.Services {
                     NULLIF(yg.jinengsj, '1900-01-01') AS '技能时间',
                     yg.lianxidh AS '联系电话',
                     yg.nianling AS '年龄',
-                    yg.renyuanlb AS '人员类别',
                     yg.shuxing AS '属相',
                     yg.hunyinzk AS '婚姻状况',
-                    NULLIF(yg.qishisfzrq, '1900-01-01') AS '身份证起始',
-                    NULLIF(yg.jieshusfzrq, '1900-01-01') AS '身份证截止',
-                    yg.hujidz AS '户籍地址',
-                    yg.xianzhuzhi AS '现住址',
                     yg.gongzikh AS '工资卡号',
                     NULLIF(yg.lizhisj, '1900-01-01') AS '离职日期',
                     yg.id, yg.bmid, yg.xlid, yg.gwid, yg.cjid
@@ -419,17 +409,10 @@ namespace CompensationSystemSubInterface.Services {
             shuxing = @Zodiac,
             nianling = @Age,
             chushengrq = @Birthday,
-            
-            hujidz = @HujiAddr,
-            xianzhuzhi = @CurrentAddr,
             lianxidh = @Phone,
-            
-            qishisfzrq = @IdStart,
-            jieshusfzrq = @IdEnd,
 
             xueli = @Education,
             xuewei = @Degree,
-            renyuanlb = @PersonType,
             
             gongzuosj = @WorkStart,
             rusisj = @JoinDate,
@@ -457,17 +440,10 @@ namespace CompensationSystemSubInterface.Services {
                 new SqlParameter("@Zodiac", emp.Zodiac ?? ""),
                 new SqlParameter("@Age", emp.Age), // int类型
                 new SqlParameter("@Birthday", emp.Birthday ?? (object)DBNull.Value), // DateTime?
-
-                new SqlParameter("@HujiAddr", emp.HujiAddr ?? ""),
-                new SqlParameter("@CurrentAddr", emp.CurrentAddr ?? ""),
                 new SqlParameter("@Phone", emp.Phone ?? ""),
-
-                new SqlParameter("@IdStart", emp.IdStart ?? (object)DBNull.Value),
-                new SqlParameter("@IdEnd", emp.IdEnd ?? (object)DBNull.Value),
 
                 new SqlParameter("@Education", emp.Education ?? ""),
                 new SqlParameter("@Degree", emp.Degree ?? ""),
-                new SqlParameter("@PersonType", emp.PersonType ?? ""),
 
                 new SqlParameter("@WorkStart", emp.WorkStart ?? (object)DBNull.Value),
                 new SqlParameter("@JoinDate", emp.JoinDate ?? (object)DBNull.Value),
@@ -476,10 +452,8 @@ namespace CompensationSystemSubInterface.Services {
 
                 new SqlParameter("@Tech", emp.TechSpecialty ?? ""),
                 new SqlParameter("@TitleLevel", emp.TitleLevel ?? ""),
-                //new SqlParameter("@TitleDate", emp.TitleDate ?? (object)DBNull.Value), // 数据库已改datetime，直接传
                 new SqlParameter("@TitleDate", emp.TitleDate.HasValue ? emp.TitleDate.Value.ToString("yyyy-MM-dd") : (object)DBNull.Value),
                 new SqlParameter("@Skill", emp.Skill ?? ""),
-                //new SqlParameter("@SkillDate", emp.SkillDate ?? (object)DBNull.Value),
                 new SqlParameter("@SkillDate", emp.SkillDate.HasValue ? emp.SkillDate.Value.ToString("yyyy-MM-dd") : (object)DBNull.Value),
 
                 new SqlParameter("@IdCard", encIdCard),
