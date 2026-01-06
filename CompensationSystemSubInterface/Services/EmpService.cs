@@ -37,7 +37,6 @@ namespace CompensationSystemSubInterface.Services {
                     bm.bmname AS '部门',
                     xl.xlname AS '序列',
                     gw.gwname AS '职务',
-                    cj.cjname AS '层级',
                     yg.xingbie AS '性别',
                     yg.minzu AS '民族',
                     yg.zhengzhimm AS '政治面貌',
@@ -59,7 +58,7 @@ namespace CompensationSystemSubInterface.Services {
                     yg.hunyinzk AS '婚姻状况',
                     yg.gongzikh AS '工资卡号',
                     NULLIF(yg.lizhisj, '1900-01-01') AS '离职日期',
-                    yg.id, yg.bmid, yg.xlid, yg.gwid, yg.cjid
+                    yg.id, yg.bmid, yg.xlid, yg.gwid
                 FROM 
                     ZX_config_yg yg
                     LEFT JOIN ZX_config_bm bm ON yg.bmid = bm.id

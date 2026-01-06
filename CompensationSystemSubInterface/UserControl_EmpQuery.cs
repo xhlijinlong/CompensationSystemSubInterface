@@ -174,7 +174,7 @@ namespace CompensationSystemSubInterface {
             // 设置列属性
             foreach (DataGridViewColumn col in dgvSalary.Columns) {
                 // 隐藏 ID 列
-                if (col.Name == "id" || col.Name == "bmid" || col.Name == "xlid" || col.Name == "gwid" || col.Name == "cjid") {
+                if (col.Name == "id" || col.Name == "bmid" || col.Name == "xlid" || col.Name == "gwid") {
                     col.Visible = false;
                     continue;
                 }
