@@ -121,12 +121,12 @@ namespace CompensationSystemSubInterface {
             };
             _popupDept = CreatePopup(_treeDept, 250, 300);
 
-            // 3. 初始化岗位树
+            // 3. 初始化职务(岗位)树
             _treePost = new WpfFilterPanel();
             _treePost.LoadPositions();
             _treePost.SelectionChanged += ids => {
                 _condition.PositionIds = ids;
-                UpdateButtonText(btnPost, "岗位", _treePost);
+                UpdateButtonText(btnPost, "职务", _treePost);
                 // 同步更新条件设置窗体中的员工列表
                 RefreshConditionWindowEmployees();
             };
@@ -135,7 +135,7 @@ namespace CompensationSystemSubInterface {
             // 初始化按钮文本
             UpdateButtonText(btnSeq, "序列", _treeSeq);
             UpdateButtonText(btnDept, "部门", _treeDept);
-            UpdateButtonText(btnPost, "岗位", _treePost);
+            UpdateButtonText(btnPost, "职务", _treePost);
         }
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace CompensationSystemSubInterface {
             }
 
             if (dgvSalary.Columns.Contains("PositionName")) {
-                dgvSalary.Columns["PositionName"].HeaderText = "岗位";
+                dgvSalary.Columns["PositionName"].HeaderText = "职务";
                 dgvSalary.Columns["PositionName"].Width = 80;
                 dgvSalary.Columns["PositionName"].DisplayIndex = dgvSalary.Columns["DeptName"].DisplayIndex + 1;
             }

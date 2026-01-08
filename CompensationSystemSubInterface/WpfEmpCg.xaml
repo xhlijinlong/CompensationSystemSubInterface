@@ -72,7 +72,7 @@
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Header="2. 岗位信息变更" Margin="0,0,0,15" Padding="10" Background="White" BorderBrush="#CCC">
+                <GroupBox Header="2. 职务信息变更" Margin="0,0,0,15" Padding="10" Background="White" BorderBrush="#CCC">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="70"/>

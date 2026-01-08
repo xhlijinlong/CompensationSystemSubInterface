@@ -87,12 +87,12 @@ namespace CompensationSystemSubInterface.Models {
         public string SeqName { get; set; }
 
         /// <summary>
-        /// 岗位ID
+        /// 职务ID
         /// </summary>
         public int? JobId { get; set; }
 
         /// <summary>
-        /// 岗位名称
+        /// 职务名称
         /// </summary>
         public string JobName { get; set; }
 
@@ -148,7 +148,7 @@ namespace CompensationSystemSubInterface.Models {
         public DateTime? JoinDate { get; set; }
 
         /// <summary>
-        /// 任现岗位时间
+        /// 任现岗位(职务)时间
         /// </summary>
         public DateTime? PostDate { get; set; }
 

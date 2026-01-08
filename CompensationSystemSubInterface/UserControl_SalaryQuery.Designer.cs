@@ -42,12 +42,12 @@
             this.lbMonth2 = new System.Windows.Forms.Label();
             this.lbName = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.btnQuery = new System.Windows.Forms.Button();
-            this.btnCondition = new System.Windows.Forms.Button();
-            this.btnExport = new System.Windows.Forms.Button();
             this.btnSeq = new System.Windows.Forms.Button();
             this.btnDept = new System.Windows.Forms.Button();
             this.btnPost = new System.Windows.Forms.Button();
+            this.btnCondition = new System.Windows.Forms.Button();
+            this.btnQuery = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -222,39 +222,6 @@
             this.txtName.Size = new System.Drawing.Size(65, 23);
             this.txtName.TabIndex = 10;
             // 
-            // btnQuery
-            // 
-            this.btnQuery.Location = new System.Drawing.Point(856, 16);
-            this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnQuery.Name = "btnQuery";
-            this.btnQuery.Size = new System.Drawing.Size(55, 25);
-            this.btnQuery.TabIndex = 11;
-            this.btnQuery.Text = "查询";
-            this.btnQuery.UseVisualStyleBackColor = true;
-            this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
-            // 
-            // btnCondition
-            // 
-            this.btnCondition.Location = new System.Drawing.Point(770, 16);
-            this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnCondition.Name = "btnCondition";
-            this.btnCondition.Size = new System.Drawing.Size(80, 25);
-            this.btnCondition.TabIndex = 12;
-            this.btnCondition.Text = "条件设置";
-            this.btnCondition.UseVisualStyleBackColor = true;
-            this.btnCondition.Click += new System.EventHandler(this.btnCondition_Click);
-            // 
-            // btnExport
-            // 
-            this.btnExport.Location = new System.Drawing.Point(917, 16);
-            this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(95, 25);
-            this.btnExport.TabIndex = 13;
-            this.btnExport.Text = "导出Excel";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
             // btnSeq
             // 
             this.btnSeq.Location = new System.Drawing.Point(587, 16);
@@ -284,9 +251,42 @@
             this.btnPost.Name = "btnPost";
             this.btnPost.Size = new System.Drawing.Size(55, 25);
             this.btnPost.TabIndex = 16;
-            this.btnPost.Text = "岗位";
+            this.btnPost.Text = "职务";
             this.btnPost.UseVisualStyleBackColor = true;
             this.btnPost.Click += new System.EventHandler(this.btnPost_Click);
+            // 
+            // btnCondition
+            // 
+            this.btnCondition.Location = new System.Drawing.Point(770, 16);
+            this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnCondition.Name = "btnCondition";
+            this.btnCondition.Size = new System.Drawing.Size(80, 25);
+            this.btnCondition.TabIndex = 12;
+            this.btnCondition.Text = "条件设置";
+            this.btnCondition.UseVisualStyleBackColor = true;
+            this.btnCondition.Click += new System.EventHandler(this.btnCondition_Click);
+            // 
+            // btnQuery
+            // 
+            this.btnQuery.Location = new System.Drawing.Point(856, 16);
+            this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnQuery.Name = "btnQuery";
+            this.btnQuery.Size = new System.Drawing.Size(55, 25);
+            this.btnQuery.TabIndex = 11;
+            this.btnQuery.Text = "查询";
+            this.btnQuery.UseVisualStyleBackColor = true;
+            this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(917, 16);
+            this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(95, 25);
+            this.btnExport.TabIndex = 13;
+            this.btnExport.Text = "导出Excel";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // UserControl_SalaryQuery
             // 

@@ -257,7 +257,7 @@
             this.btnPost.Name = "btnPost";
             this.btnPost.Size = new System.Drawing.Size(55, 25);
             this.btnPost.TabIndex = 16;
-            this.btnPost.Text = "岗位";
+            this.btnPost.Text = "职务";
             this.btnPost.UseVisualStyleBackColor = true;
             this.btnPost.Click += new System.EventHandler(this.btnPost_Click);
             // 

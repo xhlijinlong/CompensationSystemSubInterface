@@ -200,7 +200,7 @@ EXEC sp_addextendedproperty
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'现岗位时间',
+'MS_Description', N'现岗时间',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'gangweisj'

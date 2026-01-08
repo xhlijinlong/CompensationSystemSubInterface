@@ -66,7 +66,7 @@ namespace CompensationSystemSubInterface {
         }
 
         public void LoadPositions() {
-            _root = new FilterTreeNode { DisplayText = "全部岗位", IsThreeState = true, FontWeight = FontWeights.Bold };
+            _root = new FilterTreeNode { DisplayText = "全部职务", IsThreeState = true, FontWeight = FontWeights.Bold };
 
             string sql = "SELECT id, gwname FROM ZX_config_gw WHERE IsEnabled=1 AND DeleteType=0 ORDER BY DisplayOrder";
             DataTable dt = SqlHelper.ExecuteDataTable(sql);

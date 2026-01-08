@@ -45,7 +45,6 @@
             this.btnEducation = new System.Windows.Forms.Button();
             this.btnDegree = new System.Windows.Forms.Button();
             this.btnTitleLevel = new System.Windows.Forms.Button();
-            this.btnMS = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -91,7 +90,6 @@
             this.flpnlTop.Controls.Add(this.btnEducation);
             this.flpnlTop.Controls.Add(this.btnDegree);
             this.flpnlTop.Controls.Add(this.btnTitleLevel);
-            this.flpnlTop.Controls.Add(this.btnMS);
             this.flpnlTop.Controls.Add(this.btnCondition);
             this.flpnlTop.Controls.Add(this.btnQuery);
             this.flpnlTop.Controls.Add(this.btnExport);
@@ -136,7 +134,7 @@
             // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(818, 16);
+            this.btnCondition.Location = new System.Drawing.Point(732, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
             this.btnCondition.Size = new System.Drawing.Size(80, 25);
@@ -147,7 +145,7 @@
             // 
             // btnQuery
             // 
-            this.btnQuery.Location = new System.Drawing.Point(904, 16);
+            this.btnQuery.Location = new System.Drawing.Point(818, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(55, 25);
@@ -158,7 +156,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(965, 16);
+            this.btnExport.Location = new System.Drawing.Point(879, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 25);
@@ -185,7 +183,7 @@
             this.btnPost.Name = "btnPost";
             this.btnPost.Size = new System.Drawing.Size(55, 25);
             this.btnPost.TabIndex = 16;
-            this.btnPost.Text = "岗位";
+            this.btnPost.Text = "职务";
             this.btnPost.UseVisualStyleBackColor = true;
             this.btnPost.Click += new System.EventHandler(this.btnPost_Click);
             // 
@@ -255,17 +253,6 @@
             this.btnTitleLevel.UseVisualStyleBackColor = true;
             this.btnTitleLevel.Click += new System.EventHandler(this.btnTitleLevel_Click);
             // 
-            // btnMS
-            // 
-            this.btnMS.Location = new System.Drawing.Point(732, 16);
-            this.btnMS.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnMS.Name = "btnMS";
-            this.btnMS.Size = new System.Drawing.Size(80, 25);
-            this.btnMS.TabIndex = 23;
-            this.btnMS.Text = "婚姻状况";
-            this.btnMS.UseVisualStyleBackColor = true;
-            this.btnMS.Click += new System.EventHandler(this.btnMS_Click);
-            // 
             // UserControl_EmpQuery
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -303,6 +290,5 @@
         private System.Windows.Forms.Button btnEducation;
         private System.Windows.Forms.Button btnDegree;
         private System.Windows.Forms.Button btnTitleLevel;
-        private System.Windows.Forms.Button btnMS;
     }
 }

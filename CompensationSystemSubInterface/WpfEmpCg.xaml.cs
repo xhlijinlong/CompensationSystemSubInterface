@@ -165,7 +165,7 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 切换新岗位信息控件的启用状态
+        /// 切换新职务(岗位)信息控件的启用状态
         /// 用于控制部门、序列、职务、层级下拉框的可用性
         /// </summary>
         /// <param name="isEnabled">是否启用控件（true=启用，false=禁用）</param>
@@ -198,7 +198,7 @@ namespace CompensationSystemSubInterface {
                 }
             } else {
                 if (dpWageStart.SelectedDate == null) {
-                    MessageBox.Show("办理岗位变动时，【起薪时间】不能为空！");
+                    MessageBox.Show("办理职务变动时，【起薪时间】不能为空！");
                     return;
                 }
                 if (cbNewDept.SelectedValue == null) {

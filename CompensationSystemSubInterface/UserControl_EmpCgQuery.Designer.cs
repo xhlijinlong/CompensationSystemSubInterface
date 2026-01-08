@@ -37,12 +37,12 @@
             this.lbMonth2 = new System.Windows.Forms.Label();
             this.lbName = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
+            this.btnSeq = new System.Windows.Forms.Button();
             this.btnDept = new System.Windows.Forms.Button();
+            this.btnPost = new System.Windows.Forms.Button();
             this.btnCondition = new System.Windows.Forms.Button();
             this.btnQuery = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
-            this.btnSeq = new System.Windows.Forms.Button();
-            this.btnPost = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -217,6 +217,17 @@
             this.txtName.Size = new System.Drawing.Size(65, 23);
             this.txtName.TabIndex = 10;
             // 
+            // btnSeq
+            // 
+            this.btnSeq.Location = new System.Drawing.Point(587, 16);
+            this.btnSeq.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnSeq.Name = "btnSeq";
+            this.btnSeq.Size = new System.Drawing.Size(55, 25);
+            this.btnSeq.TabIndex = 15;
+            this.btnSeq.Text = "序列";
+            this.btnSeq.UseVisualStyleBackColor = true;
+            this.btnSeq.Click += new System.EventHandler(this.btnSeq_Click);
+            // 
             // btnDept
             // 
             this.btnDept.Location = new System.Drawing.Point(648, 16);
@@ -227,6 +238,17 @@
             this.btnDept.Text = "部门";
             this.btnDept.UseVisualStyleBackColor = true;
             this.btnDept.Click += new System.EventHandler(this.btnDept_Click);
+            // 
+            // btnPost
+            // 
+            this.btnPost.Location = new System.Drawing.Point(709, 16);
+            this.btnPost.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnPost.Name = "btnPost";
+            this.btnPost.Size = new System.Drawing.Size(55, 25);
+            this.btnPost.TabIndex = 16;
+            this.btnPost.Text = "职务";
+            this.btnPost.UseVisualStyleBackColor = true;
+            this.btnPost.Click += new System.EventHandler(this.btnPost_Click);
             // 
             // btnCondition
             // 
@@ -260,28 +282,6 @@
             this.btnExport.Text = "导出Excel";
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
-            // btnSeq
-            // 
-            this.btnSeq.Location = new System.Drawing.Point(587, 16);
-            this.btnSeq.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnSeq.Name = "btnSeq";
-            this.btnSeq.Size = new System.Drawing.Size(55, 25);
-            this.btnSeq.TabIndex = 15;
-            this.btnSeq.Text = "序列";
-            this.btnSeq.UseVisualStyleBackColor = true;
-            this.btnSeq.Click += new System.EventHandler(this.btnSeq_Click);
-            // 
-            // btnPost
-            // 
-            this.btnPost.Location = new System.Drawing.Point(709, 16);
-            this.btnPost.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnPost.Name = "btnPost";
-            this.btnPost.Size = new System.Drawing.Size(55, 25);
-            this.btnPost.TabIndex = 16;
-            this.btnPost.Text = "岗位";
-            this.btnPost.UseVisualStyleBackColor = true;
-            this.btnPost.Click += new System.EventHandler(this.btnPost_Click);
             // 
             // UserControl_EmpCgQuery
             // 
