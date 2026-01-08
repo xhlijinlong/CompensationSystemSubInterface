@@ -89,7 +89,7 @@
             <Button Content="重置" Grid.Column="2" Click="btnReset_Click" 
                     Width="70" Height="30" Margin="5,0"
                     Background="#E0E0E0" BorderThickness="0" Cursor="Hand"/>
-            <Button Content="应用" Grid.Column="3" Click="btnApply_Click" 
+            <Button Content="查询" Grid.Column="3" Click="btnApply_Click" 
                     Width="70" Height="30" Margin="5,0"
                     Background="#1890FF" Foreground="White" BorderThickness="0" 
                     FontWeight="Bold" Cursor="Hand"/>

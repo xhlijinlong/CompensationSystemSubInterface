@@ -1,4 +1,4 @@
-using CompensationSystemSubInterface.Utilities;
+﻿using CompensationSystemSubInterface.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,7 +20,7 @@ namespace CompensationSystemSubInterface {
         public List<int> SelectedEmployeeIds => _persistentEmpIds.ToList();
 
         /// <summary>
-        /// 定义事件: 点击应用时将最新的条件传给主界面
+        /// 定义事件: 点击查询时将最新的条件传给主界面
         /// </summary>
         public event Action<List<int>> ApplySelect;
 
