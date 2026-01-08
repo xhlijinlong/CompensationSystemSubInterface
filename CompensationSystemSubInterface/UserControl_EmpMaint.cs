@@ -357,5 +357,41 @@ namespace CompensationSystemSubInterface {
                 _popupDept.Show(btnDept, 0, btnDept.Height);
             }
         }
+
+        private void btnSeq_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnPost_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnGender_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnEthnic_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnPS_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnEducation_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnDegree_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnTitleLevel_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnMS_Click(object sender, EventArgs e) {
+
+        }
     }
 }

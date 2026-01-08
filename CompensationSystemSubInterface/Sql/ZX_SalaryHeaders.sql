@@ -21,6 +21,13 @@ ALTER TABLE [dbo].[ZX_SalaryHeaders] SET (LOCK_ESCALATION = TABLE)
 GO
 
 EXEC sp_addextendedproperty
+'MS_Description', N'薪资发放ID',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryHeaders',
+'COLUMN', N'SalaryId'
+GO
+
+EXEC sp_addextendedproperty
 'MS_Description', N'员工ID',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_SalaryHeaders',

@@ -16,6 +16,34 @@ ALTER TABLE [dbo].[ZX_Assessment] SET (LOCK_ESCALATION = TABLE)
 GO
 
 EXEC sp_addextendedproperty
+'MS_Description', N'绩效考核ID',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_Assessment',
+'COLUMN', N'id'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'员工ID',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_Assessment',
+'COLUMN', N'ygid'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'年度',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_Assessment',
+'COLUMN', N'year'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'考核结果',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_Assessment',
+'COLUMN', N'Assessment'
+GO
+
+EXEC sp_addextendedproperty
 'MS_Description', N'修改人',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_Assessment',

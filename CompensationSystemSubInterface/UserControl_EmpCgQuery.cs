@@ -278,5 +278,13 @@ namespace CompensationSystemSubInterface {
                 _popupDept.Show(btnDept, 0, btnDept.Height);
             }
         }
+
+        private void btnSeq_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnPost_Click(object sender, EventArgs e) {
+
+        }
     }
 }

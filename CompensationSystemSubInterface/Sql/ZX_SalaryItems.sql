@@ -24,6 +24,41 @@ ALTER TABLE [dbo].[ZX_SalaryItems] SET (LOCK_ESCALATION = TABLE)
 GO
 
 EXEC sp_addextendedproperty
+'MS_Description', N'薪资项目ID',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryItems',
+'COLUMN', N'ItemId'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'项目名称',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryItems',
+'COLUMN', N'ItemName'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否可用((1可用0不可用))',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryItems',
+'COLUMN', N'IsEnabled'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'展示顺序',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryItems',
+'COLUMN', N'DisplayOrder'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否每月都有(1每月有0偶尔有)',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryItems',
+'COLUMN', N'IsEveryMonth'
+GO
+
+EXEC sp_addextendedproperty
 'MS_Description', N'sap工资导入表代码',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_SalaryItems',

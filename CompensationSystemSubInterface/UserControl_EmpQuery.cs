@@ -45,7 +45,7 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         public UserControl_EmpQuery() {
             InitializeComponent();
-            
+
             // 当控件销毁时关闭WPF弹窗
             this.HandleDestroyed += (s, e) => {
                 _wpfCondition?.Close();
@@ -57,9 +57,9 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void UserControl_EmpQuery_Load(object sender, EventArgs e) {
             if (this.DesignMode) return;
-            
+
             InitFilterControls(); // 初始化筛选控件数据
-            
+
             // 加载时默认查询所有
             PerformQuery();
         }
@@ -100,7 +100,7 @@ namespace CompensationSystemSubInterface {
                 Child = treeContent,
                 Dock = DockStyle.Fill
             };
-            
+
             ToolStripControlHost tsHost = new ToolStripControlHost(host);
             tsHost.Margin = Padding.Empty;
             tsHost.Padding = Padding.Empty;
@@ -120,7 +120,7 @@ namespace CompensationSystemSubInterface {
         private void UpdateButtonText(Button btn, string name, WpfFilterPanel tree) {
             int count = tree.GetSelectedCount();
             bool isAll = tree.IsAllSelected();
-            
+
             if (count == 0) btn.Text = name;
             else if (isAll) btn.Text = name;
             else btn.Text = $"{name}*";
@@ -207,11 +207,11 @@ namespace CompensationSystemSubInterface {
                     btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";
                     PerformQuery();
                 };
-                
+
                 _wpfCondition.Closed += (s, args) => {
                     _wpfCondition = null;
                 };
-                
+
                 _wpfCondition.Show();
             } else {
                 _wpfCondition.WindowState = System.Windows.WindowState.Normal;
@@ -251,6 +251,42 @@ namespace CompensationSystemSubInterface {
             if (_popupDept != null) {
                 _popupDept.Show(btnDept, 0, btnDept.Height);
             }
+        }
+
+        private void btnSeq_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnPost_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnGender_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnEthnic_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnPS_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnEducation_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnDegree_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnTitleLevel_Click(object sender, EventArgs e) {
+
+        }
+
+        private void btnMS_Click(object sender, EventArgs e) {
+
         }
     }
 }

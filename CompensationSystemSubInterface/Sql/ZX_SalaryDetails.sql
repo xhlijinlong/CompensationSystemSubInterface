@@ -11,3 +11,31 @@ ON [PRIMARY]
 GO
 
 ALTER TABLE [dbo].[ZX_SalaryDetails] SET (LOCK_ESCALATION = TABLE)
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'薪资发放明细ID',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryDetails',
+'COLUMN', N'DetailId'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'薪资发放ID',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryDetails',
+'COLUMN', N'SalaryId'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'薪资项目ID',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryDetails',
+'COLUMN', N'ItemId'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'发放金额',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryDetails',
+'COLUMN', N'Amount'

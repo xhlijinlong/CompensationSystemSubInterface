@@ -88,7 +88,14 @@ ALTER TABLE [dbo].[ZX_config_yg] SET (LOCK_ESCALATION = TABLE)
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'域用户名',
+'MS_Description', N'员工ID',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_config_yg',
+'COLUMN', N'id'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'用户名(域用户)',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'yonghuming'
@@ -144,7 +151,7 @@ EXEC sp_addextendedproperty
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'身份证号',
+'MS_Description', N'身份证号-加密',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'shenfenzheng'
@@ -179,10 +186,17 @@ EXEC sp_addextendedproperty
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'入本单位时间',
+'MS_Description', N'入本单位时间(入社时间)',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'rusisj'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'离职时间',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_config_yg',
+'COLUMN', N'lizhisj'
 GO
 
 EXEC sp_addextendedproperty
@@ -193,7 +207,7 @@ EXEC sp_addextendedproperty
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'所在部门ID',
+'MS_Description', N'部门ID',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'bmid'
@@ -214,13 +228,6 @@ EXEC sp_addextendedproperty
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'待遇岗位ID',
-'SCHEMA', N'dbo',
-'TABLE', N'ZX_config_yg',
-'COLUMN', N'dygwid'
-GO
-
-EXEC sp_addextendedproperty
 'MS_Description', N'层级ID',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
@@ -235,7 +242,7 @@ EXEC sp_addextendedproperty
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'人员类别',
+'MS_Description', N'人员类别-不再维护',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'renyuanlb'
@@ -249,7 +256,14 @@ EXEC sp_addextendedproperty
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'专业技术职务任职资格',
+'MS_Description', N'专业技能获得时间',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_config_yg',
+'COLUMN', N'jinengsj'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'专业技术',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'zhuanyejs'
@@ -263,7 +277,7 @@ EXEC sp_addextendedproperty
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'职称取得时间',
+'MS_Description', N'职称等级取得时间',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'zhichengsj'
@@ -305,35 +319,35 @@ EXEC sp_addextendedproperty
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'婚姻状况',
+'MS_Description', N'婚姻状况-不再维护',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'hunyinzk'
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'身份证起始日期',
+'MS_Description', N'身份证起始日期-不再维护',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'qishisfzrq'
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'身份证结束日期',
+'MS_Description', N'身份证结束日期-不再维护',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'jieshusfzrq'
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'户籍地址（身份证地址）',
+'MS_Description', N'户籍地址（身份证地址）-不再维护',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'hujidz'
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'现住址',
+'MS_Description', N'现住址-不再维护',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'xianzhuzhi'
@@ -347,7 +361,7 @@ EXEC sp_addextendedproperty
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'工资卡号',
+'MS_Description', N'工资卡号-加密',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'gongzikh'

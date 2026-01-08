@@ -29,11 +29,20 @@
             this.lbName = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.btnDept = new System.Windows.Forms.Button();
-            this.btnQuery = new System.Windows.Forms.Button();
             this.btnCondition = new System.Windows.Forms.Button();
+            this.btnQuery = new System.Windows.Forms.Button();
             this.btnMaint = new System.Windows.Forms.Button();
             this.btnCg = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
+            this.btnSeq = new System.Windows.Forms.Button();
+            this.btnPost = new System.Windows.Forms.Button();
+            this.btnGender = new System.Windows.Forms.Button();
+            this.btnEthnic = new System.Windows.Forms.Button();
+            this.btnPS = new System.Windows.Forms.Button();
+            this.btnEducation = new System.Windows.Forms.Button();
+            this.btnDegree = new System.Windows.Forms.Button();
+            this.btnTitleLevel = new System.Windows.Forms.Button();
+            this.btnMS = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -70,7 +79,16 @@
             // 
             this.flpnlTop.Controls.Add(this.lbName);
             this.flpnlTop.Controls.Add(this.txtName);
+            this.flpnlTop.Controls.Add(this.btnSeq);
             this.flpnlTop.Controls.Add(this.btnDept);
+            this.flpnlTop.Controls.Add(this.btnPost);
+            this.flpnlTop.Controls.Add(this.btnGender);
+            this.flpnlTop.Controls.Add(this.btnEthnic);
+            this.flpnlTop.Controls.Add(this.btnPS);
+            this.flpnlTop.Controls.Add(this.btnEducation);
+            this.flpnlTop.Controls.Add(this.btnDegree);
+            this.flpnlTop.Controls.Add(this.btnTitleLevel);
+            this.flpnlTop.Controls.Add(this.btnMS);
             this.flpnlTop.Controls.Add(this.btnCondition);
             this.flpnlTop.Controls.Add(this.btnQuery);
             this.flpnlTop.Controls.Add(this.btnMaint);
@@ -106,7 +124,7 @@
             // 
             // btnDept
             // 
-            this.btnDept.Location = new System.Drawing.Point(133, 16);
+            this.btnDept.Location = new System.Drawing.Point(194, 16);
             this.btnDept.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnDept.Name = "btnDept";
             this.btnDept.Size = new System.Drawing.Size(55, 25);
@@ -115,20 +133,9 @@
             this.btnDept.UseVisualStyleBackColor = true;
             this.btnDept.Click += new System.EventHandler(this.btnDept_Click);
             // 
-            // btnQuery
-            // 
-            this.btnQuery.Location = new System.Drawing.Point(280, 16);
-            this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnQuery.Name = "btnQuery";
-            this.btnQuery.Size = new System.Drawing.Size(55, 25);
-            this.btnQuery.TabIndex = 11;
-            this.btnQuery.Text = "查询";
-            this.btnQuery.UseVisualStyleBackColor = true;
-            this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
-            // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(194, 16);
+            this.btnCondition.Location = new System.Drawing.Point(818, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
             this.btnCondition.Size = new System.Drawing.Size(80, 25);
@@ -137,9 +144,20 @@
             this.btnCondition.UseVisualStyleBackColor = true;
             this.btnCondition.Click += new System.EventHandler(this.btnCondition_Click);
             // 
+            // btnQuery
+            // 
+            this.btnQuery.Location = new System.Drawing.Point(904, 16);
+            this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnQuery.Name = "btnQuery";
+            this.btnQuery.Size = new System.Drawing.Size(55, 25);
+            this.btnQuery.TabIndex = 11;
+            this.btnQuery.Text = "查询";
+            this.btnQuery.UseVisualStyleBackColor = true;
+            this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
+            // 
             // btnMaint
             // 
-            this.btnMaint.Location = new System.Drawing.Point(341, 16);
+            this.btnMaint.Location = new System.Drawing.Point(965, 16);
             this.btnMaint.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnMaint.Name = "btnMaint";
             this.btnMaint.Size = new System.Drawing.Size(55, 25);
@@ -150,7 +168,7 @@
             // 
             // btnCg
             // 
-            this.btnCg.Location = new System.Drawing.Point(402, 16);
+            this.btnCg.Location = new System.Drawing.Point(1026, 16);
             this.btnCg.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCg.Name = "btnCg";
             this.btnCg.Size = new System.Drawing.Size(55, 25);
@@ -161,7 +179,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(463, 16);
+            this.btnExport.Location = new System.Drawing.Point(1087, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 25);
@@ -169,6 +187,105 @@
             this.btnExport.Text = "导出Excel";
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // btnSeq
+            // 
+            this.btnSeq.Location = new System.Drawing.Point(133, 16);
+            this.btnSeq.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnSeq.Name = "btnSeq";
+            this.btnSeq.Size = new System.Drawing.Size(55, 25);
+            this.btnSeq.TabIndex = 17;
+            this.btnSeq.Text = "序列";
+            this.btnSeq.UseVisualStyleBackColor = true;
+            this.btnSeq.Click += new System.EventHandler(this.btnSeq_Click);
+            // 
+            // btnPost
+            // 
+            this.btnPost.Location = new System.Drawing.Point(255, 16);
+            this.btnPost.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnPost.Name = "btnPost";
+            this.btnPost.Size = new System.Drawing.Size(55, 25);
+            this.btnPost.TabIndex = 18;
+            this.btnPost.Text = "岗位";
+            this.btnPost.UseVisualStyleBackColor = true;
+            this.btnPost.Click += new System.EventHandler(this.btnPost_Click);
+            // 
+            // btnGender
+            // 
+            this.btnGender.Location = new System.Drawing.Point(316, 16);
+            this.btnGender.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnGender.Name = "btnGender";
+            this.btnGender.Size = new System.Drawing.Size(55, 25);
+            this.btnGender.TabIndex = 19;
+            this.btnGender.Text = "性别";
+            this.btnGender.UseVisualStyleBackColor = true;
+            this.btnGender.Click += new System.EventHandler(this.btnGender_Click);
+            // 
+            // btnEthnic
+            // 
+            this.btnEthnic.Location = new System.Drawing.Point(377, 16);
+            this.btnEthnic.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnEthnic.Name = "btnEthnic";
+            this.btnEthnic.Size = new System.Drawing.Size(55, 25);
+            this.btnEthnic.TabIndex = 20;
+            this.btnEthnic.Text = "民族";
+            this.btnEthnic.UseVisualStyleBackColor = true;
+            this.btnEthnic.Click += new System.EventHandler(this.btnEthnic_Click);
+            // 
+            // btnPS
+            // 
+            this.btnPS.Location = new System.Drawing.Point(438, 16);
+            this.btnPS.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnPS.Name = "btnPS";
+            this.btnPS.Size = new System.Drawing.Size(80, 25);
+            this.btnPS.TabIndex = 21;
+            this.btnPS.Text = "政治面貌";
+            this.btnPS.UseVisualStyleBackColor = true;
+            this.btnPS.Click += new System.EventHandler(this.btnPS_Click);
+            // 
+            // btnEducation
+            // 
+            this.btnEducation.Location = new System.Drawing.Point(524, 16);
+            this.btnEducation.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnEducation.Name = "btnEducation";
+            this.btnEducation.Size = new System.Drawing.Size(55, 25);
+            this.btnEducation.TabIndex = 22;
+            this.btnEducation.Text = "学历";
+            this.btnEducation.UseVisualStyleBackColor = true;
+            this.btnEducation.Click += new System.EventHandler(this.btnEducation_Click);
+            // 
+            // btnDegree
+            // 
+            this.btnDegree.Location = new System.Drawing.Point(585, 16);
+            this.btnDegree.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnDegree.Name = "btnDegree";
+            this.btnDegree.Size = new System.Drawing.Size(55, 25);
+            this.btnDegree.TabIndex = 23;
+            this.btnDegree.Text = "学位";
+            this.btnDegree.UseVisualStyleBackColor = true;
+            this.btnDegree.Click += new System.EventHandler(this.btnDegree_Click);
+            // 
+            // btnTitleLevel
+            // 
+            this.btnTitleLevel.Location = new System.Drawing.Point(646, 16);
+            this.btnTitleLevel.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnTitleLevel.Name = "btnTitleLevel";
+            this.btnTitleLevel.Size = new System.Drawing.Size(80, 25);
+            this.btnTitleLevel.TabIndex = 24;
+            this.btnTitleLevel.Text = "职称等级";
+            this.btnTitleLevel.UseVisualStyleBackColor = true;
+            this.btnTitleLevel.Click += new System.EventHandler(this.btnTitleLevel_Click);
+            // 
+            // btnMS
+            // 
+            this.btnMS.Location = new System.Drawing.Point(732, 16);
+            this.btnMS.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnMS.Name = "btnMS";
+            this.btnMS.Size = new System.Drawing.Size(80, 25);
+            this.btnMS.TabIndex = 25;
+            this.btnMS.Text = "婚姻状况";
+            this.btnMS.UseVisualStyleBackColor = true;
+            this.btnMS.Click += new System.EventHandler(this.btnMS_Click);
             // 
             // UserControl_EmpMaint
             // 
@@ -201,5 +318,14 @@
         private System.Windows.Forms.Button btnMaint;
         private System.Windows.Forms.Button btnCg;
         private System.Windows.Forms.Button btnDept;
+        private System.Windows.Forms.Button btnSeq;
+        private System.Windows.Forms.Button btnPost;
+        private System.Windows.Forms.Button btnGender;
+        private System.Windows.Forms.Button btnEthnic;
+        private System.Windows.Forms.Button btnPS;
+        private System.Windows.Forms.Button btnEducation;
+        private System.Windows.Forms.Button btnDegree;
+        private System.Windows.Forms.Button btnTitleLevel;
+        private System.Windows.Forms.Button btnMS;
     }
 }
