@@ -52,8 +52,8 @@ namespace CompensationSystemSubInterface.Services {
                     jx.[year] AS 'Year',
                     jx.Assessment AS 'Result',
                     yg.id AS 'EmployeeId'
-                FROM ZX_Assessment jx
-                JOIN ZX_config_yg yg ON jx.ygid = yg.id 
+                FROM ZX_config_yg yg
+                JOIN ZX_Assessment jx ON jx.ygid = yg.id 
                 WHERE yg.zaizhi = 1 
             ");
 

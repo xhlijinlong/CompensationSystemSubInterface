@@ -271,7 +271,7 @@ namespace CompensationSystemSubInterface.Services {
                     JOIN ZX_config_yg yg ON cg.ygid = yg.id 
                     JOIN ZX_config_bm bm ON yg.bmid = bm.id 
                 WHERE 
-                    yg.zaizhi = 1 
+                    yg.id > 0
                     AND cg.changeTime BETWEEN @StartDate AND @EndDate
             ");
 
