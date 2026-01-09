@@ -111,7 +111,7 @@ namespace CompensationSystemSubInterface {
 
             // === 1. 回显原数据 (左侧灰色文本框) ===
             // 假设你的 XAML 中有 txtEmpNoHeader 等控件，这里简单略过头部赋值
-            txtEmpNo.Text = _oldData.EmployeeNo;  // 填充员工号
+            txtEmpNo.Text = _oldData.EmployeeNo;  // 填充编号
             txtName.Text = _oldData.Name;    // 填充姓名
 
             txtOldDept.Text = _oldData.DeptName;

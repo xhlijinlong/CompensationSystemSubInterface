@@ -107,7 +107,6 @@ namespace CompensationSystemSubInterface {
 
                 txtNation.Text = _currentEmp.Nation;        // 文本框赋值
                 txtPolitic.Text = _currentEmp.Politic;
-                txtMarital.Text = _currentEmp.Marital;
                 txtZodiac.Text = _currentEmp.Zodiac;
                 txtAge.Text = _currentEmp.Age.ToString();
                 dpBirthday.SelectedDate = _currentEmp.Birthday;
@@ -156,7 +155,6 @@ namespace CompensationSystemSubInterface {
                     Gender = cbGender.Text,
                     Nation = txtNation.Text,
                     Politic = txtPolitic.Text,
-                    Marital = txtMarital.Text,
                     Zodiac = txtZodiac.Text,
                     // 尝试解析年龄，防止空值报错
                     Age = int.TryParse(txtAge.Text, out int age) ? age : 0,

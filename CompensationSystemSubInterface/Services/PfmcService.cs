@@ -90,12 +90,12 @@ namespace CompensationSystemSubInterface.Services {
         /// 将每个员工多年的考核结果横向排列，每年为一列
         /// </summary>
         /// <param name="rawData">原始纵向数据表（GetRawPfmcData返回的结果）</param>
-        /// <returns>透视后的横向数据表，列结构为：员工号、姓名、2025年、2024年、2023年...</returns>
+        /// <returns>透视后的横向数据表，列结构为：编号、姓名、2025年、2024年、2023年...</returns>
         public DataTable BuildPivotReport(DataTable rawData) {
             DataTable dt = new DataTable();
 
             // 固定列
-            dt.Columns.Add("员工号", typeof(string));
+            dt.Columns.Add("编号", typeof(string));
             dt.Columns.Add("姓名", typeof(string));
 
             // 动态列：找出数据中出现的所有年份，并排序
@@ -121,7 +121,7 @@ namespace CompensationSystemSubInterface.Services {
 
             foreach (var group in empGroups) {
                 DataRow newRow = dt.NewRow();
-                newRow["员工号"] = group.Key.No;
+                newRow["编号"] = group.Key.No;
                 newRow["姓名"] = group.Key.Name;
 
                 foreach (var row in group) {

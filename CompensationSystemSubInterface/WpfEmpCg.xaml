@@ -18,7 +18,7 @@
                 <Border Background="#007ACC" CornerRadius="3" Padding="8,3" Margin="0,0,10,0">
                     <TextBlock Text="当前操作" Foreground="White" FontWeight="Bold" FontSize="12"/>
                 </Border>
-                <TextBlock Text="员工号: " Foreground="#666" VerticalAlignment="Center"/>
+                <TextBlock Text="编号: " Foreground="#666" VerticalAlignment="Center"/>
                 <TextBlock x:Name="txtEmpNo" Text="10002940" FontWeight="Bold" Foreground="#333" Margin="0,0,20,0" VerticalAlignment="Center"/>
 
                 <TextBlock Text="姓名: " Foreground="#666" VerticalAlignment="Center"/>

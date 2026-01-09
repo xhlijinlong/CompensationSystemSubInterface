@@ -32,7 +32,7 @@ namespace CompensationSystemSubInterface.Services {
             // 拼接 SQL 语句 (直接使用你提供的 SQL)
             sb.Append(@"
                 SELECT 
-                    yg.yuangongbh AS '员工号',
+                    yg.yuangongbh AS '编号',
                     yg.xingming AS '姓名',
                     bm.bmname AS '部门',
                     xl.xlname AS '序列',
@@ -55,7 +55,6 @@ namespace CompensationSystemSubInterface.Services {
                     yg.lianxidh AS '联系电话',
                     yg.nianling AS '年龄',
                     yg.shuxing AS '属相',
-                    yg.hunyinzk AS '婚姻状况',
                     yg.gongzikh AS '工资卡号',
                     NULLIF(yg.lizhisj, '1900-01-01') AS '离职日期',
                     yg.id, yg.bmid, yg.xlid, yg.gwid
@@ -141,7 +140,7 @@ namespace CompensationSystemSubInterface.Services {
             // 拼接 SQL 语句 (直接使用你提供的 SQL)
             sb.Append(@"
                 SELECT 
-                    yg.yuangongbh AS '员工号',
+                    yg.yuangongbh AS '编号',
                     yg.xingming AS '姓名',
                     bm.bmname AS '部门',
                     xl.xlname AS '序列',
@@ -165,7 +164,6 @@ namespace CompensationSystemSubInterface.Services {
                     yg.lianxidh AS '联系电话',
                     yg.nianling AS '年龄',
                     yg.shuxing AS '属相',
-                    yg.hunyinzk AS '婚姻状况',
                     yg.gongzikh AS '工资卡号',
                     NULLIF(yg.lizhisj, '1900-01-01') AS '离职日期',
                     yg.id, yg.bmid, yg.xlid, yg.gwid, yg.cjid
@@ -252,7 +250,7 @@ namespace CompensationSystemSubInterface.Services {
 
             sb.Append(@"
                 SELECT 
-                    yg.yuangongbh AS '员工号',
+                    yg.yuangongbh AS '编号',
                     yg.xingming AS '姓名',
                     cg.oldbm AS '原部门',
                     cg.oldxl AS '原序列',
@@ -404,7 +402,6 @@ namespace CompensationSystemSubInterface.Services {
             xingbie = @Gender,
             minzu = @Nation,
             zhengzhimm = @Politic,
-            hunyinzk = @Marital,
             shuxing = @Zodiac,
             nianling = @Age,
             chushengrq = @Birthday,
@@ -435,7 +432,6 @@ namespace CompensationSystemSubInterface.Services {
                 new SqlParameter("@Gender", emp.Gender ?? ""),
                 new SqlParameter("@Nation", emp.Nation ?? ""),
                 new SqlParameter("@Politic", emp.Politic ?? ""),
-                new SqlParameter("@Marital", emp.Marital ?? ""),
                 new SqlParameter("@Zodiac", emp.Zodiac ?? ""),
                 new SqlParameter("@Age", emp.Age), // int类型
                 new SqlParameter("@Birthday", emp.Birthday ?? (object)DBNull.Value), // DateTime?

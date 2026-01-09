@@ -197,11 +197,15 @@ namespace CompensationSystemSubInterface {
         /// 格式化 DataGridView 的显示效果，包括表头样式、列属性和冻结列
         /// </summary>
         private void FormatGrid() {
-            dgvSalary.EnableHeadersVisualStyles = false; // 禁用系统样式以自定义表头样式
+            // 设置整体字体为微软雅黑 12pt
+            dgvSalary.Font = new Font("微软雅黑", 12F, FontStyle.Regular);
+            
+            // 统一表头样式
+            dgvSalary.EnableHeadersVisualStyles = false;
             dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
             dgvSalary.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
             dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
-            dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold);
+            dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font("微软雅黑", 12F, FontStyle.Bold);
 
 
             foreach (DataGridViewColumn col in dgvSalary.Columns) {

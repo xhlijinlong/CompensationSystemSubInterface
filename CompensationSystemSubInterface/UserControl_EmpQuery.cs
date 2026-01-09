@@ -164,12 +164,15 @@ namespace CompensationSystemSubInterface {
         /// 格式化 DataGridView 的显示效果，包括表头样式、列属性和冻结列
         /// </summary>
         private void FormatGrid() {
+            // 设置整体字体为微软雅黑 12pt
+            dgvSalary.Font = new Font("微软雅黑", 12F, FontStyle.Regular);
+            
             // 统一表头样式
             dgvSalary.EnableHeadersVisualStyles = false;
             dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
             dgvSalary.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
             dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
-            dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold);
+            dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font("微软雅黑", 12F, FontStyle.Bold);
 
             // 设置列属性
             foreach (DataGridViewColumn col in dgvSalary.Columns) {
@@ -190,7 +193,7 @@ namespace CompensationSystemSubInterface {
                 }
             }
 
-            // 冻结前几列 (员工号、姓名、部门)
+            // 冻结前几列 (编号、姓名、部门)
             if (dgvSalary.Columns.Count > 3) {
                 if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].Frozen = true;
             }

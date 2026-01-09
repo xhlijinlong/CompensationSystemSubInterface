@@ -254,14 +254,15 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         /// <param name="dt">数据源 DataTable</param>
         private void FormatGrid(DataTable dt) {
-            // 设置表头为灰色
+            // 设置整体字体为微软雅黑 12pt
+            dgvSalary.Font = new Font("微软雅黑", 12F, FontStyle.Regular);
+            
+            // 设置表头为白色背景
             dgvSalary.EnableHeadersVisualStyles = false;
-            dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.White; // 设置背景为浅灰
-            dgvSalary.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;     // 设置文字为黑色
-            dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White; // 防止点击表头变蓝
-            if (!dgvSalary.ColumnHeadersDefaultCellStyle.Font.Bold) {
-                dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold); // 设置表头字体加粗
-            }
+            dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
+            dgvSalary.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+            dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
+            dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font("微软雅黑", 12F, FontStyle.Bold);
 
             // 1. 先进行通用设置（金额格式、Caption映射）
             foreach (DataGridViewColumn col in dgvSalary.Columns) {
@@ -334,11 +335,11 @@ namespace CompensationSystemSubInterface {
                 } else if (type == 2) {
                     // 部门小计
                     //dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGray;
-                    dgvSalary.Rows[e.RowIndex].DefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold);
+                    dgvSalary.Rows[e.RowIndex].DefaultCellStyle.Font = new Font("微软雅黑", 12F, FontStyle.Bold);
                 } else if (type == 3) {
                     // 全厂总计
                     //dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGray;
-                    dgvSalary.Rows[e.RowIndex].DefaultCellStyle.Font = new Font(dgvSalary.Font, FontStyle.Bold);
+                    dgvSalary.Rows[e.RowIndex].DefaultCellStyle.Font = new Font("微软雅黑", 12F, FontStyle.Bold);
                 }
             }
         }
