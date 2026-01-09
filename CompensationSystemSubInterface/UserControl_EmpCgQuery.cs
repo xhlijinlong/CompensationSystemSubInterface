@@ -35,10 +35,14 @@ namespace CompensationSystemSubInterface {
         private WpfEmpCondition _wpfCondition = null;
 
         // WPF 筛选树控件
+        private WpfFilterPanel _treeSeq;
         private WpfFilterPanel _treeDept;
+        private WpfFilterPanel _treePost;
 
         // 下拉弹窗
+        private ToolStripDropDown _popupSeq;
         private ToolStripDropDown _popupDept;
+        private ToolStripDropDown _popupPost;
 
         /// <summary>
         /// 初始化员工变动查询用户控件
@@ -90,19 +94,45 @@ namespace CompensationSystemSubInterface {
         /// 初始化筛选控件（使用 ToolStripDropDown + ElementHost）
         /// </summary>
         private void InitFilterControls() {
-            // 初始化部门树
+            // 常量定义弹窗尺寸
+            int popWidth = 250, popHeight = 300;
+
+            // 1. 序列
+            _treeSeq = new WpfFilterPanel();
+            _treeSeq.LoadSequences();
+            _treeSeq.SelectionChanged += ids => {
+                _condition.SequenceIds = ids;
+                UpdateButtonText(btnSeq, "序列", _treeSeq);
+                _treeDept?.LoadDepartments(ids.Count > 0 ? ids : null);
+                _condition.DepartmentIds.Clear();
+                UpdateButtonText(btnDept, "部门", _treeDept);
+                RefreshConditionWindowEmployees();
+            };
+            _popupSeq = CreatePopup(_treeSeq, popWidth, popHeight);
+
+            // 2. 部门
             _treeDept = new WpfFilterPanel();
             _treeDept.LoadDepartments(null);
             _treeDept.SelectionChanged += ids => {
                 _condition.DepartmentIds = ids;
                 UpdateButtonText(btnDept, "部门", _treeDept);
-                // 同步更新条件设置窗体中的员工列表
                 RefreshConditionWindowEmployees();
             };
-            _popupDept = CreatePopup(_treeDept, 250, 300);
+            _popupDept = CreatePopup(_treeDept, popWidth, popHeight);
+
+            // 3. 职务
+            _treePost = new WpfFilterPanel();
+            _treePost.LoadPositions();
+            _treePost.SelectionChanged += ids => {
+                _condition.PositionIds = ids;
+                UpdateButtonText(btnPost, "职务", _treePost);
+            };
+            _popupPost = CreatePopup(_treePost, popWidth, popHeight);
 
             // 初始化按钮文本
+            UpdateButtonText(btnSeq, "序列", _treeSeq);
             UpdateButtonText(btnDept, "部门", _treeDept);
+            UpdateButtonText(btnPost, "职务", _treePost);
         }
 
         /// <summary>
@@ -278,17 +308,15 @@ namespace CompensationSystemSubInterface {
         }
 
         private void btnDept_Click(object sender, EventArgs e) {
-            if (_popupDept != null) {
-                _popupDept.Show(btnDept, 0, btnDept.Height);
-            }
+            _popupDept?.Show(btnDept, 0, btnDept.Height);
         }
 
         private void btnSeq_Click(object sender, EventArgs e) {
-
+            _popupSeq?.Show(btnSeq, 0, btnSeq.Height);
         }
 
         private void btnPost_Click(object sender, EventArgs e) {
-
+            _popupPost?.Show(btnPost, 0, btnPost.Height);
         }
     }
 }

@@ -79,11 +79,38 @@ namespace CompensationSystemSubInterface.Services {
 
             // 2. 高级筛选条件
             if (cond != null) {
+                if (cond.SequenceIds.Count > 0)
+                    sb.Append($" AND xl.id IN ({string.Join(",", cond.SequenceIds)})");
+
                 if (cond.DepartmentIds.Count > 0)
                     sb.Append($" AND bm.id IN ({string.Join(",", cond.DepartmentIds)})");
 
+                if (cond.PositionIds.Count > 0)
+                    sb.Append($" AND gw.id IN ({string.Join(",", cond.PositionIds)})");
+
                 if (cond.EmployeeIds.Count > 0)
                     sb.Append($" AND yg.id IN ({string.Join(",", cond.EmployeeIds)})");
+
+                if (cond.Genders.Count > 0)
+                    sb.Append($" AND yg.xingbie IN ({string.Join(",", cond.Genders.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Ethnics.Count > 0)
+                    sb.Append($" AND yg.minzu IN ({string.Join(",", cond.Ethnics.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Zodiacs.Count > 0)
+                    sb.Append($" AND yg.shuxing IN ({string.Join(",", cond.Zodiacs.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Politics.Count > 0)
+                    sb.Append($" AND yg.zhengzhimm IN ({string.Join(",", cond.Politics.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Educations.Count > 0)
+                    sb.Append($" AND yg.xueli IN ({string.Join(",", cond.Educations.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Degrees.Count > 0)
+                    sb.Append($" AND yg.xuewei IN ({string.Join(",", cond.Degrees.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.TitleLevels.Count > 0)
+                    sb.Append($" AND yg.zhichengdj IN ({string.Join(",", cond.TitleLevels.Select(x => "'" + x.Replace("'", "''") + "'"))})");
             }
 
             // 3. 排序
@@ -188,11 +215,38 @@ namespace CompensationSystemSubInterface.Services {
 
             // 2. 高级筛选条件
             if (cond != null) {
+                if (cond.SequenceIds.Count > 0)
+                    sb.Append($" AND xl.id IN ({string.Join(",", cond.SequenceIds)})");
+
                 if (cond.DepartmentIds.Count > 0)
                     sb.Append($" AND bm.id IN ({string.Join(",", cond.DepartmentIds)})");
 
+                if (cond.PositionIds.Count > 0)
+                    sb.Append($" AND gw.id IN ({string.Join(",", cond.PositionIds)})");
+
                 if (cond.EmployeeIds.Count > 0)
                     sb.Append($" AND yg.id IN ({string.Join(",", cond.EmployeeIds)})");
+
+                if (cond.Genders.Count > 0)
+                    sb.Append($" AND yg.xingbie IN ({string.Join(",", cond.Genders.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Ethnics.Count > 0)
+                    sb.Append($" AND yg.minzu IN ({string.Join(",", cond.Ethnics.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Zodiacs.Count > 0)
+                    sb.Append($" AND yg.shuxing IN ({string.Join(",", cond.Zodiacs.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Politics.Count > 0)
+                    sb.Append($" AND yg.zhengzhimm IN ({string.Join(",", cond.Politics.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Educations.Count > 0)
+                    sb.Append($" AND yg.xueli IN ({string.Join(",", cond.Educations.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Degrees.Count > 0)
+                    sb.Append($" AND yg.xuewei IN ({string.Join(",", cond.Degrees.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.TitleLevels.Count > 0)
+                    sb.Append($" AND yg.zhichengdj IN ({string.Join(",", cond.TitleLevels.Select(x => "'" + x.Replace("'", "''") + "'"))})");
             }
 
             // 3. 排序
@@ -287,8 +341,14 @@ namespace CompensationSystemSubInterface.Services {
 
             // 高级筛选
             if (cond != null) {
+                if (cond.SequenceIds.Count > 0)
+                    sb.Append($" AND yg.xlid IN ({string.Join(",", cond.SequenceIds)})");
+
                 if (cond.DepartmentIds.Count > 0)
                     sb.Append($" AND bm.id IN ({string.Join(",", cond.DepartmentIds)})");
+
+                if (cond.PositionIds.Count > 0)
+                    sb.Append($" AND yg.gwid IN ({string.Join(",", cond.PositionIds)})");
 
                 if (cond.EmployeeIds.Count > 0)
                     sb.Append($" AND yg.id IN ({string.Join(",", cond.EmployeeIds)})");

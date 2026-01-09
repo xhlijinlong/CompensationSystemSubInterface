@@ -45,6 +45,7 @@
             this.btnEducation = new System.Windows.Forms.Button();
             this.btnDegree = new System.Windows.Forms.Button();
             this.btnTitleLevel = new System.Windows.Forms.Button();
+            this.btnChineseZodiac = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -86,6 +87,7 @@
             this.flpnlTop.Controls.Add(this.btnPost);
             this.flpnlTop.Controls.Add(this.btnGender);
             this.flpnlTop.Controls.Add(this.btnEthnic);
+            this.flpnlTop.Controls.Add(this.btnChineseZodiac);
             this.flpnlTop.Controls.Add(this.btnPS);
             this.flpnlTop.Controls.Add(this.btnEducation);
             this.flpnlTop.Controls.Add(this.btnDegree);
@@ -134,29 +136,30 @@
             // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(732, 16);
+            this.btnCondition.Location = new System.Drawing.Point(793, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
             this.btnCondition.Size = new System.Drawing.Size(80, 25);
             this.btnCondition.TabIndex = 12;
-            this.btnCondition.Text = "条件设置";
+            this.btnCondition.Text = "员工设置";
             this.btnCondition.UseVisualStyleBackColor = true;
             this.btnCondition.Click += new System.EventHandler(this.btnCondition_Click);
             // 
             // btnQuery
             // 
-            this.btnQuery.Location = new System.Drawing.Point(818, 16);
+            this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
+            this.btnQuery.Location = new System.Drawing.Point(879, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(55, 25);
             this.btnQuery.TabIndex = 11;
             this.btnQuery.Text = "查询";
-            this.btnQuery.UseVisualStyleBackColor = true;
+            this.btnQuery.UseVisualStyleBackColor = false;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(879, 16);
+            this.btnExport.Location = new System.Drawing.Point(940, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 25);
@@ -211,7 +214,7 @@
             // 
             // btnPS
             // 
-            this.btnPS.Location = new System.Drawing.Point(438, 16);
+            this.btnPS.Location = new System.Drawing.Point(499, 16);
             this.btnPS.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnPS.Name = "btnPS";
             this.btnPS.Size = new System.Drawing.Size(80, 25);
@@ -222,7 +225,7 @@
             // 
             // btnEducation
             // 
-            this.btnEducation.Location = new System.Drawing.Point(524, 16);
+            this.btnEducation.Location = new System.Drawing.Point(585, 16);
             this.btnEducation.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnEducation.Name = "btnEducation";
             this.btnEducation.Size = new System.Drawing.Size(55, 25);
@@ -233,7 +236,7 @@
             // 
             // btnDegree
             // 
-            this.btnDegree.Location = new System.Drawing.Point(585, 16);
+            this.btnDegree.Location = new System.Drawing.Point(646, 16);
             this.btnDegree.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnDegree.Name = "btnDegree";
             this.btnDegree.Size = new System.Drawing.Size(55, 25);
@@ -244,7 +247,7 @@
             // 
             // btnTitleLevel
             // 
-            this.btnTitleLevel.Location = new System.Drawing.Point(646, 16);
+            this.btnTitleLevel.Location = new System.Drawing.Point(707, 16);
             this.btnTitleLevel.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnTitleLevel.Name = "btnTitleLevel";
             this.btnTitleLevel.Size = new System.Drawing.Size(80, 25);
@@ -252,6 +255,17 @@
             this.btnTitleLevel.Text = "职称等级";
             this.btnTitleLevel.UseVisualStyleBackColor = true;
             this.btnTitleLevel.Click += new System.EventHandler(this.btnTitleLevel_Click);
+            // 
+            // btnChineseZodiac
+            // 
+            this.btnChineseZodiac.Location = new System.Drawing.Point(438, 16);
+            this.btnChineseZodiac.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnChineseZodiac.Name = "btnChineseZodiac";
+            this.btnChineseZodiac.Size = new System.Drawing.Size(55, 25);
+            this.btnChineseZodiac.TabIndex = 23;
+            this.btnChineseZodiac.Text = "属相";
+            this.btnChineseZodiac.UseVisualStyleBackColor = true;
+            this.btnChineseZodiac.Click += new System.EventHandler(this.btnChineseZodiac_Click);
             // 
             // UserControl_EmpQuery
             // 
@@ -290,5 +304,6 @@
         private System.Windows.Forms.Button btnEducation;
         private System.Windows.Forms.Button btnDegree;
         private System.Windows.Forms.Button btnTitleLevel;
+        private System.Windows.Forms.Button btnChineseZodiac;
     }
 }

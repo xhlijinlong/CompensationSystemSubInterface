@@ -268,13 +268,14 @@
             // 
             // btnQuery
             // 
+            this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
             this.btnQuery.Location = new System.Drawing.Point(856, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(55, 25);
             this.btnQuery.TabIndex = 11;
             this.btnQuery.Text = "查询";
-            this.btnQuery.UseVisualStyleBackColor = true;
+            this.btnQuery.UseVisualStyleBackColor = false;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
             // btnExport

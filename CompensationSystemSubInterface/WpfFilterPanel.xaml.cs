@@ -112,6 +112,102 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
+        /// 加载性别（程序生成）
+        /// </summary>
+        public void LoadGenders() {
+            _root = new FilterTreeNode { DisplayText = "全部性别", IsThreeState = true, FontWeight = FontWeights.Bold };
+            string[] genders = new[] { "男", "女" };
+            int id = 1;
+            foreach (var g in genders) {
+                _root.Children.Add(new FilterTreeNode { Id = id++, DisplayText = g, Parent = _root });
+            }
+            BindTree();
+        }
+
+        /// <summary>
+        /// 加载属相（12生肖）（程序生成）
+        /// </summary>
+        public void LoadZodiacs() {
+            _root = new FilterTreeNode { DisplayText = "全部属相", IsThreeState = true, FontWeight = FontWeights.Bold };
+            string[] zodiacs = new[] { "鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪" };
+            int id = 1;
+            foreach (var z in zodiacs) {
+                _root.Children.Add(new FilterTreeNode { Id = id++, DisplayText = z, Parent = _root });
+            }
+            BindTree();
+        }
+
+        /// <summary>
+        /// 加载民族（从数据库DISTINCT查询）
+        /// </summary>
+        public void LoadEthnics() {
+            _root = new FilterTreeNode { DisplayText = "全部民族", IsThreeState = true, FontWeight = FontWeights.Bold };
+            string sql = "SELECT DISTINCT minzu FROM ZX_config_yg WHERE minzu IS NOT NULL AND minzu <> '' ORDER BY minzu";
+            DataTable dt = SqlHelper.ExecuteDataTable(sql);
+            int id = 1;
+            foreach (DataRow row in dt.Rows) {
+                _root.Children.Add(new FilterTreeNode { Id = id++, DisplayText = row["minzu"].ToString(), Parent = _root });
+            }
+            BindTree();
+        }
+
+        /// <summary>
+        /// 加载政治面貌（从数据库DISTINCT查询）
+        /// </summary>
+        public void LoadPolitics() {
+            _root = new FilterTreeNode { DisplayText = "全部政治面貌", IsThreeState = true, FontWeight = FontWeights.Bold };
+            string sql = "SELECT DISTINCT zhengzhimm FROM ZX_config_yg WHERE zhengzhimm IS NOT NULL AND zhengzhimm <> '' ORDER BY zhengzhimm";
+            DataTable dt = SqlHelper.ExecuteDataTable(sql);
+            int id = 1;
+            foreach (DataRow row in dt.Rows) {
+                _root.Children.Add(new FilterTreeNode { Id = id++, DisplayText = row["zhengzhimm"].ToString(), Parent = _root });
+            }
+            BindTree();
+        }
+
+        /// <summary>
+        /// 加载学历（从数据库DISTINCT查询）
+        /// </summary>
+        public void LoadEducations() {
+            _root = new FilterTreeNode { DisplayText = "全部学历", IsThreeState = true, FontWeight = FontWeights.Bold };
+            string sql = "SELECT DISTINCT xueli FROM ZX_config_yg WHERE xueli IS NOT NULL AND xueli <> '' ORDER BY xueli";
+            DataTable dt = SqlHelper.ExecuteDataTable(sql);
+            int id = 1;
+            foreach (DataRow row in dt.Rows) {
+                _root.Children.Add(new FilterTreeNode { Id = id++, DisplayText = row["xueli"].ToString(), Parent = _root });
+            }
+            BindTree();
+        }
+
+        /// <summary>
+        /// 加载学位（从数据库DISTINCT查询）
+        /// </summary>
+        public void LoadDegrees() {
+            _root = new FilterTreeNode { DisplayText = "全部学位", IsThreeState = true, FontWeight = FontWeights.Bold };
+            string sql = "SELECT DISTINCT xuewei FROM ZX_config_yg WHERE xuewei IS NOT NULL AND xuewei <> '' ORDER BY xuewei";
+            DataTable dt = SqlHelper.ExecuteDataTable(sql);
+            int id = 1;
+            foreach (DataRow row in dt.Rows) {
+                _root.Children.Add(new FilterTreeNode { Id = id++, DisplayText = row["xuewei"].ToString(), Parent = _root });
+            }
+            BindTree();
+        }
+
+        /// <summary>
+        /// 加载职称等级（从数据库DISTINCT查询）
+        /// </summary>
+        public void LoadTitleLevels() {
+            _root = new FilterTreeNode { DisplayText = "全部职称等级", IsThreeState = true, FontWeight = FontWeights.Bold };
+            string sql = "SELECT DISTINCT zhichengdj FROM ZX_config_yg WHERE zhichengdj IS NOT NULL AND zhichengdj <> '' ORDER BY zhichengdj";
+            DataTable dt = SqlHelper.ExecuteDataTable(sql);
+            int id = 1;
+            foreach (DataRow row in dt.Rows) {
+                _root.Children.Add(new FilterTreeNode { Id = id++, DisplayText = row["zhichengdj"].ToString(), Parent = _root });
+            }
+            BindTree();
+        }
+
+        /// <summary>
         /// 获取选中项的显示文本列表（用于考核结果等字符串类型筛选）
         /// </summary>
         public List<string> GetSelectedTexts() {

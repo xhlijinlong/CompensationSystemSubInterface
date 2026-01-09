@@ -35,10 +35,28 @@ namespace CompensationSystemSubInterface {
         private WpfEmpCondition _wpfCondition = null;
 
         // WPF 筛选树控件
+        private WpfFilterPanel _treeSeq;
         private WpfFilterPanel _treeDept;
+        private WpfFilterPanel _treePost;
+        private WpfFilterPanel _treeGender;
+        private WpfFilterPanel _treeEthnic;
+        private WpfFilterPanel _treeZodiac;
+        private WpfFilterPanel _treePolitic;
+        private WpfFilterPanel _treeEducation;
+        private WpfFilterPanel _treeDegree;
+        private WpfFilterPanel _treeTitleLevel;
 
         // 下拉弹窗
+        private ToolStripDropDown _popupSeq;
         private ToolStripDropDown _popupDept;
+        private ToolStripDropDown _popupPost;
+        private ToolStripDropDown _popupGender;
+        private ToolStripDropDown _popupEthnic;
+        private ToolStripDropDown _popupZodiac;
+        private ToolStripDropDown _popupPolitic;
+        private ToolStripDropDown _popupEducation;
+        private ToolStripDropDown _popupDegree;
+        private ToolStripDropDown _popupTitleLevel;
 
         /// <summary>
         /// 初始化员工信息查询用户控件
@@ -68,19 +86,115 @@ namespace CompensationSystemSubInterface {
         /// 初始化筛选控件（使用 ToolStripDropDown + ElementHost）
         /// </summary>
         private void InitFilterControls() {
-            // 初始化部门树
+            // 常量定义弹窗尺寸
+            int popWidth = 250, popHeight = 300;
+
+            // 1. 序列
+            _treeSeq = new WpfFilterPanel();
+            _treeSeq.LoadSequences();
+            _treeSeq.SelectionChanged += ids => {
+                _condition.SequenceIds = ids;
+                UpdateButtonText(btnSeq, "序列", _treeSeq);
+                // 序列变化后级联刷新部门
+                _treeDept?.LoadDepartments(ids.Count > 0 ? ids : null);
+                _condition.DepartmentIds.Clear();
+                UpdateButtonText(btnDept, "部门", _treeDept);
+                RefreshConditionWindowEmployees();
+            };
+            _popupSeq = CreatePopup(_treeSeq, popWidth, popHeight);
+
+            // 2. 部门
             _treeDept = new WpfFilterPanel();
             _treeDept.LoadDepartments(null);
             _treeDept.SelectionChanged += ids => {
                 _condition.DepartmentIds = ids;
                 UpdateButtonText(btnDept, "部门", _treeDept);
-                // 同步更新条件设置窗体中的员工列表
                 RefreshConditionWindowEmployees();
             };
-            _popupDept = CreatePopup(_treeDept, 250, 300);
+            _popupDept = CreatePopup(_treeDept, popWidth, popHeight);
+
+            // 3. 职务
+            _treePost = new WpfFilterPanel();
+            _treePost.LoadPositions();
+            _treePost.SelectionChanged += ids => {
+                _condition.PositionIds = ids;
+                UpdateButtonText(btnPost, "职务", _treePost);
+            };
+            _popupPost = CreatePopup(_treePost, popWidth, popHeight);
+
+            // 4. 性别
+            _treeGender = new WpfFilterPanel();
+            _treeGender.LoadGenders();
+            _treeGender.SelectionChanged += ids => {
+                _condition.Genders = _treeGender.GetSelectedTexts();
+                UpdateButtonText(btnGender, "性别", _treeGender);
+            };
+            _popupGender = CreatePopup(_treeGender, 150, 150);
+
+            // 5. 民族
+            _treeEthnic = new WpfFilterPanel();
+            _treeEthnic.LoadEthnics();
+            _treeEthnic.SelectionChanged += ids => {
+                _condition.Ethnics = _treeEthnic.GetSelectedTexts();
+                UpdateButtonText(btnEthnic, "民族", _treeEthnic);
+            };
+            _popupEthnic = CreatePopup(_treeEthnic, popWidth, popHeight);
+
+            // 6. 属相
+            _treeZodiac = new WpfFilterPanel();
+            _treeZodiac.LoadZodiacs();
+            _treeZodiac.SelectionChanged += ids => {
+                _condition.Zodiacs = _treeZodiac.GetSelectedTexts();
+                UpdateButtonText(btnChineseZodiac, "属相", _treeZodiac);
+            };
+            _popupZodiac = CreatePopup(_treeZodiac, popWidth, popHeight);
+
+            // 7. 政治面貌
+            _treePolitic = new WpfFilterPanel();
+            _treePolitic.LoadPolitics();
+            _treePolitic.SelectionChanged += ids => {
+                _condition.Politics = _treePolitic.GetSelectedTexts();
+                UpdateButtonText(btnPS, "政治面貌", _treePolitic);
+            };
+            _popupPolitic = CreatePopup(_treePolitic, popWidth, popHeight);
+
+            // 8. 学历
+            _treeEducation = new WpfFilterPanel();
+            _treeEducation.LoadEducations();
+            _treeEducation.SelectionChanged += ids => {
+                _condition.Educations = _treeEducation.GetSelectedTexts();
+                UpdateButtonText(btnEducation, "学历", _treeEducation);
+            };
+            _popupEducation = CreatePopup(_treeEducation, popWidth, popHeight);
+
+            // 9. 学位
+            _treeDegree = new WpfFilterPanel();
+            _treeDegree.LoadDegrees();
+            _treeDegree.SelectionChanged += ids => {
+                _condition.Degrees = _treeDegree.GetSelectedTexts();
+                UpdateButtonText(btnDegree, "学位", _treeDegree);
+            };
+            _popupDegree = CreatePopup(_treeDegree, popWidth, popHeight);
+
+            // 10. 职称等级
+            _treeTitleLevel = new WpfFilterPanel();
+            _treeTitleLevel.LoadTitleLevels();
+            _treeTitleLevel.SelectionChanged += ids => {
+                _condition.TitleLevels = _treeTitleLevel.GetSelectedTexts();
+                UpdateButtonText(btnTitleLevel, "职称等级", _treeTitleLevel);
+            };
+            _popupTitleLevel = CreatePopup(_treeTitleLevel, popWidth, popHeight);
 
             // 初始化按钮文本
+            UpdateButtonText(btnSeq, "序列", _treeSeq);
             UpdateButtonText(btnDept, "部门", _treeDept);
+            UpdateButtonText(btnPost, "职务", _treePost);
+            UpdateButtonText(btnGender, "性别", _treeGender);
+            UpdateButtonText(btnEthnic, "民族", _treeEthnic);
+            UpdateButtonText(btnChineseZodiac, "属相", _treeZodiac);
+            UpdateButtonText(btnEducation, "学历", _treeEducation);
+            UpdateButtonText(btnDegree, "学位", _treeDegree);
+            UpdateButtonText(btnTitleLevel, "职称等级", _treeTitleLevel);
         }
 
         /// <summary>
@@ -251,45 +365,43 @@ namespace CompensationSystemSubInterface {
         }
 
         private void btnDept_Click(object sender, EventArgs e) {
-            if (_popupDept != null) {
-                _popupDept.Show(btnDept, 0, btnDept.Height);
-            }
+            _popupDept?.Show(btnDept, 0, btnDept.Height);
         }
 
         private void btnSeq_Click(object sender, EventArgs e) {
-
+            _popupSeq?.Show(btnSeq, 0, btnSeq.Height);
         }
 
         private void btnPost_Click(object sender, EventArgs e) {
-
+            _popupPost?.Show(btnPost, 0, btnPost.Height);
         }
 
         private void btnGender_Click(object sender, EventArgs e) {
-
+            _popupGender?.Show(btnGender, 0, btnGender.Height);
         }
 
         private void btnEthnic_Click(object sender, EventArgs e) {
-
+            _popupEthnic?.Show(btnEthnic, 0, btnEthnic.Height);
         }
 
         private void btnPS_Click(object sender, EventArgs e) {
-
+            _popupPolitic?.Show(btnPS, 0, btnPS.Height);
         }
 
         private void btnEducation_Click(object sender, EventArgs e) {
-
+            _popupEducation?.Show(btnEducation, 0, btnEducation.Height);
         }
 
         private void btnDegree_Click(object sender, EventArgs e) {
-
+            _popupDegree?.Show(btnDegree, 0, btnDegree.Height);
         }
 
         private void btnTitleLevel_Click(object sender, EventArgs e) {
-
+            _popupTitleLevel?.Show(btnTitleLevel, 0, btnTitleLevel.Height);
         }
 
-        private void btnMS_Click(object sender, EventArgs e) {
-
+        private void btnChineseZodiac_Click(object sender, EventArgs e) {
+            _popupZodiac?.Show(btnChineseZodiac, 0, btnChineseZodiac.Height);
         }
     }
 }

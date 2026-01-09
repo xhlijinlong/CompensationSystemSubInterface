@@ -257,19 +257,20 @@
             this.btnCondition.Name = "btnCondition";
             this.btnCondition.Size = new System.Drawing.Size(80, 25);
             this.btnCondition.TabIndex = 12;
-            this.btnCondition.Text = "条件设置";
+            this.btnCondition.Text = "员工设置";
             this.btnCondition.UseVisualStyleBackColor = true;
             this.btnCondition.Click += new System.EventHandler(this.btnCondition_Click);
             // 
             // btnQuery
             // 
+            this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
             this.btnQuery.Location = new System.Drawing.Point(856, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(55, 25);
             this.btnQuery.TabIndex = 11;
             this.btnQuery.Text = "查询";
-            this.btnQuery.UseVisualStyleBackColor = true;
+            this.btnQuery.UseVisualStyleBackColor = false;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
             // btnExport
