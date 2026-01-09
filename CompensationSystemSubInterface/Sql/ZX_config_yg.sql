@@ -221,7 +221,7 @@ EXEC sp_addextendedproperty
 GO
 
 EXEC sp_addextendedproperty
-'MS_Description', N'岗位ID',
+'MS_Description', N'职务ID',
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_config_yg',
 'COLUMN', N'gwid'
