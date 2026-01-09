@@ -54,11 +54,11 @@
 
 ### 待开发需求
 
-1. 婚姻状况不再查询和维护
+1. 婚姻状况不再查询和维护 ✅
 
-2. 所有页面中的表格数据显示字体调整为 微软雅黑 12pt
+2. 所有页面中的表格数据显示字体调整为 微软雅黑 12pt ✅
 
-3. 涉及到员工信息查询的页面, 增加查询条件
+3. 涉及到员工信息查询的页面, 增加查询条件 ⚠️ 查询条件的关联还需要梳理
    涉及到的页面有 UserControl_EmpQuery , UserControl_EmpMaint , UserControl_EmpCgQuery
 
    UserControl_EmpQuery UserControl_EmpMaint
