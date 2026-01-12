@@ -16,7 +16,7 @@ using System.Windows.Forms.Integration;
 
 namespace CompensationSystemSubInterface {
     /// <summary>
-    /// 员工信息查询用户控件，提供员工信息查询、筛选和导出功能
+    /// 离职员工信息查询用户控件，提供离职员工信息查询、筛选和导出功能
     /// </summary>
     public partial class UserControl_EmpRsQuery : UserControl {
         /// <summary>
@@ -262,9 +262,9 @@ namespace CompensationSystemSubInterface {
             try {
                 this.Cursor = Cursors.WaitCursor;
 
-                // 1. 调用 Service 获取数据
+                // 1. 调用 Service 获取离职员工数据
                 string keyword = txtName.Text.Trim();
-                DataTable dt = _service.GetEmpData(keyword, _condition);
+                DataTable dt = _service.GetEmpRsData(keyword, _condition);
 
                 // 2. 绑定数据
                 dgvSalary.DataSource = null;
@@ -331,7 +331,7 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void btnCondition_Click(object sender, EventArgs e) {
             if (_wpfCondition == null) {
-                _wpfCondition = new WpfEmpCondition(_condition.EmployeeIds, _condition.DepartmentIds);
+                _wpfCondition = new WpfEmpCondition(_condition.EmployeeIds, _condition.DepartmentIds, true);
                 _wpfCondition.ApplySelect += (empIds) => {
                     _condition.EmployeeIds = empIds;
                     btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";
@@ -360,7 +360,7 @@ namespace CompensationSystemSubInterface {
 
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Excel 文件 (*.xlsx)|*.xlsx";
-            sfd.FileName = $"员工信息表_{DateTime.Now:yyyyMMdd}.xlsx";
+            sfd.FileName = $"离职员工信息表_{DateTime.Now:yyyyMMdd}.xlsx";
 
             if (sfd.ShowDialog() == DialogResult.OK) {
                 try {

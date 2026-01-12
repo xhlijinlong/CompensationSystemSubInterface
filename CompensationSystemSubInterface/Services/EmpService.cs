@@ -156,6 +156,134 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
+        /// 查询离职员工详细信息 (用于离职员工信息查询界面)
+        /// </summary>
+        /// <param name="keyword">关键字搜索（姓名或员工编号）</param>
+        /// <param name="cond">高级筛选条件（部门、员工）</param>
+        /// <returns>包含离职员工信息的数据表</returns>
+        public DataTable GetEmpRsData(string keyword, EmpCondition cond) {
+            StringBuilder sb = new StringBuilder();
+
+            // 拼接 SQL 语句 - 查询离职员工 (zaizhi=0)
+            sb.Append(@"
+                SELECT 
+                    yg.yuangongbh AS '编号',
+                    yg.xingming AS '姓名',
+                    bm.bmname AS '部门',
+                    xl.xlname AS '序列',
+                    gw.gwname AS '职务',
+                    yg.xingbie AS '性别',
+                    yg.minzu AS '民族',
+                    yg.zhengzhimm AS '政治面貌',
+                    yg.xueli AS '学历',
+                    yg.xuewei AS '学位',
+                    NULLIF(yg.chushengrq, '1900-01-01') AS '出生日期',
+                    NULLIF(yg.gongzuosj, '1900-01-01') AS '参加工作时间',
+                    NULLIF(yg.rusisj, '1900-01-01') AS '入社时间',
+                    NULLIF(yg.gangweisj, '1900-01-01') AS '任现岗位时间',
+                    yg.shenfenzheng AS '证件号码',
+                    yg.zhuanyejs AS '专业技术',
+                    yg.zhichengdj AS '职称等级',
+                    NULLIF ( yg.zhichengsj, '1900-01-01' ) AS '取得时间',
+                    yg.zhuanyejn AS '专业技能',
+                    NULLIF(yg.jinengsj, '1900-01-01') AS '技能时间',
+                    yg.lianxidh AS '联系电话',
+                    yg.nianling AS '年龄',
+                    yg.shuxing AS '属相',
+                    yg.gongzikh AS '工资卡号',
+                    NULLIF(yg.lizhisj, '1900-01-01') AS '离职日期',
+                    yg.id, yg.bmid, yg.xlid, yg.gwid
+                FROM 
+                    ZX_config_yg yg
+                    LEFT JOIN ZX_config_bm bm ON yg.bmid = bm.id
+                    LEFT JOIN ZX_config_xl xl ON yg.xlid = xl.id
+                    LEFT JOIN ZX_config_gw gw ON yg.gwid = gw.id
+                    LEFT JOIN ZX_config_cj cj ON yg.cjid = cj.id
+                WHERE 
+                    yg.zaizhi=0
+            ");
+
+            List<SqlParameter> ps = new List<SqlParameter>();
+
+            // 1. 姓名模糊搜索
+            if (!string.IsNullOrWhiteSpace(keyword)) {
+                sb.Append(" AND (yg.xingming LIKE @Key OR yg.yuangongbh LIKE @Key)");
+                ps.Add(new SqlParameter("@Key", "%" + keyword.Trim() + "%"));
+            }
+
+            // 2. 高级筛选条件
+            if (cond != null) {
+                if (cond.SequenceIds.Count > 0)
+                    sb.Append($" AND xl.id IN ({string.Join(",", cond.SequenceIds)})");
+
+                if (cond.DepartmentIds.Count > 0)
+                    sb.Append($" AND bm.id IN ({string.Join(",", cond.DepartmentIds)})");
+
+                if (cond.PositionIds.Count > 0)
+                    sb.Append($" AND gw.id IN ({string.Join(",", cond.PositionIds)})");
+
+                if (cond.EmployeeIds.Count > 0)
+                    sb.Append($" AND yg.id IN ({string.Join(",", cond.EmployeeIds)})");
+
+                if (cond.Genders.Count > 0)
+                    sb.Append($" AND yg.xingbie IN ({string.Join(",", cond.Genders.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Ethnics.Count > 0)
+                    sb.Append($" AND yg.minzu IN ({string.Join(",", cond.Ethnics.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Zodiacs.Count > 0)
+                    sb.Append($" AND yg.shuxing IN ({string.Join(",", cond.Zodiacs.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Politics.Count > 0)
+                    sb.Append($" AND yg.zhengzhimm IN ({string.Join(",", cond.Politics.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Educations.Count > 0)
+                    sb.Append($" AND yg.xueli IN ({string.Join(",", cond.Educations.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.Degrees.Count > 0)
+                    sb.Append($" AND yg.xuewei IN ({string.Join(",", cond.Degrees.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.TitleLevels.Count > 0)
+                    sb.Append($" AND yg.zhichengdj IN ({string.Join(",", cond.TitleLevels.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+            }
+
+            // 3. 排序 - 按离职日期倒序
+            sb.Append(" ORDER BY yg.lizhisj DESC, yg.xuhao");
+
+            DataTable dt = SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
+
+            // 4. 遍历解密
+            if (dt.Rows.Count > 0) {
+                bool hasIdCard = dt.Columns.Contains("证件号码");
+                bool hasBankCard = dt.Columns.Contains("工资卡号");
+
+                if (hasIdCard || hasBankCard) {
+                    foreach (DataRow row in dt.Rows) {
+                        try {
+                            if (hasIdCard && row["证件号码"] != DBNull.Value) {
+                                string cipher = row["证件号码"].ToString().Trim();
+                                if (!string.IsNullOrEmpty(cipher)) {
+                                    row["证件号码"] = _sm4.Decrypt_ECB_Str(cipher);
+                                }
+                            }
+
+                            if (hasBankCard && row["工资卡号"] != DBNull.Value) {
+                                string cipher = row["工资卡号"].ToString().Trim();
+                                if (!string.IsNullOrEmpty(cipher)) {
+                                    row["工资卡号"] = _sm4.Decrypt_ECB_Str(cipher);
+                                }
+                            }
+                        } catch {
+                            // 解密失败时不处理
+                        }
+                    }
+                }
+            }
+
+            return dt;
+        }
+
+        /// <summary>
         /// 查询员工详细信息 (用于员工维护界面)
         /// </summary>
         /// <param name="keyword">关键字搜索（姓名或员工编号）</param>

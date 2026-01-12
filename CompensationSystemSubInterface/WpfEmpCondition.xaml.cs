@@ -39,13 +39,20 @@ namespace CompensationSystemSubInterface {
         // 筛选条件（从主界面传入）
         private EmpCondition _filterCondition = new EmpCondition();
 
+        // 是否显示离职员工（false=在职，true=离职）
+        private bool _showTerminatedEmployees = false;
+
         /// <summary>
         /// 初始化员工筛选条件窗体
         /// </summary>
         /// <param name="existingIds">现有的员工ID列表</param>
         /// <param name="departmentIds">部门筛选条件（可选）</param>
-        public WpfEmpCondition(List<int> existingIds, List<int> departmentIds = null) {
+        /// <param name="showTerminatedEmployees">是否显示离职员工（默认false=在职员工）</param>
+        public WpfEmpCondition(List<int> existingIds, List<int> departmentIds = null, bool showTerminatedEmployees = false) {
             InitializeComponent();
+
+            // 设置是否显示离职员工
+            _showTerminatedEmployees = showTerminatedEmployees;
 
             // 初始化持久化ID
             if (existingIds != null) {
@@ -79,11 +86,12 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void RefreshEmployeeData() {
             try {
-                // 查询所有需要的字段
-                string empSql = @"SELECT y.id, y.xingming, y.xlid, y.bmid, y.gwid, 
+                // 查询所有需要的字段，根据_showTerminatedEmployees决定查询在职或离职员工
+                int zaizhi = _showTerminatedEmployees ? 0 : 1;
+                string empSql = $@"SELECT y.id, y.xingming, y.xlid, y.bmid, y.gwid, 
                                   y.xingbie, y.minzu, y.shuxing, y.zhengzhimm, 
                                   y.xueli, y.xuewei, y.zhichengdj 
-                                  FROM ZX_config_yg y WHERE y.zaizhi=1 ORDER BY y.xuhao";
+                                  FROM ZX_config_yg y WHERE y.zaizhi={zaizhi} ORDER BY y.xuhao";
                 DataTable dtEmp = SqlHelper.ExecuteDataTable(empSql);
 
                 // 更新持久化ID
