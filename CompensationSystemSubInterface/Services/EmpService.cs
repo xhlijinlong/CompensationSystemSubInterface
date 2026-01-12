@@ -73,7 +73,7 @@ namespace CompensationSystemSubInterface.Services {
 
             // 1. 姓名模糊搜索
             if (!string.IsNullOrWhiteSpace(keyword)) {
-                sb.Append(" AND (yg.xingming LIKE @Key OR yg.yuangongbh LIKE @Key)");
+                sb.Append(" AND (yg.xingming LIKE @Key OR yg.yuangongbh LIKE @Key OR yg.yonghuming LIKE @Key)");
                 ps.Add(new SqlParameter("@Key", "%" + keyword.Trim() + "%"));
             }
 
@@ -207,7 +207,7 @@ namespace CompensationSystemSubInterface.Services {
 
             // 1. 姓名模糊搜索
             if (!string.IsNullOrWhiteSpace(keyword)) {
-                sb.Append(" AND (yg.xingming LIKE @Key OR yg.yuangongbh LIKE @Key)");
+                sb.Append(" AND (yg.xingming LIKE @Key OR yg.yuangongbh LIKE @Key OR yg.yonghuming LIKE @Key)");
                 ps.Add(new SqlParameter("@Key", "%" + keyword.Trim() + "%"));
             }
 
@@ -337,7 +337,7 @@ namespace CompensationSystemSubInterface.Services {
 
             // 1. 姓名模糊搜索
             if (!string.IsNullOrWhiteSpace(keyword)) {
-                sb.Append(" AND (yg.xingming LIKE @Key OR yg.yuangongbh LIKE @Key)");
+                sb.Append(" AND (yg.xingming LIKE @Key OR yg.yuangongbh LIKE @Key OR yg.yonghuming LIKE @Key)");
                 ps.Add(new SqlParameter("@Key", "%" + keyword.Trim() + "%"));
             }
 
@@ -463,7 +463,7 @@ namespace CompensationSystemSubInterface.Services {
 
             // 姓名搜索
             if (!string.IsNullOrWhiteSpace(keyword)) {
-                sb.Append(" AND (yg.xingming LIKE @Key OR yg.yuangongbh LIKE @Key)");
+                sb.Append(" AND (yg.xingming LIKE @Key OR yg.yuangongbh LIKE @Key OR yg.yonghuming LIKE @Key)");
                 ps.Add(new SqlParameter("@Key", "%" + keyword.Trim() + "%"));
             }
 

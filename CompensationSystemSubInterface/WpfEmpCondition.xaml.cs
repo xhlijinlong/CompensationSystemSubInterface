@@ -88,7 +88,7 @@ namespace CompensationSystemSubInterface {
             try {
                 // 查询所有需要的字段，根据_showTerminatedEmployees决定查询在职或离职员工
                 int zaizhi = _showTerminatedEmployees ? 0 : 1;
-                string empSql = $@"SELECT y.id, y.xingming, y.xlid, y.bmid, y.gwid, 
+                string empSql = $@"SELECT y.id, y.xingming, y.yonghuming, y.xlid, y.bmid, y.gwid, 
                                   y.xingbie, y.minzu, y.shuxing, y.zhengzhimm, 
                                   y.xueli, y.xuewei, y.zhichengdj 
                                   FROM ZX_config_yg y WHERE y.zaizhi={zaizhi} ORDER BY y.xuhao";
@@ -111,6 +111,7 @@ namespace CompensationSystemSubInterface {
                     int bmid = dr["bmid"] != DBNull.Value ? Convert.ToInt32(dr["bmid"]) : 0;
                     int gwid = dr["gwid"] != DBNull.Value ? Convert.ToInt32(dr["gwid"]) : 0;
                     string name = dr["xingming"].ToString();
+                    string yonghuming = dr["yonghuming"]?.ToString() ?? "";
                     int empId = Convert.ToInt32(dr["id"]);
                     string xingbie = dr["xingbie"]?.ToString() ?? "";
                     string minzu = dr["minzu"]?.ToString() ?? "";
@@ -140,8 +141,8 @@ namespace CompensationSystemSubInterface {
                     if (_filterCondition.Degrees.Count > 0 && !_filterCondition.Degrees.Contains(xuewei)) continue;
                     // 按职称等级筛选
                     if (_filterCondition.TitleLevels.Count > 0 && !_filterCondition.TitleLevels.Contains(zhichengdj)) continue;
-                    // 按搜索文本筛选
-                    if (!string.IsNullOrEmpty(searchText) && !name.Contains(searchText)) continue;
+                    // 按搜索文本筛选（姓名或用户名）
+                    if (!string.IsNullOrEmpty(searchText) && !name.Contains(searchText) && !yonghuming.Contains(searchText)) continue;
 
                     var child = new EmpConditionTreeNode {
                         Name = name,
