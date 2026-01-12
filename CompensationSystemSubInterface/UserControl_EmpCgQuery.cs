@@ -65,11 +65,12 @@ namespace CompensationSystemSubInterface {
             InitDateCombos();
             InitFilterControls(); // 初始化筛选控件数据
             
-            // 默认查最近一个月，或者今年
-            cbYear1.Text = DateTime.Now.Year.ToString();
+            // 默认起止时间为今年1-12月
+            int currentYear = DateTime.Now.Year;
+            cbYear1.Text = currentYear.ToString();
             cbMonth1.Text = "01";
-            cbYear2.Text = DateTime.Now.Year.ToString();
-            cbMonth2.Text = DateTime.Now.Month.ToString("00");
+            cbYear2.Text = currentYear.ToString();
+            cbMonth2.Text = "12";
 
             PerformQuery();
         }

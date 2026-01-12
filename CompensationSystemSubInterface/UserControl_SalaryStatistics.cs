@@ -69,23 +69,12 @@ namespace CompensationSystemSubInterface {
             InitDateCombos();
             InitFilterControls(); // 初始化筛选控件数据
 
-            // 获取数据库中最近的发薪月份
-            DateTime? latest = _service.GetLatestSalaryMonth();
-            if (latest.HasValue) {
-                int y = latest.Value.Year;
-                int m = latest.Value.Month;
-                // 默认起止时间都是最近那个月
-                cbYear1.Text = y.ToString();
-                cbMonth1.Text = m.ToString("00");
-                cbYear2.Text = y.ToString();
-                cbMonth2.Text = m.ToString("00");
-            } else {
-                // 如果没数据，默认显示当前年月
-                cbYear1.Text = DateTime.Now.Year.ToString();
-                cbMonth1.Text = DateTime.Now.Month.ToString("00");
-                cbYear2.Text = DateTime.Now.Year.ToString();
-                cbMonth2.Text = DateTime.Now.Month.ToString("00");
-            }
+            // 默认起止时间为今年1-12月
+            int currentYear = DateTime.Now.Year;
+            cbYear1.Text = currentYear.ToString();
+            cbMonth1.Text = "01";
+            cbYear2.Text = currentYear.ToString();
+            cbMonth2.Text = "12";
 
             // 自动查询
             PerformQuery();

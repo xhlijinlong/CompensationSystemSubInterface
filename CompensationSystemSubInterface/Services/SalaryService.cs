@@ -44,6 +44,9 @@ namespace CompensationSystemSubInterface.Services {
         /// <returns>包含薪资明细的原始数据表，包括员工信息、薪资项目和金额等字段</returns>
         public DataTable GetRawSalaryData(DateTime startDate, DateTime endDate, string keyword, SalaryQueryCondition cond) {
             StringBuilder sb = new StringBuilder();
+            // 使用薪资表中的部门/职务ID（发放时的组织信息），而不是员工当前的组织信息
+            // 这样可以正确处理：1.离职员工的历史薪资 2.变动员工按发放时部门统计
+            // 注意：不过滤部门和薪资项目的 IsEnabled/DeleteType，因为历史数据可能涉及已停用的部门或项目
             sb.Append(@"
                 SELECT h.SalaryMonth, yg.id AS EmployeeId, yg.yuangongbh AS EmployeeNo, yg.xingming AS EmployeeName,
                        si.ItemId, si.ItemName, d.Amount, bm.bmname AS DeptName, gw.gwname AS PositionName,
@@ -52,13 +55,11 @@ namespace CompensationSystemSubInterface.Services {
                 JOIN ZX_SalaryDetails d ON h.SalaryId = d.SalaryId
                 JOIN ZX_SalaryItems si ON d.ItemId = si.ItemId
                 JOIN ZX_config_yg yg ON h.EmployeeId = yg.id
-                JOIN ZX_config_bm bm ON yg.bmid = bm.id
-                JOIN ZX_config_xl xl ON yg.xlid = xl.id
-                JOIN ZX_config_gw gw ON yg.gwid = gw.id
-                JOIN ZX_config_cj cj ON yg.cjid = cj.id
-                WHERE bm.IsEnabled=1 AND bm.DeleteType=0 
-                  AND yg.zaizhi=1 AND si.IsEnabled=1
-                  AND h.SalaryMonth BETWEEN @StartDate AND @EndDate
+                JOIN ZX_config_bm bm ON h.DepartmentId = bm.id
+                JOIN ZX_config_xl xl ON h.SequenceId = xl.id
+                JOIN ZX_config_gw gw ON h.PositionId = gw.id
+                JOIN ZX_config_cj cj ON h.LevelId = cj.id
+                WHERE h.SalaryMonth BETWEEN @StartDate AND @EndDate
             ");
 
             List<SqlParameter> ps = new List<SqlParameter>();
@@ -71,11 +72,11 @@ namespace CompensationSystemSubInterface.Services {
                 ps.Add(new SqlParameter("@Key", "%" + keyword.Trim() + "%"));
             }
 
-            // 高级筛选 SQL 拼接
-            if (cond.DepartmentIds.Count > 0) sb.Append($" AND bm.id IN ({string.Join(",", cond.DepartmentIds)})");
-            if (cond.SequenceIds.Count > 0) sb.Append($" AND xl.id IN ({string.Join(",", cond.SequenceIds)})");
-            if (cond.PositionIds.Count > 0) sb.Append($" AND gw.id IN ({string.Join(",", cond.PositionIds)})");
-            if (cond.LevelIds.Count > 0) sb.Append($" AND cj.id IN ({string.Join(",", cond.LevelIds)})");
+            // 高级筛选 SQL 拼接 - 使用薪资表中的组织ID
+            if (cond.DepartmentIds.Count > 0) sb.Append($" AND h.DepartmentId IN ({string.Join(",", cond.DepartmentIds)})");
+            if (cond.SequenceIds.Count > 0) sb.Append($" AND h.SequenceId IN ({string.Join(",", cond.SequenceIds)})");
+            if (cond.PositionIds.Count > 0) sb.Append($" AND h.PositionId IN ({string.Join(",", cond.PositionIds)})");
+            if (cond.LevelIds.Count > 0) sb.Append($" AND h.LevelId IN ({string.Join(",", cond.LevelIds)})");
             if (cond.EmployeeIds.Count > 0) sb.Append($" AND yg.id IN ({string.Join(",", cond.EmployeeIds)})");
 
             // 排序：先按展示顺序，再按月份, 再按薪资项目
