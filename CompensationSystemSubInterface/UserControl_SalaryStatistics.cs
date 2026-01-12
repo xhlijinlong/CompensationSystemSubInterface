@@ -325,13 +325,11 @@ namespace CompensationSystemSubInterface {
             if (drv != null && drv.Row.Table.Columns.Contains("RowType")) {
                 int type = Convert.ToInt32(drv["RowType"]);
                 if (type == 1) {
-                    dgvSalary.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.AliceBlue; // 个人小计
+                    // 个人小计 - 保持与普通行一致
                 } else if (type == 2) {
-                    // 部门小计
-                    dgvSalary.Rows[e.RowIndex].DefaultCellStyle.Font = new Font("微软雅黑", 12F, FontStyle.Bold);
+                    // 部门小计 - 保持与普通行一致的字体样式
                 } else if (type == 3) {
-                    // 全厂总计
-                    dgvSalary.Rows[e.RowIndex].DefaultCellStyle.Font = new Font("微软雅黑", 12F, FontStyle.Bold);
+                    // 全厂总计 - 保持与普通行一致的字体样式
                 }
             }
         }
