@@ -56,7 +56,6 @@ namespace CompensationSystemSubInterface.Services {
                     yg.nianling AS '年龄',
                     yg.shuxing AS '属相',
                     yg.gongzikh AS '工资卡号',
-                    NULLIF(yg.lizhisj, '1900-01-01') AS '离职日期',
                     yg.id, yg.bmid, yg.xlid, yg.gwid
                 FROM 
                     ZX_config_yg yg
@@ -320,7 +319,6 @@ namespace CompensationSystemSubInterface.Services {
                     yg.nianling AS '年龄',
                     yg.shuxing AS '属相',
                     yg.gongzikh AS '工资卡号',
-                    NULLIF(yg.lizhisj, '1900-01-01') AS '离职日期',
                     yg.id, yg.bmid, yg.xlid, yg.gwid, yg.cjid
                 FROM 
                     ZX_config_yg yg
