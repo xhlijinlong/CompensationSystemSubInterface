@@ -126,6 +126,7 @@ namespace CompensationSystemSubInterface {
             _treePost.SelectionChanged += ids => {
                 _condition.PositionIds = ids;
                 UpdateButtonText(btnPost, "职务", _treePost);
+                RefreshConditionWindowEmployees();
             };
             _popupPost = CreatePopup(_treePost, popWidth, popHeight);
 
@@ -139,7 +140,7 @@ namespace CompensationSystemSubInterface {
         /// 当外部筛选条件变化时，同步更新条件设置窗体中的员工列表
         /// </summary>
         private void RefreshConditionWindowEmployees() {
-            _wpfCondition?.RefreshFilterConditions(_condition.DepartmentIds);
+            _wpfCondition?.RefreshFilterConditions(_condition);
         }
 
         /// <summary>
@@ -254,8 +255,12 @@ namespace CompensationSystemSubInterface {
                 }
             }
 
-            // 冻结
-            if (dgvSalary.Columns.Count > 2) dgvSalary.Columns[1].Frozen = true; // 冻结前两列(隐藏列也计入)
+            // 设置前2列显示顺序：姓名, 编号
+            if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].DisplayIndex = 0;
+            if (dgvSalary.Columns["编号"] != null) dgvSalary.Columns["编号"].DisplayIndex = 1;
+
+            // 冻结前2列（编号列）
+            if (dgvSalary.Columns["编号"] != null) dgvSalary.Columns["编号"].Frozen = true;
         }
 
         /// <summary>

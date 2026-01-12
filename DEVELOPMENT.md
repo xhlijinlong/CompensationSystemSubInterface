@@ -58,7 +58,7 @@
 
 2. 所有页面中的表格数据显示字体调整为 微软雅黑 12pt ✅
 
-3. 涉及到员工信息查询的页面, 增加查询条件 ⚠️ 查询条件的关联还需要梳理
+3. 涉及到员工信息查询的页面, 增加查询条件 ✅
    涉及到的页面有 UserControl_EmpQuery , UserControl_EmpMaint , UserControl_EmpCgQuery
 
    UserControl_EmpQuery UserControl_EmpMaint
@@ -76,7 +76,7 @@
 5. 增加离职员工信息查询页面
    跟员工信息查询 UserControl_EmpQuery 保持一致, 只是查询条件为 ZX_config_yg.zaizhi = 0
 
-6. 工资统计相关页面固定列调整
+6. 工资统计相关页面固定列调整 ✅
    涉及到的页面有 UserControl_SalaryQuery , UserControl_SalaryStatistics
    当前固定的列只有姓名, 调整为 姓名,编号,部门和职务四列固定
 

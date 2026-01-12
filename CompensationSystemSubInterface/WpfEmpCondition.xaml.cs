@@ -1,4 +1,5 @@
-﻿using CompensationSystemSubInterface.Utilities;
+﻿using CompensationSystemSubInterface.Models;
+using CompensationSystemSubInterface.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,8 +36,8 @@ namespace CompensationSystemSubInterface {
         // 持久化选中的员工ID（包括搜索时隐藏的项）
         private HashSet<int> _persistentEmpIds = new HashSet<int>();
 
-        // 部门筛选条件（从主界面传入）
-        private List<int> _departmentIds = new List<int>();
+        // 筛选条件（从主界面传入）
+        private EmpCondition _filterCondition = new EmpCondition();
 
         /// <summary>
         /// 初始化员工筛选条件窗体
@@ -51,7 +52,10 @@ namespace CompensationSystemSubInterface {
                 _persistentEmpIds = new HashSet<int>(existingIds);
             }
 
-            _departmentIds = departmentIds ?? new List<int>();
+            // 初始化筛选条件
+            if (departmentIds != null && departmentIds.Count > 0) {
+                _filterCondition.DepartmentIds = departmentIds;
+            }
 
             // 绑定数据源
             treeConditions.ItemsSource = TreeRoots;
@@ -75,7 +79,11 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void RefreshEmployeeData() {
             try {
-                string empSql = "SELECT id, xingming, bmid FROM ZX_config_yg WHERE zaizhi=1 ORDER BY xuhao";
+                // 查询所有需要的字段
+                string empSql = @"SELECT y.id, y.xingming, y.xlid, y.bmid, y.gwid, 
+                                  y.xingbie, y.minzu, y.shuxing, y.zhengzhimm, 
+                                  y.xueli, y.xuewei, y.zhichengdj 
+                                  FROM ZX_config_yg y WHERE y.zaizhi=1 ORDER BY y.xuhao";
                 DataTable dtEmp = SqlHelper.ExecuteDataTable(empSql);
 
                 // 更新持久化ID
@@ -91,12 +99,39 @@ namespace CompensationSystemSubInterface {
 
                 _empRoot.Children.Clear();
                 foreach (DataRow dr in dtEmp.Rows) {
+                    int xlid = dr["xlid"] != DBNull.Value ? Convert.ToInt32(dr["xlid"]) : 0;
                     int bmid = dr["bmid"] != DBNull.Value ? Convert.ToInt32(dr["bmid"]) : 0;
+                    int gwid = dr["gwid"] != DBNull.Value ? Convert.ToInt32(dr["gwid"]) : 0;
                     string name = dr["xingming"].ToString();
                     int empId = Convert.ToInt32(dr["id"]);
+                    string xingbie = dr["xingbie"]?.ToString() ?? "";
+                    string minzu = dr["minzu"]?.ToString() ?? "";
+                    string shuxing = dr["shuxing"]?.ToString() ?? "";
+                    string zhengzhimm = dr["zhengzhimm"]?.ToString() ?? "";
+                    string xueli = dr["xueli"]?.ToString() ?? "";
+                    string xuewei = dr["xuewei"]?.ToString() ?? "";
+                    string zhichengdj = dr["zhichengdj"]?.ToString() ?? "";
 
+                    // 按序列筛选
+                    if (_filterCondition.SequenceIds.Count > 0 && !_filterCondition.SequenceIds.Contains(xlid)) continue;
                     // 按部门筛选
-                    if (_departmentIds.Count > 0 && !_departmentIds.Contains(bmid)) continue;
+                    if (_filterCondition.DepartmentIds.Count > 0 && !_filterCondition.DepartmentIds.Contains(bmid)) continue;
+                    // 按职务筛选
+                    if (_filterCondition.PositionIds.Count > 0 && !_filterCondition.PositionIds.Contains(gwid)) continue;
+                    // 按性别筛选
+                    if (_filterCondition.Genders.Count > 0 && !_filterCondition.Genders.Contains(xingbie)) continue;
+                    // 按民族筛选
+                    if (_filterCondition.Ethnics.Count > 0 && !_filterCondition.Ethnics.Contains(minzu)) continue;
+                    // 按属相筛选
+                    if (_filterCondition.Zodiacs.Count > 0 && !_filterCondition.Zodiacs.Contains(shuxing)) continue;
+                    // 按政治面貌筛选
+                    if (_filterCondition.Politics.Count > 0 && !_filterCondition.Politics.Contains(zhengzhimm)) continue;
+                    // 按学历筛选
+                    if (_filterCondition.Educations.Count > 0 && !_filterCondition.Educations.Contains(xueli)) continue;
+                    // 按学位筛选
+                    if (_filterCondition.Degrees.Count > 0 && !_filterCondition.Degrees.Contains(xuewei)) continue;
+                    // 按职称等级筛选
+                    if (_filterCondition.TitleLevels.Count > 0 && !_filterCondition.TitleLevels.Contains(zhichengdj)) continue;
                     // 按搜索文本筛选
                     if (!string.IsNullOrEmpty(searchText) && !name.Contains(searchText)) continue;
 
@@ -117,10 +152,18 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 外部调用：更新部门筛选条件并刷新员工列表
+        /// 外部调用：更新筛选条件并刷新员工列表
+        /// </summary>
+        public void RefreshFilterConditions(EmpCondition condition) {
+            _filterCondition = condition ?? new EmpCondition();
+            RefreshEmployeeData();
+        }
+
+        /// <summary>
+        /// 外部调用：更新部门筛选条件并刷新员工列表（兼容旧接口）
         /// </summary>
         public void RefreshFilterConditions(List<int> departmentIds) {
-            _departmentIds = departmentIds ?? new List<int>();
+            _filterCondition.DepartmentIds = departmentIds ?? new List<int>();
             RefreshEmployeeData();
         }
 

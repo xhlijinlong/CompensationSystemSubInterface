@@ -318,6 +318,7 @@ namespace CompensationSystemSubInterface {
                 dgvSalary.Columns["PositionName"].HeaderText = "职务";
                 dgvSalary.Columns["PositionName"].Width = 80;
                 dgvSalary.Columns["PositionName"].DisplayIndex = dgvSalary.Columns["DeptName"].DisplayIndex + 1;
+                dgvSalary.Columns["PositionName"].Frozen = true; // 冻结前5列
             }
 
             // 3. 隐藏不需要显示的列

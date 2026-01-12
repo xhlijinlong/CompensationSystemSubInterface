@@ -193,8 +193,12 @@ namespace CompensationSystemSubInterface {
                 }
             }
 
-            // 冻结前两列
-            if (dgvSalary.Columns.Count > 2) dgvSalary.Columns[1].Frozen = true;
+            // 设置前2列显示顺序：姓名, 编号
+            if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].DisplayIndex = 0;
+            if (dgvSalary.Columns["编号"] != null) dgvSalary.Columns["编号"].DisplayIndex = 1;
+
+            // 冻结前2列（编号列）
+            if (dgvSalary.Columns["编号"] != null) dgvSalary.Columns["编号"].Frozen = true;
         }
 
         /// <summary>

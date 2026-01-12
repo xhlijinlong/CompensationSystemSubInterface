@@ -119,6 +119,7 @@ namespace CompensationSystemSubInterface {
             _treePost.SelectionChanged += ids => {
                 _condition.PositionIds = ids;
                 UpdateButtonText(btnPost, "职务", _treePost);
+                RefreshConditionWindowEmployees();
             };
             _popupPost = CreatePopup(_treePost, popWidth, popHeight);
 
@@ -128,6 +129,7 @@ namespace CompensationSystemSubInterface {
             _treeGender.SelectionChanged += ids => {
                 _condition.Genders = _treeGender.GetSelectedTexts();
                 UpdateButtonText(btnGender, "性别", _treeGender);
+                RefreshConditionWindowEmployees();
             };
             _popupGender = CreatePopup(_treeGender, 150, 150);
 
@@ -137,6 +139,7 @@ namespace CompensationSystemSubInterface {
             _treeEthnic.SelectionChanged += ids => {
                 _condition.Ethnics = _treeEthnic.GetSelectedTexts();
                 UpdateButtonText(btnEthnic, "民族", _treeEthnic);
+                RefreshConditionWindowEmployees();
             };
             _popupEthnic = CreatePopup(_treeEthnic, popWidth, popHeight);
 
@@ -146,6 +149,7 @@ namespace CompensationSystemSubInterface {
             _treeZodiac.SelectionChanged += ids => {
                 _condition.Zodiacs = _treeZodiac.GetSelectedTexts();
                 UpdateButtonText(btnChineseZodiac, "属相", _treeZodiac);
+                RefreshConditionWindowEmployees();
             };
             _popupZodiac = CreatePopup(_treeZodiac, popWidth, popHeight);
 
@@ -155,6 +159,7 @@ namespace CompensationSystemSubInterface {
             _treePolitic.SelectionChanged += ids => {
                 _condition.Politics = _treePolitic.GetSelectedTexts();
                 UpdateButtonText(btnPS, "政治面貌", _treePolitic);
+                RefreshConditionWindowEmployees();
             };
             _popupPolitic = CreatePopup(_treePolitic, popWidth, popHeight);
 
@@ -164,6 +169,7 @@ namespace CompensationSystemSubInterface {
             _treeEducation.SelectionChanged += ids => {
                 _condition.Educations = _treeEducation.GetSelectedTexts();
                 UpdateButtonText(btnEducation, "学历", _treeEducation);
+                RefreshConditionWindowEmployees();
             };
             _popupEducation = CreatePopup(_treeEducation, popWidth, popHeight);
 
@@ -173,6 +179,7 @@ namespace CompensationSystemSubInterface {
             _treeDegree.SelectionChanged += ids => {
                 _condition.Degrees = _treeDegree.GetSelectedTexts();
                 UpdateButtonText(btnDegree, "学位", _treeDegree);
+                RefreshConditionWindowEmployees();
             };
             _popupDegree = CreatePopup(_treeDegree, popWidth, popHeight);
 
@@ -182,6 +189,7 @@ namespace CompensationSystemSubInterface {
             _treeTitleLevel.SelectionChanged += ids => {
                 _condition.TitleLevels = _treeTitleLevel.GetSelectedTexts();
                 UpdateButtonText(btnTitleLevel, "职称等级", _treeTitleLevel);
+                RefreshConditionWindowEmployees();
             };
             _popupTitleLevel = CreatePopup(_treeTitleLevel, popWidth, popHeight);
 
@@ -201,7 +209,7 @@ namespace CompensationSystemSubInterface {
         /// 当外部筛选条件变化时，同步更新条件设置窗体中的员工列表
         /// </summary>
         private void RefreshConditionWindowEmployees() {
-            _wpfCondition?.RefreshFilterConditions(_condition.DepartmentIds);
+            _wpfCondition?.RefreshFilterConditions(_condition);
         }
 
         /// <summary>
@@ -307,10 +315,15 @@ namespace CompensationSystemSubInterface {
                 }
             }
 
-            // 冻结前几列 (编号、姓名、部门)
-            if (dgvSalary.Columns.Count > 3) {
-                if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].Frozen = true;
-            }
+            // 设置前5列显示顺序：姓名, 编号, 序列, 部门, 职务
+            if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].DisplayIndex = 0;
+            if (dgvSalary.Columns["编号"] != null) dgvSalary.Columns["编号"].DisplayIndex = 1;
+            if (dgvSalary.Columns["序列"] != null) dgvSalary.Columns["序列"].DisplayIndex = 2;
+            if (dgvSalary.Columns["部门"] != null) dgvSalary.Columns["部门"].DisplayIndex = 3;
+            if (dgvSalary.Columns["职务"] != null) dgvSalary.Columns["职务"].DisplayIndex = 4;
+
+            // 冻结前5列（职务列）
+            if (dgvSalary.Columns["职务"] != null) dgvSalary.Columns["职务"].Frozen = true;
         }
 
         /// <summary>
