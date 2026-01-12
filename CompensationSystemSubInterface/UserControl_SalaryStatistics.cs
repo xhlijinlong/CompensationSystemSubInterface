@@ -58,6 +58,15 @@ namespace CompensationSystemSubInterface {
             this.HandleDestroyed += (s, e) => {
                 _wpfCondition?.Close();
             };
+
+            // 搜索框回车触发查询
+            txtName.KeyDown += (s, e) => {
+                if (e.KeyCode == Keys.Enter) {
+                    PerformQuery();
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                }
+            };
         }
 
         /// <summary>
