@@ -48,6 +48,7 @@ namespace CompensationSystemSubInterface {
 
             this.Loaded += WpfEmpCg_Loaded;
             cbChangeType.SelectionChanged += CbChangeType_SelectionChanged;
+            cbNewSeq.SelectionChanged += CbNewSeq_SelectionChanged;
             btnSave.Click += BtnSave_Click;
             btnCancel.Click += (s, e) => this.Close();
         }
@@ -72,17 +73,14 @@ namespace CompensationSystemSubInterface {
         /// 包括部门、序列、职务、层级的下拉框数据
         /// </summary>
         private void LoadDropdowns() {
-            // === 部门 ===
-            var deptList = _service.GetComboList("ZX_config_bm");
-            cbNewDept.ItemsSource = deptList;
-            cbNewDept.DisplayMemberPath = "Name"; // 显示名称
-            cbNewDept.SelectedValuePath = "Id";   // 选中取值
-
             // === 序列 ===
             var seqList = _service.GetComboList("ZX_config_xl");
             cbNewSeq.ItemsSource = seqList;
             cbNewSeq.DisplayMemberPath = "Name";
             cbNewSeq.SelectedValuePath = "Id";
+
+            // === 部门 === (初始加载所有部门，后续根据序列筛选)
+            RefreshDeptBySeq(null);
 
             // === 职务 ===
             var jobList = _service.GetComboList("ZX_config_gw");
@@ -98,6 +96,24 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
+        /// 根据序列ID刷新部门下拉框数据
+        /// </summary>
+        private void RefreshDeptBySeq(int? seqId) {
+            var deptList = _service.GetDeptListBySeq(seqId);
+            cbNewDept.ItemsSource = deptList;
+            cbNewDept.DisplayMemberPath = "Name";
+            cbNewDept.SelectedValuePath = "Id";
+        }
+
+        /// <summary>
+        /// 序列下拉框选择变更事件，联动刷新部门列表
+        /// </summary>
+        private void CbNewSeq_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            int? seqId = cbNewSeq.SelectedValue as int?;
+            RefreshDeptBySeq(seqId);
+        }
+
+        /// <summary>
         /// 加载员工原始数据并回显到界面
         /// 左侧显示原组织信息（只读），右侧新组织信息默认选中原值
         /// </summary>
@@ -110,7 +126,6 @@ namespace CompensationSystemSubInterface {
             }
 
             // === 1. 回显原数据 (左侧灰色文本框) ===
-            // 假设你的 XAML 中有 txtEmpNoHeader 等控件，这里简单略过头部赋值
             txtEmpNo.Text = _oldData.EmployeeNo;  // 填充编号
             txtName.Text = _oldData.Name;    // 填充姓名
 
@@ -120,10 +135,14 @@ namespace CompensationSystemSubInterface {
             txtOldLevel.Text = _oldData.LevelName;
 
             // === 2. 设置新数据默认值 (右侧下拉框) ===
-            // ★关键点：让新数据默认选中原数据★
-            // 只要 _oldData.DeptId 类型是 int，且下拉框数据源里有这个 Id，就会自动选中
+            // ★关键点：先设置序列，刷新部门列表，再设置部门★
+            // 这样确保部门列表是根据序列过滤后的，且能正确选中原部门
+            if (_oldData.SeqId.HasValue) {
+                cbNewSeq.SelectedValue = _oldData.SeqId.Value;
+                // 序列变更会触发 CbNewSeq_SelectionChanged，自动刷新部门列表
+            }
+            // 设置部门（此时部门列表已根据序列过滤）
             if (_oldData.DeptId.HasValue) cbNewDept.SelectedValue = _oldData.DeptId.Value;
-            if (_oldData.SeqId.HasValue) cbNewSeq.SelectedValue = _oldData.SeqId.Value;
             if (_oldData.JobId.HasValue) cbNewJob.SelectedValue = _oldData.JobId.Value;
             if (_oldData.LevelId.HasValue) cbNewLevel.SelectedValue = _oldData.LevelId.Value;
 

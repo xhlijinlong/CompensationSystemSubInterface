@@ -850,6 +850,30 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
+        /// 根据序列ID获取部门列表 (用于联动下拉框)
+        /// </summary>
+        /// <param name="seqId">序列ID，如果为null则返回所有部门</param>
+        /// <returns>ComboItem对象列表</returns>
+        public List<ComboItem> GetDeptListBySeq(int? seqId) {
+            string sql;
+            if (seqId.HasValue && seqId.Value > 0) {
+                sql = $"SELECT id, bmname AS name FROM ZX_config_bm WHERE IsEnabled=1 AND DeleteType=0 AND xlid={seqId.Value} ORDER BY DisplayOrder";
+            } else {
+                sql = "SELECT id, bmname AS name FROM ZX_config_bm WHERE IsEnabled=1 AND DeleteType=0 ORDER BY DisplayOrder";
+            }
+            
+            DataTable dt = SqlHelper.ExecuteDataTable(sql);
+            List<ComboItem> list = new List<ComboItem>();
+            foreach (DataRow row in dt.Rows) {
+                list.Add(new ComboItem {
+                    Id = row["id"] != DBNull.Value ? Convert.ToInt32(row["id"]) : 0,
+                    Name = row["name"] != DBNull.Value ? row["name"].ToString() : ""
+                });
+            }
+            return list;
+        }
+
+        /// <summary>
         /// 辅助方法：将数据库对象转换为可空DateTime类型
         /// 自动处理DBNull和1900-01-01无效日期
         /// </summary>

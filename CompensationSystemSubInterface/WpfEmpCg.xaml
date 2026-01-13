@@ -91,15 +91,15 @@
                         <TextBlock Text="变更前 (原)" Grid.Row="0" Grid.Column="1" Foreground="#888" FontSize="11" Margin="2,0,0,5"/>
                         <TextBlock Text="变更后 (新)" Grid.Row="0" Grid.Column="3" Foreground="#007ACC" FontSize="11" Margin="2,0,0,5"/>
 
-                        <TextBlock Text="部门:" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,10,0"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtOldDept" IsReadOnly="True" Background="#F2F2F2" Foreground="#666" ToolTip="原部门"/>
+                        <TextBlock Text="序列:" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtOldSeq" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
                         <TextBlock Text="➜" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Foreground="#CCC"/>
-                        <ComboBox Grid.Row="1" Grid.Column="3" x:Name="cbNewDept"/>
+                        <ComboBox Grid.Row="1" Grid.Column="3" x:Name="cbNewSeq"/>
 
-                        <TextBlock Text="序列:" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,10,0"/>
-                        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtOldSeq" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
+                        <TextBlock Text="部门:" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtOldDept" IsReadOnly="True" Background="#F2F2F2" Foreground="#666" ToolTip="原部门"/>
                         <TextBlock Text="➜" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Foreground="#CCC"/>
-                        <ComboBox Grid.Row="2" Grid.Column="3" x:Name="cbNewSeq"/>
+                        <ComboBox Grid.Row="2" Grid.Column="3" x:Name="cbNewDept"/>
 
                         <TextBlock Text="职务:" Grid.Row="3" HorizontalAlignment="Right" Margin="0,0,10,0"/>
                         <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtOldJob" IsReadOnly="True" Background="#F2F2F2" Foreground="#666"/>
