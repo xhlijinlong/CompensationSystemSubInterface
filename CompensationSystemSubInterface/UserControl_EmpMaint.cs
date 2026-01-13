@@ -88,9 +88,6 @@ namespace CompensationSystemSubInterface {
             // 根据默认值初始化变动按钮可见性
             btnCg.Visible = _canChange;
 
-            // 员工信息表不需要复杂的行颜色逻辑 (RowPrePaint)，只需交替色即可
-            //dgvSalary.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
-
             // 当控件销毁时关闭WPF弹窗
             this.HandleDestroyed += (s, e) => {
                 _wpfCondition?.Close();
@@ -105,15 +102,6 @@ namespace CompensationSystemSubInterface {
                 }
             };
         }
-
-        /*/// <summary>
-        /// 用户控件加载事件处理，执行默认查询
-        /// </summary>
-        private void UserControl_EmpMaint_Load(object sender, EventArgs e) {
-            if (this.DesignMode) return;
-            // 加载时默认查询所有
-            PerformQuery();
-        }*/
 
         /// <summary>
         /// 查询按钮点击事件处理

@@ -803,11 +803,6 @@ namespace CompensationSystemSubInterface.Services {
                 PersonType = row["renyuanlb"].ToString(),
 
                 // 日期
-                //WorkStart = row["gongzuosj"] as DateTime?,
-                //JoinDate = row["rusisj"] as DateTime?,
-                //PostDate = row["gangweisj"] as DateTime?,
-                //ResignDate = row["lizhisj"] as DateTime?,
-
                 WorkStart = ConvertToDate(row["gongzuosj"]),
                 JoinDate = ConvertToDate(row["rusisj"]),
                 PostDate = ConvertToDate(row["gangweisj"]),

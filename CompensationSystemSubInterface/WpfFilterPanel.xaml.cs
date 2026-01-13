@@ -271,11 +271,9 @@ namespace CompensationSystemSubInterface {
         #endregion
     }
 
-    // 复用 FilterTreeNode
-    // (如果已在其他地方定义，这里不需要再次定义，但为了保险，我先假设它在命名空间下共享或者作为嵌套类)
-    // 看起来它是在命名空间下定义的，所以这里不需要 Duplicate。
-    // 但是之前的 WpfFilterPanel.xaml.cs 把它定义在了 Namespace 下。
-    // 如果我把这个文件覆盖了，那个类定义也没了。所以我需要重新包含它。
+    /// <summary>
+    /// 筛选树节点数据模型
+    /// </summary>
 
     public class FilterTreeNode : INotifyPropertyChanged {
         private bool? _isChecked = false;

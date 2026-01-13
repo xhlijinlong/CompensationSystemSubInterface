@@ -223,9 +223,6 @@ namespace CompensationSystemSubInterface {
         /// 变动成功后会通知主界面刷新并关闭当前窗口
         /// </summary>
         private void btnChange_Click(object sender, RoutedEventArgs e) {
-            // 隐藏当前修改窗口
-            //this.Hide();
-
             // 打开变动窗口
             WpfEmpCg cgWindow = new WpfEmpCg(_empId);
             bool? result = cgWindow.ShowDialog();
@@ -235,9 +232,7 @@ namespace CompensationSystemSubInterface {
                 this.DialogResult = true;
                 this.Close();
             } else {
-                // 变动取消，重新显示修改窗口
-                //this.Show();
-                // 建议重新加载一下数据，以防万一
+                // 变动取消，重新加载数据
                 LoadData();
             }
         }
