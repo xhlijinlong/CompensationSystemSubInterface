@@ -135,7 +135,6 @@ namespace CompensationSystemSubInterface {
                 dpWorkStart.SelectedDate = _currentEmp.WorkStart;
                 dpJoinDate.SelectedDate = _currentEmp.JoinDate;
                 dpPostDate.SelectedDate = _currentEmp.PostDate;
-                dpResignDate.SelectedDate = _currentEmp.ResignDate;
 
                 // === 3. 学历技能 (文本框赋值) ===
                 txtEducation.Text = _currentEmp.Education;

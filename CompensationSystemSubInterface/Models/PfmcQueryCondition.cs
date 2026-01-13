@@ -25,24 +25,41 @@ namespace CompensationSystemSubInterface.Models {
         public List<int> EmployeeIds { get; set; } = new List<int>();
 
         /// <summary>
+        /// 序列ID列表
+        /// </summary>
+        public List<int> SequenceIds { get; set; } = new List<int>();
+
+        /// <summary>
+        /// 部门ID列表
+        /// </summary>
+        public List<int> DepartmentIds { get; set; } = new List<int>();
+
+        /// <summary>
+        /// 职务ID列表
+        /// </summary>
+        public List<int> PositionIds { get; set; } = new List<int>();
+
+        /// <summary>
         /// 获取一个值，指示是否设置了任何筛选条件
         /// </summary>
-        /// <value>如果至少有一个筛选条件列表不为空，则为 true；否则为 false</value>
         public bool HasFilter {
             get {
-                return (EmployeeIds.Count > 0) || (Years.Count > 0) || (Results.Count > 0);
+                return (EmployeeIds.Count > 0) || (Years.Count > 0) || (Results.Count > 0) 
+                    || (SequenceIds.Count > 0) || (DepartmentIds.Count > 0) || (PositionIds.Count > 0);
             }
         }
 
         /// <summary>
         /// 克隆当前筛选条件对象
         /// </summary>
-        /// <returns>包含相同筛选条件的新实例</returns>
         public PfmcQueryCondition Clone() {
             return new PfmcQueryCondition {
                 EmployeeIds = new List<int>(this.EmployeeIds),
                 Years = new List<int>(this.Years),
-                Results = new List<string>(this.Results)
+                Results = new List<string>(this.Results),
+                SequenceIds = new List<int>(this.SequenceIds),
+                DepartmentIds = new List<int>(this.DepartmentIds),
+                PositionIds = new List<int>(this.PositionIds)
             };
         }
     }

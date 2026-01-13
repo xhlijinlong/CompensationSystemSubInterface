@@ -33,6 +33,9 @@
             this.btnCondition = new System.Windows.Forms.Button();
             this.btnQuery = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
+            this.btnSeq = new System.Windows.Forms.Button();
+            this.btnDept = new System.Windows.Forms.Button();
+            this.btnPost = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -71,6 +74,9 @@
             this.flpnlTop.Controls.Add(this.txtName);
             this.flpnlTop.Controls.Add(this.btnYear);
             this.flpnlTop.Controls.Add(this.btnRslt);
+            this.flpnlTop.Controls.Add(this.btnSeq);
+            this.flpnlTop.Controls.Add(this.btnDept);
+            this.flpnlTop.Controls.Add(this.btnPost);
             this.flpnlTop.Controls.Add(this.btnCondition);
             this.flpnlTop.Controls.Add(this.btnQuery);
             this.flpnlTop.Controls.Add(this.btnExport);
@@ -126,7 +132,7 @@
             // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(255, 16);
+            this.btnCondition.Location = new System.Drawing.Point(438, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
             this.btnCondition.Size = new System.Drawing.Size(80, 25);
@@ -138,7 +144,7 @@
             // btnQuery
             // 
             this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnQuery.Location = new System.Drawing.Point(341, 16);
+            this.btnQuery.Location = new System.Drawing.Point(524, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(55, 25);
@@ -149,7 +155,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(402, 16);
+            this.btnExport.Location = new System.Drawing.Point(585, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 25);
@@ -157,6 +163,39 @@
             this.btnExport.Text = "导出Excel";
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // btnSeq
+            // 
+            this.btnSeq.Location = new System.Drawing.Point(255, 16);
+            this.btnSeq.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnSeq.Name = "btnSeq";
+            this.btnSeq.Size = new System.Drawing.Size(55, 25);
+            this.btnSeq.TabIndex = 16;
+            this.btnSeq.Text = "序列";
+            this.btnSeq.UseVisualStyleBackColor = true;
+            this.btnSeq.Click += new System.EventHandler(this.btnSeq_Click);
+            // 
+            // btnDept
+            // 
+            this.btnDept.Location = new System.Drawing.Point(316, 16);
+            this.btnDept.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnDept.Name = "btnDept";
+            this.btnDept.Size = new System.Drawing.Size(55, 25);
+            this.btnDept.TabIndex = 17;
+            this.btnDept.Text = "部门";
+            this.btnDept.UseVisualStyleBackColor = true;
+            this.btnDept.Click += new System.EventHandler(this.btnDept_Click);
+            // 
+            // btnPost
+            // 
+            this.btnPost.Location = new System.Drawing.Point(377, 16);
+            this.btnPost.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnPost.Name = "btnPost";
+            this.btnPost.Size = new System.Drawing.Size(55, 25);
+            this.btnPost.TabIndex = 18;
+            this.btnPost.Text = "职务";
+            this.btnPost.UseVisualStyleBackColor = true;
+            this.btnPost.Click += new System.EventHandler(this.btnPost_Click);
             // 
             // UserControl_PfmcQuery
             // 
@@ -188,5 +227,8 @@
         private System.Windows.Forms.DataGridView dgvSalary;
         private System.Windows.Forms.Button btnYear;
         private System.Windows.Forms.Button btnRslt;
+        private System.Windows.Forms.Button btnSeq;
+        private System.Windows.Forms.Button btnDept;
+        private System.Windows.Forms.Button btnPost;
     }
 }

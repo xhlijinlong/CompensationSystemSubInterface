@@ -78,6 +78,15 @@ namespace CompensationSystemSubInterface.Services {
                     string resultStr = string.Join(",", cond.Results.Select(r => $"'{r}'"));
                     sb.Append($" AND jx.Assessment IN ({resultStr})");
                 }
+
+                if (cond.SequenceIds.Count > 0)
+                    sb.Append($" AND yg.xlid IN ({string.Join(",", cond.SequenceIds)})");
+
+                if (cond.DepartmentIds.Count > 0)
+                    sb.Append($" AND yg.bmid IN ({string.Join(",", cond.DepartmentIds)})");
+
+                if (cond.PositionIds.Count > 0)
+                    sb.Append($" AND yg.gwid IN ({string.Join(",", cond.PositionIds)})");
             }
 
             sb.Append(" ORDER BY yg.xuhao, jx.[year] DESC");

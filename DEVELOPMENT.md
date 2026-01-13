@@ -54,11 +54,11 @@
 
 ### 待开发需求
 
-1. 婚姻状况不再查询和维护 ✅
+1. 婚姻状况不再查询和维护 ✅ 测试通过
 
-2. 所有页面中的表格数据显示字体调整为 微软雅黑 12pt ✅
+2. 所有页面中的表格数据显示字体调整为 微软雅黑 12pt ✅ 测试通过
 
-3. 涉及到员工信息查询的页面, 增加查询条件 ✅
+3. 涉及到员工信息查询的页面, 增加查询条件 ✅ 测试通过
    涉及到的页面有 UserControl_EmpQuery , UserControl_EmpMaint , UserControl_EmpCgQuery
 
    UserControl_EmpQuery UserControl_EmpMaint
@@ -67,14 +67,14 @@
    UserControl_EmpCgQuery
    查询条件调整为序列,部门(已有)和职务筛选条件
 
-4. 员工变动查询和修改页面需要根据角色信息调整 ✅
+4. 员工变动查询和修改页面需要根据角色信息调整 ✅ 测试通过
 
    涉及到两个角色: 一个角色可以使用变动功能,另一个角色不可以使用变动功能.
    变动功能涉及页面: UserControl_EmpMaint(变动按钮),WpfEmpMaint(变动按钮)
    本项目开发的是界面组件, 由主程序调用, 所以是否可用变动功能由主程序控制.
    主程序只调用 UserControl_EmpMaint 界面嵌入主界面,WpfEmpMaint 是 UserControl_EmpMaint 界面上的修改按钮调出的.
 
-5. 增加离职员工信息查询页面 ✅
+5. 增加离职员工信息查询页面 ✅ 测试通过
    跟员工信息查询 UserControl_EmpQuery 保持一致, 只是查询条件为 ZX_config_yg.zaizhi = 0
 
 6. 工资统计相关页面固定列调整 ✅

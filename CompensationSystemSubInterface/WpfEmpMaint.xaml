@@ -144,9 +144,6 @@
 
                         <TextBlock Text="任现岗位时间:" Grid.Row="1" Grid.Column="4" />
                         <DatePicker Grid.Row="1" Grid.Column="5" x:Name="dpPostDate" />
-
-                        <TextBlock Text="离职日期:" Grid.Row="1" Grid.Column="6" />
-                        <DatePicker Grid.Row="1" Grid.Column="7" x:Name="dpResignDate" />
                     </Grid>
                 </GroupBox>
 

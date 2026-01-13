@@ -482,7 +482,7 @@ namespace CompensationSystemSubInterface.Services {
                     sb.Append($" AND yg.id IN ({string.Join(",", cond.EmployeeIds)})");
             }
 
-            sb.Append(" ORDER BY yg.xuhao, cg.changeTime DESC"); // 按人排序，同一个人按时间倒序
+            sb.Append(" ORDER BY cg.changeTime DESC, yg.xuhao ASC");
 
             return SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
         }
@@ -858,7 +858,7 @@ namespace CompensationSystemSubInterface.Services {
             } else {
                 sql = "SELECT id, bmname AS name FROM ZX_config_bm WHERE IsEnabled=1 AND DeleteType=0 ORDER BY DisplayOrder";
             }
-            
+
             DataTable dt = SqlHelper.ExecuteDataTable(sql);
             List<ComboItem> list = new List<ComboItem>();
             foreach (DataRow row in dt.Rows) {
