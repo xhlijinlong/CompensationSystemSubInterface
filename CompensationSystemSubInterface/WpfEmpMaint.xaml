@@ -216,7 +216,8 @@
 
         <Border Grid.Row="2" Background="#EEE" BorderBrush="#CCC" BorderThickness="0,1,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
-                <Button Content="变动" Width="80" Margin="5" Height="30" Click="btnChange_Click"
+                <Button x:Name="btnChange" Content="变动" Width="80" Margin="5" Height="30"
+                    Click="btnChange_Click"
                     Background="#FF9800" Foreground="White" FontWeight="Bold" BorderThickness="0" />
                 <Button Content="重置" Width="80" Margin="5" Height="30" Click="btnReset_Click" />
                 <Button Content="取消" Width="80" Margin="5" Height="30" Click="btnCancel_Click" />

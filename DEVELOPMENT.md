@@ -69,7 +69,10 @@
 
 4. 员工变动查询和修改页面需要根据角色信息调整 ℹ️todo
 
-   涉及到两个角色, 分别是可以查询到所有字段和可以查询到部分字段
+   涉及到两个角色: 一个角色可以使用变动功能,另一个角色不可以使用变动功能.
+   变动功能涉及页面: UserControl_EmpMaint(变动按钮),WpfEmpMaint(变动按钮)
+   本项目开发的是界面组件, 由主程序调用, 所以是否可用变动功能由主程序控制.
+   主程序只调用 UserControl_EmpMaint 界面嵌入主界面,WpfEmpMaint 是 UserControl_EmpMaint 界面上的修改按钮调出的.
 
 5. 增加离职员工信息查询页面 ✅
    跟员工信息查询 UserControl_EmpQuery 保持一致, 只是查询条件为 ZX_config_yg.zaizhi = 0

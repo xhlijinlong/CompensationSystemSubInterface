@@ -43,6 +43,21 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         public event Action<int> OpenChangeWindowRequested;
 
+        // 是否显示变动功能（由主程序控制）
+        private bool _canChange = true;
+
+        /// <summary>
+        /// 获取或设置是否允许使用变动功能
+        /// 设为false时隐藏变动按钮
+        /// </summary>
+        public bool CanChange {
+            get => _canChange;
+            set {
+                _canChange = value;
+                if (btnChange != null) btnChange.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
         /// <summary>
         /// 构造函数：初始化员工维护窗口
         /// </summary>

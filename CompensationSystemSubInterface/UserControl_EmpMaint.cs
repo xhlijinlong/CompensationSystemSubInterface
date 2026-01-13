@@ -59,15 +59,38 @@ namespace CompensationSystemSubInterface {
         private ToolStripDropDown _popupDegree;
         private ToolStripDropDown _popupTitleLevel;
 
+        // 右键菜单项（变动）
+        private ToolStripMenuItem _tsmiCg;
+
+        // 是否显示变动功能（由主程序控制）
+        private bool _canChange = true;
+
+        /// <summary>
+        /// 获取或设置是否允许使用变动功能
+        /// 设为false时隐藏变动按钮和右键菜单项
+        /// </summary>
+        public bool CanChange {
+            get => _canChange;
+            set {
+                _canChange = value;
+                btnCg.Visible = value;
+                if (_tsmiCg != null) _tsmiCg.Visible = value;
+            }
+        }
+
         /// <summary>
         /// 构造函数：初始化员工信息维护用户控件
         /// 设置 DataGridView 的交替行颜色样式
         /// </summary>
         public UserControl_EmpMaint() {
             InitializeComponent();
+
+            // 根据默认值初始化变动按钮可见性
+            btnCg.Visible = _canChange;
+
             // 员工信息表不需要复杂的行颜色逻辑 (RowPrePaint)，只需交替色即可
             //dgvSalary.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
-            
+
             // 当控件销毁时关闭WPF弹窗
             this.HandleDestroyed += (s, e) => {
                 _wpfCondition?.Close();
@@ -135,7 +158,7 @@ namespace CompensationSystemSubInterface {
         private void FormatGrid() {
             // 设置整体字体为微软雅黑 12pt
             dgvSalary.Font = new Font("微软雅黑", 12F, FontStyle.Regular);
-            
+
             // 统一表头样式
             dgvSalary.EnableHeadersVisualStyles = false;
             dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
@@ -185,11 +208,11 @@ namespace CompensationSystemSubInterface {
                     btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";
                     PerformQuery();
                 };
-                
+
                 _wpfCondition.Closed += (s, args) => {
                     _wpfCondition = null;
                 };
-                
+
                 _wpfCondition.Show();
             } else {
                 _wpfCondition.WindowState = System.Windows.WindowState.Normal;
@@ -232,7 +255,7 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void UserControl_EmpMaint_Load(object sender, EventArgs e) {
             if (this.DesignMode) return;
-            
+
             InitFilterControls(); // 初始化筛选控件数据
             PerformQuery();
 
@@ -243,10 +266,11 @@ namespace CompensationSystemSubInterface {
             ContextMenuStrip cms = new ContextMenuStrip();
             ToolStripMenuItem tsmiMod = new ToolStripMenuItem("维护");
             tsmiMod.Click += btnMaint_Click; // 复用修改按钮逻辑
-            ToolStripMenuItem tsmiCg = new ToolStripMenuItem("变动");
-            tsmiCg.Click += btnCg_Click; // 复用变动按钮逻辑
+            _tsmiCg = new ToolStripMenuItem("变动");
+            _tsmiCg.Click += btnCg_Click; // 复用变动按钮逻辑
+            _tsmiCg.Visible = _canChange; // 根据权限控制可见性
             cms.Items.Add(tsmiMod);
-            cms.Items.Add(tsmiCg);
+            cms.Items.Add(_tsmiCg);
             dgvSalary.ContextMenuStrip = cms;
         }
 
@@ -389,7 +413,7 @@ namespace CompensationSystemSubInterface {
                 Child = treeContent,
                 Dock = DockStyle.Fill
             };
-            
+
             ToolStripControlHost tsHost = new ToolStripControlHost(host);
             tsHost.Margin = Padding.Empty;
             tsHost.Padding = Padding.Empty;
@@ -409,7 +433,7 @@ namespace CompensationSystemSubInterface {
         private void UpdateButtonText(Button btn, string name, WpfFilterPanel tree) {
             int count = tree.GetSelectedCount();
             bool isAll = tree.IsAllSelected();
-            
+
             if (count == 0) btn.Text = name;
             else if (isAll) btn.Text = name;
             else btn.Text = $"{name}*";
@@ -456,6 +480,7 @@ namespace CompensationSystemSubInterface {
 
             // 打开 WPF 窗口
             WpfEmpMaint win = new WpfEmpMaint(empId);
+            win.CanChange = _canChange; // 传递变动功能权限
 
             // 监听窗口内的"变动"请求 (如果在WpfEmpMaint内部处理了，这里就不需要特殊处理，只要刷新即可)
             bool? result = win.ShowDialog();
