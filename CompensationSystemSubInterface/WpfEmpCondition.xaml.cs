@@ -194,6 +194,8 @@ namespace CompensationSystemSubInterface {
                 foreach (var child in node.Children) {
                     child.IsChecked = isChecked;
                 }
+                // 更新父节点的显示文本（选择/全部数字）
+                node.UpdateDisplayText();
             } else {
                 node.Parent?.UpdateCheckState();
             }

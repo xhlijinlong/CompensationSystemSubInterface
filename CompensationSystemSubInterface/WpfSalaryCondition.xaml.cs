@@ -320,6 +320,12 @@ namespace CompensationSystemSubInterface {
                         HandleCheckLogic(child); // Recursively handle deep grouping
                     }
                 }
+                // 更新节点的显示文本（选择/全部数字）
+                node.UpdateDisplayText();
+                // 如果是 Group，还需要更新父节点（Category）的显示文本
+                if (node.NodeType == ConditionNodeType.Group && node.Parent != null) {
+                    node.Parent.UpdateDisplayText();
+                }
             } else {
                 node.Parent?.UpdateCheckState();
                 // If parent is a group, the group's parent (Category) also needs updating
