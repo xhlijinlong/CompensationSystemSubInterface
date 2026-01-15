@@ -108,9 +108,16 @@ namespace CompensationSystemSubInterface {
                 List<int> selectedSeqIds = CurrentCondition.SequenceIds ?? new List<int>();
                 List<int> selectedDeptIds = CurrentCondition.DepartmentIds ?? new List<int>();
                 List<int> selectedPostIds = CurrentCondition.PositionIds ?? new List<int>();
+                List<int> selectedStatusIds = CurrentCondition.EmploymentStatusIds ?? new List<int>();
 
-                // Note: No user input in SQL query - all data comes from database or controlled sources
-                string empSql = "SELECT id, xingming, xlid, bmid, gwid FROM ZX_config_yg WHERE zaizhi=1 ORDER BY xuhao";
+                // Build SQL with optional employment status filter
+                // Empty list = all (no filter), otherwise filter by selected status values
+                string empSql;
+                if (selectedStatusIds.Count > 0) {
+                    empSql = $"SELECT id, xingming, xlid, bmid, gwid FROM ZX_config_yg WHERE zaizhi IN ({string.Join(",", selectedStatusIds)}) ORDER BY xuhao";
+                } else {
+                    empSql = "SELECT id, xingming, xlid, bmid, gwid FROM ZX_config_yg ORDER BY xuhao";
+                }
                 DataTable dtEmp = SqlHelper.ExecuteDataTable(empSql);
 
                 // Update persistent employee IDs from currently visible checked items before clearing
@@ -462,15 +469,17 @@ namespace CompensationSystemSubInterface {
 
         /// <summary>
         /// 外部调用：更新筛选条件并刷新员工列表
-        /// 当主界面的序列/部门/职务(岗位)筛选条件变化时调用此方法
+        /// 当主界面的序列/部门/职务(岗位)/状态筛选条件变化时调用此方法
         /// </summary>
         /// <param name="sequenceIds">新的序列ID列表</param>
         /// <param name="departmentIds">新的部门ID列表</param>
         /// <param name="positionIds">新的职务(岗位)ID列表</param>
-        public void RefreshFilterConditions(List<int> sequenceIds, List<int> departmentIds, List<int> positionIds) {
+        /// <param name="employmentStatusIds">在职状态ID列表: 空列表=全部, 1=在职, 0=离职</param>
+        public void RefreshFilterConditions(List<int> sequenceIds, List<int> departmentIds, List<int> positionIds, List<int> employmentStatusIds = null) {
             CurrentCondition.SequenceIds = sequenceIds;
             CurrentCondition.DepartmentIds = departmentIds;
             CurrentCondition.PositionIds = positionIds;
+            CurrentCondition.EmploymentStatusIds = employmentStatusIds ?? new List<int>();
             RefreshCascadingData();
         }
 

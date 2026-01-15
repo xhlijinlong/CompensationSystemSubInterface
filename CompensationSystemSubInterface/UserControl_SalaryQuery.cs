@@ -37,11 +37,13 @@ namespace CompensationSystemSubInterface {
         private WpfFilterPanel _treeSeq;
         private WpfFilterPanel _treeDept;
         private WpfFilterPanel _treePost;
+        private WpfFilterPanel _treeStatus;
 
         // 下拉弹窗
         private ToolStripDropDown _popupSeq;
         private ToolStripDropDown _popupDept;
         private ToolStripDropDown _popupPost;
+        private ToolStripDropDown _popupStatus;
 
         /// <summary>
         /// 初始化薪资查询用户控件
@@ -144,10 +146,22 @@ namespace CompensationSystemSubInterface {
             };
             _popupPost = CreatePopup(_treePost, 200, 300);
 
+            // 4. 初始化状态下拉菜单
+            _treeStatus = new WpfFilterPanel();
+            _treeStatus.LoadEmploymentStatus();
+            _treeStatus.SelectionChanged += ids => {
+                _condition.EmploymentStatusIds = ids;
+                UpdateButtonText(btnStatus, "状态", _treeStatus);
+                // 同步更新条件设置窗体中的员工列表
+                RefreshConditionWindowEmployees();
+            };
+            _popupStatus = CreatePopup(_treeStatus, 150, 150);
+
             // 初始化按钮文本
             UpdateButtonText(btnSeq, "序列", _treeSeq);
             UpdateButtonText(btnDept, "部门", _treeDept);
             UpdateButtonText(btnPost, "职务", _treePost);
+            UpdateButtonText(btnStatus, "状态", _treeStatus);
         }
 
         /// <summary>
@@ -157,7 +171,8 @@ namespace CompensationSystemSubInterface {
             _wpfCondition?.RefreshFilterConditions(
                 _condition.SequenceIds,
                 _condition.DepartmentIds,
-                _condition.PositionIds
+                _condition.PositionIds,
+                _condition.EmploymentStatusIds
             );
         }
 
@@ -409,6 +424,12 @@ namespace CompensationSystemSubInterface {
         private void btnPost_Click(object sender, EventArgs e) {
              if (_popupPost != null) {
                 _popupPost.Show(btnPost, 0, btnPost.Height);
+            }
+        }
+
+        private void btnStatus_Click(object sender, EventArgs e) {
+            if (_popupStatus != null) {
+                _popupStatus.Show(btnStatus, 0, btnStatus.Height);
             }
         }
     }

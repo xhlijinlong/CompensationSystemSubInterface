@@ -208,6 +208,18 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
+        /// 加载在职状态（程序生成）
+        /// Id对应数据库zaizhi字段: 1=在职, 0=离职
+        /// </summary>
+        public void LoadEmploymentStatus() {
+            _root = new FilterTreeNode { DisplayText = "全部状态", IsThreeState = true, FontWeight = FontWeights.Bold };
+            // Id直接使用数据库中的zaizhi值
+            _root.Children.Add(new FilterTreeNode { Id = 1, DisplayText = "在职", Parent = _root });
+            _root.Children.Add(new FilterTreeNode { Id = 0, DisplayText = "离职", Parent = _root });
+            BindTree();
+        }
+
+        /// <summary>
         /// 获取选中项的显示文本列表（用于考核结果等字符串类型筛选）
         /// </summary>
         public List<string> GetSelectedTexts() {

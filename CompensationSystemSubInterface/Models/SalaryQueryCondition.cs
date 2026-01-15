@@ -33,6 +33,13 @@ namespace CompensationSystemSubInterface.Models {
         /// 员工ID列表
         /// </summary>
         public List<int> EmployeeIds { get; set; } = new List<int>();
+        /// <summary>
+        /// 在职状态筛选条件列表
+        /// 空列表 = 全部状态（不筛选）
+        /// 1 = 在职
+        /// 0 = 离职
+        /// </summary>
+        public List<int> EmploymentStatusIds { get; set; } = new List<int>();
 
         /// <summary>
         /// 获取一个值，指示是否设置了任何筛选条件
@@ -44,7 +51,8 @@ namespace CompensationSystemSubInterface.Models {
                     (SequenceIds.Count > 0) ||
                     (PositionIds.Count > 0) ||
                     (EmployeeIds.Count > 0) ||
-                    (SalaryItemIds.Count > 0);
+                    (SalaryItemIds.Count > 0) ||
+                    (EmploymentStatusIds.Count > 0);
             }
         }
 
@@ -59,7 +67,8 @@ namespace CompensationSystemSubInterface.Models {
                 PositionIds = new List<int>(this.PositionIds),
                 LevelIds = new List<int>(this.LevelIds),
                 EmployeeIds = new List<int>(this.EmployeeIds),
-                SalaryItemIds = new List<int>(this.SalaryItemIds)
+                SalaryItemIds = new List<int>(this.SalaryItemIds),
+                EmploymentStatusIds = new List<int>(this.EmploymentStatusIds)
             };
         }
     }

@@ -44,6 +44,7 @@
             this.btnCondition = new System.Windows.Forms.Button();
             this.btnQuery = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
+            this.btnStatus = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.pnlTopContainer.SuspendLayout();
@@ -102,6 +103,7 @@
             this.flpnlTop.Controls.Add(this.btnSeq);
             this.flpnlTop.Controls.Add(this.btnDept);
             this.flpnlTop.Controls.Add(this.btnPost);
+            this.flpnlTop.Controls.Add(this.btnStatus);
             this.flpnlTop.Controls.Add(this.btnCondition);
             this.flpnlTop.Controls.Add(this.btnQuery);
             this.flpnlTop.Controls.Add(this.btnExport);
@@ -263,7 +265,7 @@
             // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(770, 16);
+            this.btnCondition.Location = new System.Drawing.Point(831, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
             this.btnCondition.Size = new System.Drawing.Size(80, 25);
@@ -275,7 +277,7 @@
             // btnQuery
             // 
             this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnQuery.Location = new System.Drawing.Point(856, 16);
+            this.btnQuery.Location = new System.Drawing.Point(917, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(55, 25);
@@ -286,7 +288,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(917, 16);
+            this.btnExport.Location = new System.Drawing.Point(978, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 25);
@@ -294,6 +296,17 @@
             this.btnExport.Text = "导出Excel";
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // btnStatus
+            // 
+            this.btnStatus.Location = new System.Drawing.Point(770, 16);
+            this.btnStatus.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnStatus.Name = "btnStatus";
+            this.btnStatus.Size = new System.Drawing.Size(55, 25);
+            this.btnStatus.TabIndex = 17;
+            this.btnStatus.Text = "状态";
+            this.btnStatus.UseVisualStyleBackColor = true;
+            this.btnStatus.Click += new System.EventHandler(this.btnStatus_Click);
             // 
             // UserControl_SalaryStatistics
             // 
@@ -337,5 +350,6 @@
         private System.Windows.Forms.Button btnSeq;
         private System.Windows.Forms.Button btnDept;
         private System.Windows.Forms.Button btnPost;
+        private System.Windows.Forms.Button btnStatus;
     }
 }

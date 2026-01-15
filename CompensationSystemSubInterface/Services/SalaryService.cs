@@ -78,7 +78,8 @@ namespace CompensationSystemSubInterface.Services {
             if (cond.PositionIds.Count > 0) sb.Append($" AND h.PositionId IN ({string.Join(",", cond.PositionIds)})");
             if (cond.LevelIds.Count > 0) sb.Append($" AND h.LevelId IN ({string.Join(",", cond.LevelIds)})");
             if (cond.EmployeeIds.Count > 0) sb.Append($" AND yg.id IN ({string.Join(",", cond.EmployeeIds)})");
-
+            // 在职状态筛选: 空列表=全部(不筛选), 否则按选中的状态值筛选
+            if (cond.EmploymentStatusIds.Count > 0) sb.Append($" AND yg.zaizhi IN ({string.Join(",", cond.EmploymentStatusIds)})");
             // 排序：先按展示顺序，再按月份, 再按薪资项目
             sb.Append(" ORDER BY h.DisplayOrder, h.SalaryMonth, si.DisplayOrder");
 
