@@ -13,6 +13,43 @@ namespace CompensationSystemSubInterface.Services {
     /// 薪资数据查询服务类
     /// </summary>
     public class SalaryService {
+        // 人员类别常量
+        private const string CAT_MANAGER = "中层及以上管理人员";
+        private const string CAT_TECH = "专业技术人员";
+        private const string CAT_ADMIN = "办事人员及有关人员";
+        private const string CAT_PROD = "生产制造及有关人员";
+        
+        // 人员类别显示顺序
+        private static readonly string[] CATEGORY_ORDER = { CAT_MANAGER, CAT_TECH, CAT_ADMIN, CAT_PROD };
+
+        /// <summary>
+        /// 根据部门名称和职务名称判定人员类别
+        /// </summary>
+        /// <param name="deptName">部门名称</param>
+        /// <param name="positionName">职务名称</param>
+        /// <returns>人员类别名称，不属于4类则返回null</returns>
+        private string GetPersonnelCategory(string deptName, string positionName) {
+            bool isDeptManager = positionName == "部门主任" || positionName == "部门副主任";
+            
+            // 领导班子(主任/副主任) 或 各部门的部门主任/副主任 → 中层及以上管理人员
+            if (deptName == "领导班子" || isDeptManager)
+                return CAT_MANAGER;
+            
+            // 技术部/资源事业部的非管理人员 → 专业技术人员
+            if ((deptName == "技术部" || deptName == "资源事业部") && !isDeptManager)
+                return CAT_TECH;
+            
+            // 综合管理部的非管理人员 → 办事人员
+            if (deptName == "综合管理部" && !isDeptManager)
+                return CAT_ADMIN;
+            
+            // 质量管控部/制作部/输出部的非管理人员 → 生产制造人员
+            if ((deptName == "质量管控部" || deptName == "制作部" || deptName == "输出部") && !isDeptManager)
+                return CAT_PROD;
+            
+            return null; // 不属于4类
+        }
+
         /// <summary>
         /// 获取最近的一个薪资月份 (用于界面默认值)
         /// </summary>
@@ -178,6 +215,14 @@ namespace CompensationSystemSubInterface.Services {
             // 存放部门合计，实现"部门小计在最后"
             List<DataRow> deptTotalRows = new List<DataRow>();
 
+            // 人员类别统计
+            Dictionary<string, Dictionary<string, decimal>> categoryTotals = new Dictionary<string, Dictionary<string, decimal>>();
+            Dictionary<string, decimal> categoryRowTotals = new Dictionary<string, decimal>();
+            foreach (var cat in CATEGORY_ORDER) {
+                categoryTotals[cat] = new Dictionary<string, decimal>();
+                categoryRowTotals[cat] = 0;
+            }
+
             foreach (var deptGroup in deptGroups) {
                 string deptName = deptGroup.Key;
                 Dictionary<string, decimal> deptTotals = new Dictionary<string, decimal>();
@@ -217,6 +262,22 @@ namespace CompensationSystemSubInterface.Services {
 
                         if (showTotalColumn) row["TotalAmount"] = rowSum;
                         empRowTotal += rowSum;
+                        
+                        // 累加到人员类别统计
+                        string category = GetPersonnelCategory(deptName, row["PositionName"]?.ToString() ?? "");
+                        if (category != null) {
+                            foreach (var d in monthGroup) {
+                                int id = d.Field<int>("ItemId");
+                                if (colMap.ContainsKey(id)) {
+                                    decimal amt = d.Field<decimal>("Amount");
+                                    string cName = colMap[id];
+                                    if (!categoryTotals[category].ContainsKey(cName)) categoryTotals[category][cName] = 0;
+                                    categoryTotals[category][cName] += amt;
+                                }
+                            }
+                            if (showTotalColumn) categoryRowTotals[category] += rowSum;
+                        }
+                        
                         dt.Rows.Add(row);
                     }
 
@@ -238,7 +299,7 @@ namespace CompensationSystemSubInterface.Services {
                 // --- 部门小计 ---
                 DataRow subDept = dt.NewRow();
                 subDept["DeptName"] = deptName;
-                subDept["EmployeeName"] = deptName + " 小计";
+                subDept["EmployeeName"] = deptName;
                 subDept["RowType"] = 2;
                 foreach (var kv in deptTotals) {
                     subDept[kv.Key] = kv.Value;
@@ -258,6 +319,18 @@ namespace CompensationSystemSubInterface.Services {
             // 统一追加部门合计行
             foreach (var row in deptTotalRows) {
                 dt.Rows.Add(row);
+            }
+
+            // --- 人员类别统计行 ---
+            foreach (var cat in CATEGORY_ORDER) {
+                DataRow catRow = dt.NewRow();
+                catRow["EmployeeName"] = cat;
+                catRow["RowType"] = 4; // 人员类别统计
+                foreach (var kv in categoryTotals[cat]) {
+                    catRow[kv.Key] = kv.Value;
+                }
+                if (showTotalColumn) catRow["TotalAmount"] = categoryRowTotals[cat];
+                dt.Rows.Add(catRow);
             }
 
             // --- 全厂总计 ---
@@ -356,6 +429,14 @@ namespace CompensationSystemSubInterface.Services {
 
             List<DataRow> deptTotalRows = new List<DataRow>();
 
+            // 人员类别统计
+            Dictionary<string, Dictionary<string, decimal>> categoryTotals = new Dictionary<string, Dictionary<string, decimal>>();
+            Dictionary<string, decimal> categoryRowTotals = new Dictionary<string, decimal>();
+            foreach (var cat in CATEGORY_ORDER) {
+                categoryTotals[cat] = new Dictionary<string, decimal>();
+                categoryRowTotals[cat] = 0;
+            }
+
             foreach (var deptGroup in deptGroups) {
                 string deptName = deptGroup.Key;
                 Dictionary<string, decimal> deptTotals = new Dictionary<string, decimal>();
@@ -399,6 +480,21 @@ namespace CompensationSystemSubInterface.Services {
                     if (showTotalColumn) row["TotalAmount"] = rowSum;
                     deptRowTotal += rowSum;
 
+                    // 累加到人员类别统计
+                    string category = GetPersonnelCategory(deptName, row["PositionName"]?.ToString() ?? "");
+                    if (category != null) {
+                        foreach (var d in empGroup) {
+                            int id = d.Field<int>("ItemId");
+                            if (colMap.ContainsKey(id)) {
+                                decimal amt = d.Field<decimal>("Amount");
+                                string cName = colMap[id];
+                                if (!categoryTotals[category].ContainsKey(cName)) categoryTotals[category][cName] = 0;
+                                categoryTotals[category][cName] += amt;
+                            }
+                        }
+                        if (showTotalColumn) categoryRowTotals[category] += rowSum;
+                    }
+
                     dt.Rows.Add(row);
                 }
 
@@ -406,7 +502,7 @@ namespace CompensationSystemSubInterface.Services {
                 DataRow subDept = dt.NewRow();
                 // 序号留空或不显示
                 subDept["DeptName"] = deptName;
-                subDept["EmployeeName"] = deptName + " 统计";
+                subDept["EmployeeName"] = deptName;
                 subDept["RowType"] = 2; // 保持 2 (灰色高亮)
                 foreach (var kv in deptTotals) {
                     subDept[kv.Key] = kv.Value;
@@ -422,6 +518,18 @@ namespace CompensationSystemSubInterface.Services {
 
             // 追加部门合计
             foreach (var row in deptTotalRows) dt.Rows.Add(row);
+
+            // --- 人员类别统计行 ---
+            foreach (var cat in CATEGORY_ORDER) {
+                DataRow catRow = dt.NewRow();
+                catRow["EmployeeName"] = cat;
+                catRow["RowType"] = 4; // 人员类别统计
+                foreach (var kv in categoryTotals[cat]) {
+                    catRow[kv.Key] = kv.Value;
+                }
+                if (showTotalColumn) catRow["TotalAmount"] = categoryRowTotals[cat];
+                dt.Rows.Add(catRow);
+            }
 
             // --- 全厂总计 ---
             DataRow subGrand = dt.NewRow();

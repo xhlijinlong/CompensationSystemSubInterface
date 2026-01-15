@@ -307,7 +307,7 @@ namespace CompensationSystemSubInterface {
 
             if (dgvSalary.Columns.Contains("EmployeeName")) {
                 dgvSalary.Columns["EmployeeName"].HeaderText = "姓名";
-                dgvSalary.Columns["EmployeeName"].Width = 80;
+                dgvSalary.Columns["EmployeeName"].Width = 100;
                 dgvSalary.Columns["EmployeeName"].Frozen = true; // 冻结姓名列
             }
 
