@@ -30,6 +30,11 @@ namespace CompensationSystemSubInterface.Utilities {
                     return new XSSFColor(new byte[] { c.R, c.G, c.B });
                 }
 
+                // 统一字体：微软雅黑 12pt
+                IFont baseFont = workbook.CreateFont();
+                baseFont.FontName = "微软雅黑";
+                baseFont.FontHeightInPoints = 12;
+
                 // 1. 表头样式（白色背景、加粗、居中）
                 ICellStyle headerStyle = workbook.CreateCellStyle();
                 headerStyle.Alignment = HorizontalAlignment.Center;
@@ -38,6 +43,8 @@ namespace CompensationSystemSubInterface.Utilities {
                 headerStyle.BorderLeft = BorderStyle.Thin;
                 headerStyle.BorderRight = BorderStyle.Thin;
                 IFont headerFont = workbook.CreateFont();
+                headerFont.FontName = "微软雅黑";
+                headerFont.FontHeightInPoints = 12;
                 headerFont.IsBold = true;
                 headerStyle.SetFont(headerFont);
 
@@ -48,6 +55,7 @@ namespace CompensationSystemSubInterface.Utilities {
                 dataStyle.BorderLeft = BorderStyle.Thin;
                 dataStyle.BorderRight = BorderStyle.Thin;
                 dataStyle.VerticalAlignment = VerticalAlignment.Center;
+                dataStyle.SetFont(baseFont);
 
                 // 3. 货币样式（数字格式，靠右对齐）
                 ICellStyle currencyStyle = workbook.CreateCellStyle();
@@ -55,18 +63,21 @@ namespace CompensationSystemSubInterface.Utilities {
                 IDataFormat format = workbook.CreateDataFormat();
                 currencyStyle.DataFormat = format.GetFormat("#,##0.00");
                 currencyStyle.Alignment = HorizontalAlignment.Right;
+                currencyStyle.SetFont(baseFont);
 
                 // 4. 日期样式（不含时分秒）
                 ICellStyle dateStyle = workbook.CreateCellStyle();
                 dateStyle.CloneStyleFrom(dataStyle);
                 dateStyle.DataFormat = format.GetFormat("yyyy-MM-dd");
                 dateStyle.Alignment = HorizontalAlignment.Center;
+                dateStyle.SetFont(baseFont);
 
                 // 5. 时间样式（含时分秒）
                 ICellStyle dateTimeStyle = workbook.CreateCellStyle();
                 dateTimeStyle.CloneStyleFrom(dataStyle);
                 dateTimeStyle.DataFormat = format.GetFormat("yyyy-MM-dd HH:mm:ss");
                 dateTimeStyle.Alignment = HorizontalAlignment.Center;
+                dateTimeStyle.SetFont(baseFont);
 
                 // ==================== 写入表头 ====================
                 IRow headerRow = sheet.CreateRow(0);
