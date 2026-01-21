@@ -308,28 +308,25 @@ namespace CompensationSystemSubInterface {
                 dgvSalary.Columns["Seq"].Frozen = true;
             }
 
-            if (dgvSalary.Columns.Contains("EmployeeName")) {
-                dgvSalary.Columns["EmployeeName"].HeaderText = "姓名";
-                dgvSalary.Columns["EmployeeName"].Width = 100;
-                dgvSalary.Columns["EmployeeName"].Frozen = true; // 冻结姓名列
-            }
-
             if (dgvSalary.Columns.Contains("EmployeeNo")) {
                 dgvSalary.Columns["EmployeeNo"].HeaderText = "编号";
                 dgvSalary.Columns["EmployeeNo"].Width = 90;
-                dgvSalary.Columns["EmployeeNo"].DisplayIndex = dgvSalary.Columns["EmployeeName"].DisplayIndex + 1;
+                dgvSalary.Columns["EmployeeNo"].Frozen = true; // 冻结编号列
+            }
+
+            if (dgvSalary.Columns.Contains("EmployeeName")) {
+                dgvSalary.Columns["EmployeeName"].HeaderText = "姓名";
+                dgvSalary.Columns["EmployeeName"].Width = 100;
             }
 
             if (dgvSalary.Columns.Contains("DeptName")) {
                 dgvSalary.Columns["DeptName"].HeaderText = "部门";
                 dgvSalary.Columns["DeptName"].Width = 100;
-                dgvSalary.Columns["DeptName"].DisplayIndex = dgvSalary.Columns["EmployeeNo"].DisplayIndex + 1;
             }
 
             if (dgvSalary.Columns.Contains("PositionName")) {
                 dgvSalary.Columns["PositionName"].HeaderText = "职务";
                 dgvSalary.Columns["PositionName"].Width = 80;
-                dgvSalary.Columns["PositionName"].DisplayIndex = dgvSalary.Columns["DeptName"].DisplayIndex + 1;
                 dgvSalary.Columns["PositionName"].Frozen = true; // 冻结前5列
             }
 

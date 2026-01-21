@@ -181,8 +181,8 @@ namespace CompensationSystemSubInterface.Services {
             }
 
             dt.Columns.Add("MonthStr", typeof(string));
-            dt.Columns.Add("EmployeeName", typeof(string));
             dt.Columns.Add("EmployeeNo", typeof(string));
+            dt.Columns.Add("EmployeeName", typeof(string));
             dt.Columns.Add("DeptName", typeof(string));
             dt.Columns.Add("PositionName", typeof(string));
 
@@ -396,8 +396,8 @@ namespace CompensationSystemSubInterface.Services {
 
             // 构建 DataTable 结构 (增加序号列)
             dt.Columns.Add("Seq", typeof(int)); // 序号
-            dt.Columns.Add("EmployeeName", typeof(string));
             dt.Columns.Add("EmployeeNo", typeof(string));
+            dt.Columns.Add("EmployeeName", typeof(string));
             dt.Columns.Add("DeptName", typeof(string));
             dt.Columns.Add("PositionName", typeof(string));
 
