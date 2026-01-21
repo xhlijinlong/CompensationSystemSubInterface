@@ -95,7 +95,7 @@
             this.flpnlTop.Controls.Add(this.btnQuery);
             this.flpnlTop.Controls.Add(this.btnExport);
             this.flpnlTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flpnlTop.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.flpnlTop.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.flpnlTop.Location = new System.Drawing.Point(0, 0);
             this.flpnlTop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.flpnlTop.Name = "flpnlTop";
@@ -110,7 +110,7 @@
             this.lbDate.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.lbDate.Name = "lbDate";
             this.lbDate.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.lbDate.Size = new System.Drawing.Size(50, 20);
+            this.lbDate.Size = new System.Drawing.Size(54, 27);
             this.lbDate.TabIndex = 0;
             this.lbDate.Text = "日期:";
             // 
@@ -118,20 +118,20 @@
             // 
             this.cbYear1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbYear1.FormattingEnabled = true;
-            this.cbYear1.Location = new System.Drawing.Point(62, 16);
+            this.cbYear1.Location = new System.Drawing.Point(66, 16);
             this.cbYear1.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.cbYear1.Name = "cbYear1";
-            this.cbYear1.Size = new System.Drawing.Size(65, 21);
+            this.cbYear1.Size = new System.Drawing.Size(65, 29);
             this.cbYear1.TabIndex = 1;
             // 
             // lbYear1
             // 
             this.lbYear1.AutoSize = true;
-            this.lbYear1.Location = new System.Drawing.Point(133, 16);
+            this.lbYear1.Location = new System.Drawing.Point(137, 16);
             this.lbYear1.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.lbYear1.Name = "lbYear1";
             this.lbYear1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.lbYear1.Size = new System.Drawing.Size(29, 20);
+            this.lbYear1.Size = new System.Drawing.Size(34, 27);
             this.lbYear1.TabIndex = 2;
             this.lbYear1.Text = "年";
             // 
@@ -139,20 +139,20 @@
             // 
             this.cbMonth1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbMonth1.FormattingEnabled = true;
-            this.cbMonth1.Location = new System.Drawing.Point(168, 16);
+            this.cbMonth1.Location = new System.Drawing.Point(177, 16);
             this.cbMonth1.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.cbMonth1.Name = "cbMonth1";
-            this.cbMonth1.Size = new System.Drawing.Size(45, 21);
+            this.cbMonth1.Size = new System.Drawing.Size(45, 29);
             this.cbMonth1.TabIndex = 3;
             // 
             // lbMonth1
             // 
             this.lbMonth1.AutoSize = true;
-            this.lbMonth1.Location = new System.Drawing.Point(219, 16);
+            this.lbMonth1.Location = new System.Drawing.Point(228, 16);
             this.lbMonth1.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.lbMonth1.Name = "lbMonth1";
             this.lbMonth1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.lbMonth1.Size = new System.Drawing.Size(43, 20);
+            this.lbMonth1.Size = new System.Drawing.Size(46, 27);
             this.lbMonth1.TabIndex = 4;
             this.lbMonth1.Text = "月 -";
             // 
@@ -160,20 +160,20 @@
             // 
             this.cbYear2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbYear2.FormattingEnabled = true;
-            this.cbYear2.Location = new System.Drawing.Point(268, 16);
+            this.cbYear2.Location = new System.Drawing.Point(280, 16);
             this.cbYear2.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.cbYear2.Name = "cbYear2";
-            this.cbYear2.Size = new System.Drawing.Size(65, 21);
+            this.cbYear2.Size = new System.Drawing.Size(65, 29);
             this.cbYear2.TabIndex = 5;
             // 
             // lbYear2
             // 
             this.lbYear2.AutoSize = true;
-            this.lbYear2.Location = new System.Drawing.Point(339, 16);
+            this.lbYear2.Location = new System.Drawing.Point(351, 16);
             this.lbYear2.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.lbYear2.Name = "lbYear2";
             this.lbYear2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.lbYear2.Size = new System.Drawing.Size(29, 20);
+            this.lbYear2.Size = new System.Drawing.Size(34, 27);
             this.lbYear2.TabIndex = 6;
             this.lbYear2.Text = "年";
             // 
@@ -181,48 +181,48 @@
             // 
             this.cbMonth2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbMonth2.FormattingEnabled = true;
-            this.cbMonth2.Location = new System.Drawing.Point(374, 16);
+            this.cbMonth2.Location = new System.Drawing.Point(391, 16);
             this.cbMonth2.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.cbMonth2.Name = "cbMonth2";
-            this.cbMonth2.Size = new System.Drawing.Size(45, 21);
+            this.cbMonth2.Size = new System.Drawing.Size(45, 29);
             this.cbMonth2.TabIndex = 7;
             // 
             // lbMonth2
             // 
             this.lbMonth2.AutoSize = true;
-            this.lbMonth2.Location = new System.Drawing.Point(425, 16);
+            this.lbMonth2.Location = new System.Drawing.Point(442, 16);
             this.lbMonth2.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.lbMonth2.Name = "lbMonth2";
             this.lbMonth2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.lbMonth2.Size = new System.Drawing.Size(29, 20);
+            this.lbMonth2.Size = new System.Drawing.Size(34, 27);
             this.lbMonth2.TabIndex = 8;
             this.lbMonth2.Text = "月";
             // 
             // lbName
             // 
             this.lbName.AutoSize = true;
-            this.lbName.Location = new System.Drawing.Point(460, 16);
+            this.lbName.Location = new System.Drawing.Point(482, 16);
             this.lbName.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.lbName.Name = "lbName";
             this.lbName.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.lbName.Size = new System.Drawing.Size(50, 20);
+            this.lbName.Size = new System.Drawing.Size(54, 27);
             this.lbName.TabIndex = 9;
             this.lbName.Text = "姓名:";
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(516, 16);
+            this.txtName.Location = new System.Drawing.Point(542, 16);
             this.txtName.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(65, 23);
+            this.txtName.Size = new System.Drawing.Size(65, 29);
             this.txtName.TabIndex = 10;
             // 
             // btnSeq
             // 
-            this.btnSeq.Location = new System.Drawing.Point(587, 16);
+            this.btnSeq.Location = new System.Drawing.Point(613, 16);
             this.btnSeq.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnSeq.Name = "btnSeq";
-            this.btnSeq.Size = new System.Drawing.Size(55, 25);
+            this.btnSeq.Size = new System.Drawing.Size(55, 30);
             this.btnSeq.TabIndex = 15;
             this.btnSeq.Text = "序列";
             this.btnSeq.UseVisualStyleBackColor = true;
@@ -230,10 +230,10 @@
             // 
             // btnDept
             // 
-            this.btnDept.Location = new System.Drawing.Point(648, 16);
+            this.btnDept.Location = new System.Drawing.Point(674, 16);
             this.btnDept.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnDept.Name = "btnDept";
-            this.btnDept.Size = new System.Drawing.Size(55, 25);
+            this.btnDept.Size = new System.Drawing.Size(55, 30);
             this.btnDept.TabIndex = 14;
             this.btnDept.Text = "部门";
             this.btnDept.UseVisualStyleBackColor = true;
@@ -241,10 +241,10 @@
             // 
             // btnPost
             // 
-            this.btnPost.Location = new System.Drawing.Point(709, 16);
+            this.btnPost.Location = new System.Drawing.Point(735, 16);
             this.btnPost.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnPost.Name = "btnPost";
-            this.btnPost.Size = new System.Drawing.Size(55, 25);
+            this.btnPost.Size = new System.Drawing.Size(55, 30);
             this.btnPost.TabIndex = 16;
             this.btnPost.Text = "职务";
             this.btnPost.UseVisualStyleBackColor = true;
@@ -252,10 +252,10 @@
             // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(770, 16);
+            this.btnCondition.Location = new System.Drawing.Point(796, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
-            this.btnCondition.Size = new System.Drawing.Size(80, 25);
+            this.btnCondition.Size = new System.Drawing.Size(90, 30);
             this.btnCondition.TabIndex = 12;
             this.btnCondition.Text = "员工设置";
             this.btnCondition.UseVisualStyleBackColor = true;
@@ -264,10 +264,10 @@
             // btnQuery
             // 
             this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnQuery.Location = new System.Drawing.Point(856, 16);
+            this.btnQuery.Location = new System.Drawing.Point(892, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
-            this.btnQuery.Size = new System.Drawing.Size(55, 25);
+            this.btnQuery.Size = new System.Drawing.Size(55, 30);
             this.btnQuery.TabIndex = 11;
             this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = false;
@@ -275,10 +275,10 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(917, 16);
+            this.btnExport.Location = new System.Drawing.Point(953, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(95, 25);
+            this.btnExport.Size = new System.Drawing.Size(95, 30);
             this.btnExport.TabIndex = 13;
             this.btnExport.Text = "导出Excel";
             this.btnExport.UseVisualStyleBackColor = true;
@@ -286,11 +286,11 @@
             // 
             // UserControl_EmpCgQuery
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.pnlBody);
             this.Controls.Add(this.flpnlTop);
-            this.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "UserControl_EmpCgQuery";
             this.Size = new System.Drawing.Size(1200, 600);
