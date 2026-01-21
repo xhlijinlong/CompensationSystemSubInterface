@@ -173,15 +173,8 @@ namespace CompensationSystemSubInterface {
                 }
             }
 
-            // 设置前5列显示顺序：姓名, 编号, 序列, 部门, 职务
-            if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].DisplayIndex = 0;
-            if (dgvSalary.Columns["编号"] != null) dgvSalary.Columns["编号"].DisplayIndex = 1;
-            if (dgvSalary.Columns["序列"] != null) dgvSalary.Columns["序列"].DisplayIndex = 2;
-            if (dgvSalary.Columns["部门"] != null) dgvSalary.Columns["部门"].DisplayIndex = 3;
-            if (dgvSalary.Columns["职务"] != null) dgvSalary.Columns["职务"].DisplayIndex = 4;
-
-            // 冻结前5列（职务列）
-            if (dgvSalary.Columns["职务"] != null) dgvSalary.Columns["职务"].Frozen = true;
+            // 冻结前4列（员工编号, 部门, 职务, 姓名）
+            if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].Frozen = true;
         }
 
         /// <summary>

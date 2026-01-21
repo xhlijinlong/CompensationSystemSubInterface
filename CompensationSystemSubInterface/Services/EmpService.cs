@@ -32,12 +32,10 @@ namespace CompensationSystemSubInterface.Services {
             // 拼接 SQL 语句 (直接使用你提供的 SQL)
             sb.Append(@"
                 SELECT 
-                    yg.yuangongbh AS '编号',
-                    yg.xingming AS '姓名',
+                    yg.yuangongbh AS '员工编号',
                     bm.bmname AS '部门',
-                    xl.xlname AS '序列',
                     gw.gwname AS '职务',
-                    cj.cjname AS '层级',
+                    yg.xingming AS '姓名',
                     yg.xingbie AS '性别',
                     yg.minzu AS '民族',
                     yg.zhengzhimm AS '政治面貌',
@@ -50,12 +48,14 @@ namespace CompensationSystemSubInterface.Services {
                     yg.shenfenzheng AS '证件号码',
                     yg.zhuanyejs AS '专业技术',
                     yg.zhichengdj AS '职称等级',
-                    NULLIF ( yg.zhichengsj, '1900-01-01' ) AS '取得时间',
+                    NULLIF(yg.zhichengsj, '1900-01-01') AS '取得时间',
                     yg.zhuanyejn AS '专业技能',
                     NULLIF(yg.jinengsj, '1900-01-01') AS '技能时间',
-                    yg.lianxidh AS '联系电话',
-                    yg.nianling AS '年龄',
+                    xl.xlname AS '序列',
+                    cj.cjname AS '层级',
                     yg.shuxing AS '属相',
+                    yg.nianling AS '年龄',
+                    yg.lianxidh AS '联系电话',
                     yg.gongzikh AS '工资卡号',
                     yg.id, yg.bmid, yg.xlid, yg.gwid
                 FROM 
@@ -167,12 +167,10 @@ namespace CompensationSystemSubInterface.Services {
             // 拼接 SQL 语句 - 查询离职员工 (zaizhi=0)
             sb.Append(@"
                 SELECT 
-                    yg.yuangongbh AS '编号',
-                    yg.xingming AS '姓名',
+                    yg.yuangongbh AS '员工编号',
                     bm.bmname AS '部门',
-                    xl.xlname AS '序列',
                     gw.gwname AS '职务',
-                    cj.cjname AS '层级',
+                    yg.xingming AS '姓名',
                     yg.xingbie AS '性别',
                     yg.minzu AS '民族',
                     yg.zhengzhimm AS '政治面貌',
@@ -185,12 +183,14 @@ namespace CompensationSystemSubInterface.Services {
                     yg.shenfenzheng AS '证件号码',
                     yg.zhuanyejs AS '专业技术',
                     yg.zhichengdj AS '职称等级',
-                    NULLIF ( yg.zhichengsj, '1900-01-01' ) AS '取得时间',
+                    NULLIF(yg.zhichengsj, '1900-01-01') AS '取得时间',
                     yg.zhuanyejn AS '专业技能',
                     NULLIF(yg.jinengsj, '1900-01-01') AS '技能时间',
-                    yg.lianxidh AS '联系电话',
-                    yg.nianling AS '年龄',
+                    xl.xlname AS '序列',
+                    cj.cjname AS '层级',
                     yg.shuxing AS '属相',
+                    yg.nianling AS '年龄',
+                    yg.lianxidh AS '联系电话',
                     yg.gongzikh AS '工资卡号',
                     NULLIF(yg.lizhisj, '1900-01-01') AS '离职日期',
                     yg.id, yg.bmid, yg.xlid, yg.gwid
@@ -296,12 +296,10 @@ namespace CompensationSystemSubInterface.Services {
             // 拼接 SQL 语句 (直接使用你提供的 SQL)
             sb.Append(@"
                 SELECT 
-                    yg.yuangongbh AS '编号',
-                    yg.xingming AS '姓名',
+                    yg.yuangongbh AS '员工编号',
                     bm.bmname AS '部门',
-                    xl.xlname AS '序列',
                     gw.gwname AS '职务',
-                    cj.cjname AS '层级',
+                    yg.xingming AS '姓名',
                     yg.xingbie AS '性别',
                     yg.minzu AS '民族',
                     yg.zhengzhimm AS '政治面貌',
@@ -317,9 +315,11 @@ namespace CompensationSystemSubInterface.Services {
                     NULLIF(yg.zhichengsj, '1900-01-01') AS '取得时间',
                     yg.zhuanyejn AS '专业技能',
                     NULLIF(yg.jinengsj, '1900-01-01') AS '技能时间',
-                    yg.lianxidh AS '联系电话',
-                    yg.nianling AS '年龄',
+                    xl.xlname AS '序列',
+                    cj.cjname AS '层级',
                     yg.shuxing AS '属相',
+                    yg.nianling AS '年龄',
+                    yg.lianxidh AS '联系电话',
                     yg.gongzikh AS '工资卡号',
                     yg.id, yg.bmid, yg.xlid, yg.gwid, yg.cjid
                 FROM 
