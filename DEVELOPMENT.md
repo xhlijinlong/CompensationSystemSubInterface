@@ -113,9 +113,18 @@
 
 ### 待开发需求
 
+1. 员工信息管理中，员工表的列按照指定顺序查询展示
+   涉及页面 UserControl_EmpMaint UserControl_EmpQuery UserControl_EmpRsQuery(离职日期保持最后一列位置不变)
+   员工编号 部门 职务 姓名 性别 民族 政治面貌 学历 学位 出生日期 参加工作时间 入社时间 任现岗位时间 证件号码 专业技术 职称等级 取得时间 专业技能 技能时间 序列 层级 属相 年龄 联系电话 工资卡号
+
+2. 还有2个工资统计中，把姓名和编号列的查询展示顺序对调一下
+   涉及页面 UserControl_SalaryQuery UserControl_SalaryStatistics
+
+3. 表格中的字体和页面窗体上的字体统一调整为 微软雅黑 12pt
+   涉及页面 UserControl_EmpMaint UserControl_EmpQuery UserControl_EmpRsQuery UserControl_PfmcQuery UserControl_EmpCgQuery UserControl_SalaryQuery UserControl_SalaryStatistics
+
+4. 高分屏中表格列宽显示过窄的问题
 
 ## 潜在问题记录
 
-
 ## 问题修复记录
-
