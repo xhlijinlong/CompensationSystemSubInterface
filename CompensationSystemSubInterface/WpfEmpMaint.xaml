@@ -1,9 +1,10 @@
 ﻿<Window x:Class="CompensationSystemSubInterface.WpfEmpMaint"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="员工信息维护" Height="720" Width="900"
+    Title="员工信息维护" Height="740" Width="900"
     WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-    Background="#F5F6F8">
+    Background="#F5F6F8"
+    FontFamily="Microsoft YaHei" FontSize="16">
 
     <Grid>
         <Grid.RowDefinitions>

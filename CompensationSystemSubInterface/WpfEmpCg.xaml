@@ -2,9 +2,10 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        Title="员工变动信息维护" Height="590" Width="700"
+        Title="员工变动信息维护" Height="610" Width="700"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Background="#F5F6F8">
+        Background="#F5F6F8"
+        FontFamily="Microsoft YaHei" FontSize="16">
 
     <Grid>
         <Grid.RowDefinitions>

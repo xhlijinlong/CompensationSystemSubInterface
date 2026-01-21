@@ -1,33 +1,34 @@
 ﻿<UserControl x:Class="CompensationSystemSubInterface.WpfFilterPanel"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="250"
-             Background="White">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    mc:Ignorable="d"
+    d:DesignHeight="300" d:DesignWidth="250"
+    Background="White"
+    FontFamily="Microsoft YaHei" FontSize="16">
     <UserControl.Resources>
         <!-- TreeViewItem 样式 -->
         <Style TargetType="TreeViewItem">
-            <Setter Property="IsExpanded" Value="True"/>
-            <Setter Property="Padding" Value="2"/>
+            <Setter Property="IsExpanded" Value="True" />
+            <Setter Property="Padding" Value="2" />
         </Style>
     </UserControl.Resources>
-    
+
     <Border BorderThickness="1" BorderBrush="#DDD" Margin="1">
         <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="400">
             <TreeView x:Name="treeMain" BorderThickness="0" Background="Transparent" Margin="2">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                         <StackPanel Orientation="Horizontal" Margin="2">
-                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}" 
-                                      IsThreeState="{Binding IsThreeState}"
-                                      Click="CheckBox_Click"
-                                      VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding DisplayText}" 
-                                       Margin="5,0,0,0" 
-                                       VerticalAlignment="Center"
-                                       FontWeight="{Binding FontWeight}"/>
+                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                IsThreeState="{Binding IsThreeState}"
+                                Click="CheckBox_Click"
+                                VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding DisplayText}"
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                FontWeight="{Binding FontWeight}" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>

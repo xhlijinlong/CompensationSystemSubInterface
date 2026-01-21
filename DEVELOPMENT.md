@@ -123,7 +123,7 @@
 3. 表格中的字体和页面窗体上的字体统一调整为 微软雅黑 12pt
    涉及页面 UserControl_EmpMaint UserControl_EmpQuery UserControl_EmpRsQuery UserControl_PfmcQuery UserControl_EmpCgQuery UserControl_SalaryQuery UserControl_SalaryStatistics
 
-4. 高分屏中表格列宽显示过窄的问题
+4. 表格列宽显示过窄的问题
 
 ## 潜在问题记录
 

@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="条件设置" Height="500" Width="350"
     WindowStartupLocation="CenterScreen" Background="#F5F7FA"
-    ResizeMode="CanResizeWithGrip">
+    ResizeMode="CanResizeWithGrip"
+    FontFamily="Microsoft YaHei" FontSize="16">
 
     <Window.Resources>
         <!-- TreeViewItem 样式 -->
