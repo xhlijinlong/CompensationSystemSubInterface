@@ -240,6 +240,9 @@ namespace CompensationSystemSubInterface {
         private void FormatGrid() {
             // 设置整体字体为微软雅黑 12pt
             dgvSalary.Font = new Font("微软雅黑", 12F, FontStyle.Regular);
+
+            // 关闭持续自动列宽（改用一次性计算提升性能）
+            dgvSalary.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             
             // 统一表头样式
             dgvSalary.EnableHeadersVisualStyles = false;
@@ -271,6 +274,9 @@ namespace CompensationSystemSubInterface {
 
             // 冻结前2列（编号列）
             if (dgvSalary.Columns["编号"] != null) dgvSalary.Columns["编号"].Frozen = true;
+
+            // 一次性计算列宽（解决高分屏列宽过窄问题）
+            dgvSalary.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
         /// <summary>

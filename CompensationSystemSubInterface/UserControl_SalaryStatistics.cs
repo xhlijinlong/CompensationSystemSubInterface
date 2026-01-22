@@ -272,6 +272,9 @@ namespace CompensationSystemSubInterface {
         private void FormatGrid(DataTable dt) {
             // 设置整体字体为微软雅黑 12pt
             dgvSalary.Font = new Font("微软雅黑", 12F, FontStyle.Regular);
+
+            // 关闭持续自动列宽（改用一次性计算提升性能）
+            dgvSalary.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             
             // 设置表头为白色背景
             dgvSalary.EnableHeadersVisualStyles = false;
@@ -303,30 +306,25 @@ namespace CompensationSystemSubInterface {
             // 序号列
             if (dgvSalary.Columns.Contains("Seq")) {
                 dgvSalary.Columns["Seq"].HeaderText = "序号";
-                dgvSalary.Columns["Seq"].Width = 60;
                 dgvSalary.Columns["Seq"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 dgvSalary.Columns["Seq"].Frozen = true;
             }
 
             if (dgvSalary.Columns.Contains("EmployeeNo")) {
                 dgvSalary.Columns["EmployeeNo"].HeaderText = "编号";
-                dgvSalary.Columns["EmployeeNo"].Width = 90;
                 dgvSalary.Columns["EmployeeNo"].Frozen = true; // 冻结编号列
             }
 
             if (dgvSalary.Columns.Contains("EmployeeName")) {
                 dgvSalary.Columns["EmployeeName"].HeaderText = "姓名";
-                dgvSalary.Columns["EmployeeName"].Width = 100;
             }
 
             if (dgvSalary.Columns.Contains("DeptName")) {
                 dgvSalary.Columns["DeptName"].HeaderText = "部门";
-                dgvSalary.Columns["DeptName"].Width = 100;
             }
 
             if (dgvSalary.Columns.Contains("PositionName")) {
                 dgvSalary.Columns["PositionName"].HeaderText = "职务";
-                dgvSalary.Columns["PositionName"].Width = 80;
                 dgvSalary.Columns["PositionName"].Frozen = true; // 冻结前5列
             }
 
@@ -334,6 +332,9 @@ namespace CompensationSystemSubInterface {
             if (dgvSalary.Columns.Contains("RowType")) {
                 dgvSalary.Columns["RowType"].Visible = false;
             }
+
+            // 一次性计算列宽（解决高分屏列宽过窄问题）
+            dgvSalary.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
         /// <summary>

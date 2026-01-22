@@ -147,6 +147,9 @@ namespace CompensationSystemSubInterface {
             // 设置整体字体为微软雅黑 12pt
             dgvSalary.Font = new Font("微软雅黑", 12F, FontStyle.Regular);
 
+            // 关闭持续自动列宽（改用一次性计算提升性能）
+            dgvSalary.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+
             // 统一表头样式
             dgvSalary.EnableHeadersVisualStyles = false;
             dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
@@ -175,6 +178,9 @@ namespace CompensationSystemSubInterface {
 
             // 冻结前4列（员工编号, 部门, 职务, 姓名）
             if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].Frozen = true;
+
+            // 一次性计算列宽（解决高分屏列宽过窄问题）
+            dgvSalary.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.DisplayedCells);
         }
 
         /// <summary>
