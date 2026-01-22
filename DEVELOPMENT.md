@@ -123,9 +123,7 @@
 3. 表格中的字体和页面窗体上的字体统一调整为 微软雅黑 12pt
    涉及页面 UserControl_EmpMaint UserControl_EmpQuery UserControl_EmpRsQuery UserControl_PfmcQuery UserControl_EmpCgQuery UserControl_SalaryQuery UserControl_SalaryStatistics
 
-4. ~~表格列宽显示过窄的问题~~ ✅ 已修复
-   涉及页面 UserControl_EmpMaint UserControl_EmpQuery UserControl_EmpRsQuery UserControl_PfmcQuery UserControl_EmpCgQuery UserControl_SalaryQuery UserControl_SalaryStatistics
-   解决方案: 在 FormatGrid 方法中设置 `AutoSizeColumnsMode = None`，并在方法末尾调用 `AutoResizeColumns(DisplayedCells)` 一次性计算列宽，解决高分屏下列宽过窄问题，同时保证性能
+4. 表格列宽显示过窄的问题
 
 ## 潜在问题记录
 
