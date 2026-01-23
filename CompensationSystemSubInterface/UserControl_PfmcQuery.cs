@@ -238,6 +238,9 @@ namespace CompensationSystemSubInterface {
             dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
             dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font("微软雅黑", 12F, FontStyle.Bold);
 
+            // 使用 DPI 缩放列宽
+            int scaledWidth = DpiHelper.ScaleWidth(this, 100);
+
             // 设置列属性
             foreach (DataGridViewColumn col in dgvSalary.Columns) {
                 // 隐藏 ID 列
@@ -245,6 +248,9 @@ namespace CompensationSystemSubInterface {
                     col.Visible = false;
                     continue;
                 }
+
+                // 设置 DPI 缩放列宽
+                col.Width = scaledWidth;
 
                 // 居中对齐
                 col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;

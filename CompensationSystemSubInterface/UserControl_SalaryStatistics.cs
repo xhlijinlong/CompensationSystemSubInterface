@@ -280,13 +280,19 @@ namespace CompensationSystemSubInterface {
             dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
             dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font("微软雅黑", 12F, FontStyle.Bold);
 
-            // 1. 先进行通用设置（金额格式、Caption映射）
+            // 使用 DPI 缩放列宽
+            int scaledWidth = DpiHelper.ScaleWidth(this, 100);
+
+            // 1. 先进行通用设置（金额格式、Caption映射、DPI缩放列宽）
             foreach (DataGridViewColumn col in dgvSalary.Columns) {
                 // 如果 DataTable 中有设置 Caption，就用它
                 // 注意：MonthStr 默认 Caption 也是 MonthStr，所以这里会先把表头设为英文
                 if (dt.Columns.Contains(col.Name) && !string.IsNullOrEmpty(dt.Columns[col.Name].Caption)) {
                     col.HeaderText = dt.Columns[col.Name].Caption;
                 }
+
+                // 设置 DPI 缩放列宽（特殊列后面会覆盖）
+                col.Width = scaledWidth;
 
                 // 设置表头居中对齐
                 col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -300,33 +306,35 @@ namespace CompensationSystemSubInterface {
                 }
             }
 
+            // 2. 特殊列的表头名称和设置
+
             // 序号列
             if (dgvSalary.Columns.Contains("Seq")) {
                 dgvSalary.Columns["Seq"].HeaderText = "序号";
-                dgvSalary.Columns["Seq"].Width = 60;
+                dgvSalary.Columns["Seq"].Width = scaledWidth;
                 dgvSalary.Columns["Seq"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 dgvSalary.Columns["Seq"].Frozen = true;
             }
 
             if (dgvSalary.Columns.Contains("EmployeeNo")) {
                 dgvSalary.Columns["EmployeeNo"].HeaderText = "编号";
-                dgvSalary.Columns["EmployeeNo"].Width = 90;
+                dgvSalary.Columns["EmployeeNo"].Width = scaledWidth;
                 dgvSalary.Columns["EmployeeNo"].Frozen = true; // 冻结编号列
             }
 
             if (dgvSalary.Columns.Contains("EmployeeName")) {
                 dgvSalary.Columns["EmployeeName"].HeaderText = "姓名";
-                dgvSalary.Columns["EmployeeName"].Width = 100;
+                dgvSalary.Columns["EmployeeName"].Width = scaledWidth;
             }
 
             if (dgvSalary.Columns.Contains("DeptName")) {
                 dgvSalary.Columns["DeptName"].HeaderText = "部门";
-                dgvSalary.Columns["DeptName"].Width = 100;
+                dgvSalary.Columns["DeptName"].Width = scaledWidth;
             }
 
             if (dgvSalary.Columns.Contains("PositionName")) {
                 dgvSalary.Columns["PositionName"].HeaderText = "职务";
-                dgvSalary.Columns["PositionName"].Width = 80;
+                dgvSalary.Columns["PositionName"].Width = scaledWidth;
                 dgvSalary.Columns["PositionName"].Frozen = true; // 冻结前5列
             }
 

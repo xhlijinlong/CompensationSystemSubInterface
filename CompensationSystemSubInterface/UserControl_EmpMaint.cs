@@ -154,6 +154,9 @@ namespace CompensationSystemSubInterface {
             dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
             dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font("微软雅黑", 12F, FontStyle.Bold);
 
+            // 使用 DPI 缩放列宽
+            int scaledWidth = DpiHelper.ScaleWidth(this, 100);
+
             // 设置列属性
             foreach (DataGridViewColumn col in dgvSalary.Columns) {
                 // 隐藏 ID 列
@@ -161,6 +164,9 @@ namespace CompensationSystemSubInterface {
                     col.Visible = false;
                     continue;
                 }
+
+                // 设置 DPI 缩放列宽
+                col.Width = scaledWidth;
 
                 // 居中对齐
                 col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -172,6 +178,13 @@ namespace CompensationSystemSubInterface {
                     col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
             }
+
+            // 特殊列宽度调整（证件号码、工资卡号需要更宽）
+            int wideColumnWidth = DpiHelper.ScaleWidth(this, 200);
+            int phoneColumnWidth = DpiHelper.ScaleWidth(this, 120);
+            if (dgvSalary.Columns["证件号码"] != null) dgvSalary.Columns["证件号码"].Width = wideColumnWidth;
+            if (dgvSalary.Columns["联系电话"] != null) dgvSalary.Columns["联系电话"].Width = phoneColumnWidth;
+            if (dgvSalary.Columns["工资卡号"] != null) dgvSalary.Columns["工资卡号"].Width = wideColumnWidth;
 
             // 冻结前4列（员工编号, 部门, 职务, 姓名）
             if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].Frozen = true;

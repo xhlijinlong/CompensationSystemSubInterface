@@ -248,13 +248,19 @@ namespace CompensationSystemSubInterface {
             dgvSalary.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
             dgvSalary.ColumnHeadersDefaultCellStyle.Font = new Font("微软雅黑", 12F, FontStyle.Bold);
 
+            // 使用 DPI 缩放列宽
+            int scaledWidth = DpiHelper.ScaleWidth(this, 100);
 
+            // 设置列属性
             foreach (DataGridViewColumn col in dgvSalary.Columns) {
                 // 隐藏不必要的列
                 if (col.Name == "id" || col.Name == "ygid") {
                     col.Visible = false;
                     continue;
                 }
+
+                // 设置 DPI 缩放列宽
+                col.Width = scaledWidth;
 
                 col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter; // 表头居中
                 col.SortMode = DataGridViewColumnSortMode.NotSortable; // 禁用排序
