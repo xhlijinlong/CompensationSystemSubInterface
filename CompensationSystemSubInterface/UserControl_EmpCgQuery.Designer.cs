@@ -43,6 +43,7 @@
             this.btnCondition = new System.Windows.Forms.Button();
             this.btnQuery = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
+            this.btnWithdraw = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -93,6 +94,7 @@
             this.flpnlTop.Controls.Add(this.btnPost);
             this.flpnlTop.Controls.Add(this.btnCondition);
             this.flpnlTop.Controls.Add(this.btnQuery);
+            this.flpnlTop.Controls.Add(this.btnWithdraw);
             this.flpnlTop.Controls.Add(this.btnExport);
             this.flpnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.flpnlTop.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -275,7 +277,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(968, 16);
+            this.btnExport.Location = new System.Drawing.Point(1029, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);
@@ -283,6 +285,18 @@
             this.btnExport.Text = "导出Excel";
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // btnWithdraw
+            // 
+            this.btnWithdraw.BackColor = System.Drawing.Color.AliceBlue;
+            this.btnWithdraw.Location = new System.Drawing.Point(968, 16);
+            this.btnWithdraw.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnWithdraw.Name = "btnWithdraw";
+            this.btnWithdraw.Size = new System.Drawing.Size(55, 30);
+            this.btnWithdraw.TabIndex = 17;
+            this.btnWithdraw.Text = "撤销";
+            this.btnWithdraw.UseVisualStyleBackColor = false;
+            this.btnWithdraw.Click += new System.EventHandler(this.btnWithdraw_Click);
             // 
             // UserControl_EmpCgQuery
             // 
@@ -325,5 +339,6 @@
         private System.Windows.Forms.Button btnDept;
         private System.Windows.Forms.Button btnSeq;
         private System.Windows.Forms.Button btnPost;
+        private System.Windows.Forms.Button btnWithdraw;
     }
 }

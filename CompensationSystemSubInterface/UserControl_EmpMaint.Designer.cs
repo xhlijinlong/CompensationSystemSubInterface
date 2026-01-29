@@ -43,6 +43,7 @@
             this.btnMaint = new System.Windows.Forms.Button();
             this.btnCg = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -56,7 +57,7 @@
             this.pnlBody.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnlBody.Name = "pnlBody";
             this.pnlBody.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.pnlBody.Size = new System.Drawing.Size(1200, 540);
+            this.pnlBody.Size = new System.Drawing.Size(1400, 540);
             this.pnlBody.TabIndex = 1;
             // 
             // dgvSalary
@@ -72,7 +73,7 @@
             this.dgvSalary.ReadOnly = true;
             this.dgvSalary.RowTemplate.Height = 23;
             this.dgvSalary.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSalary.Size = new System.Drawing.Size(1188, 530);
+            this.dgvSalary.Size = new System.Drawing.Size(1388, 530);
             this.dgvSalary.TabIndex = 0;
             // 
             // flpnlTop
@@ -91,6 +92,7 @@
             this.flpnlTop.Controls.Add(this.btnTitleLevel);
             this.flpnlTop.Controls.Add(this.btnCondition);
             this.flpnlTop.Controls.Add(this.btnQuery);
+            this.flpnlTop.Controls.Add(this.btnAdd);
             this.flpnlTop.Controls.Add(this.btnMaint);
             this.flpnlTop.Controls.Add(this.btnCg);
             this.flpnlTop.Controls.Add(this.btnExport);
@@ -100,7 +102,7 @@
             this.flpnlTop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.flpnlTop.Name = "flpnlTop";
             this.flpnlTop.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.flpnlTop.Size = new System.Drawing.Size(1200, 60);
+            this.flpnlTop.Size = new System.Drawing.Size(1400, 60);
             this.flpnlTop.TabIndex = 0;
             // 
             // lbName
@@ -258,7 +260,7 @@
             // btnMaint
             // 
             this.btnMaint.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnMaint.Location = new System.Drawing.Point(1014, 16);
+            this.btnMaint.Location = new System.Drawing.Point(1075, 16);
             this.btnMaint.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnMaint.Name = "btnMaint";
             this.btnMaint.Size = new System.Drawing.Size(55, 30);
@@ -270,7 +272,7 @@
             // btnCg
             // 
             this.btnCg.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnCg.Location = new System.Drawing.Point(1075, 16);
+            this.btnCg.Location = new System.Drawing.Point(1136, 16);
             this.btnCg.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCg.Name = "btnCg";
             this.btnCg.Size = new System.Drawing.Size(55, 30);
@@ -281,7 +283,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(6, 68);
+            this.btnExport.Location = new System.Drawing.Point(1197, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);
@@ -289,6 +291,18 @@
             this.btnExport.Text = "导出Excel";
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.BackColor = System.Drawing.Color.AliceBlue;
+            this.btnAdd.Location = new System.Drawing.Point(1014, 16);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(55, 30);
+            this.btnAdd.TabIndex = 26;
+            this.btnAdd.Text = "新增";
+            this.btnAdd.UseVisualStyleBackColor = false;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // UserControl_EmpMaint
             // 
@@ -300,7 +314,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "UserControl_EmpMaint";
-            this.Size = new System.Drawing.Size(1200, 600);
+            this.Size = new System.Drawing.Size(1400, 600);
             this.Load += new System.EventHandler(this.UserControl_EmpMaint_Load);
             this.pnlBody.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).EndInit();
@@ -331,5 +345,6 @@
         private System.Windows.Forms.Button btnDegree;
         private System.Windows.Forms.Button btnTitleLevel;
         private System.Windows.Forms.Button btnChineseZodiac;
+        private System.Windows.Forms.Button btnAdd;
     }
 }

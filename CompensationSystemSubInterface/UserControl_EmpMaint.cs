@@ -542,5 +542,9 @@ namespace CompensationSystemSubInterface {
         private void btnChineseZodiac_Click(object sender, EventArgs e) {
             _popupZodiac?.Show(btnChineseZodiac, 0, btnChineseZodiac.Height);
         }
+
+        private void btnAdd_Click(object sender, EventArgs e) {
+
+        }
     }
 }

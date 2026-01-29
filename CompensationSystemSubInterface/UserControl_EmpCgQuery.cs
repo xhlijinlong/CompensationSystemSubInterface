@@ -339,5 +339,9 @@ namespace CompensationSystemSubInterface {
         private void btnPost_Click(object sender, EventArgs e) {
             _popupPost?.Show(btnPost, 0, btnPost.Height);
         }
+
+        private void btnWithdraw_Click(object sender, EventArgs e) {
+
+        }
     }
 }
