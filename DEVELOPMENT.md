@@ -113,17 +113,26 @@
 
 ### 待开发需求
 
-1. 员工信息管理中，员工表的列按照指定顺序查询展示
-   涉及页面 UserControl_EmpMaint UserControl_EmpQuery UserControl_EmpRsQuery(离职日期保持最后一列位置不变)
-   员工编号 部门 职务 姓名 性别 民族 政治面貌 学历 学位 出生日期 参加工作时间 入社时间 任现岗位时间 证件号码 专业技术 职称等级 取得时间 专业技能 技能时间 序列 层级 属相 年龄 联系电话 工资卡号
-
-2. 还有2个工资统计中，把姓名和编号列的查询展示顺序对调一下
-   涉及页面 UserControl_SalaryQuery UserControl_SalaryStatistics
-
-3. 表格中的字体和页面窗体上的字体统一调整为 微软雅黑 12pt
-   涉及页面 UserControl_EmpMaint UserControl_EmpQuery UserControl_EmpRsQuery UserControl_PfmcQuery UserControl_EmpCgQuery UserControl_SalaryQuery UserControl_SalaryStatistics
-
-4. 表格列宽显示过窄的问题
+1.变动
+ 1.1 变动可撤回某员工的最新的一条变动记录
+    (涉及到两种情况,一种是变动时间还没到,另一种是变动时间已经到了,两种情况的撤回逻辑不同)
+ 1.2 到达变动时间才做修改员工信息表操作
+    (当前是保存变更信息的时候就修改了员工信息表,我想的是程序设置一个定时任务,在每天凌晨的时候检查变动数据,最好是使用数据库的时间进行查询,防止用户修改本地时间)
+ 1.3 变动增加入职选项,入职的逻辑与平调一致
+2.新增
+ 2.1 增加入职按钮,填写员工基本信息完成信息保存(基本信息就按照修改员工信息的界面来设计,不同的是所有的字段都需要用户填写,时间字段都先默认当前时间,用户可以选择修改)
+    不需要填写的字段:
+    字段名	初始值	备注
+    zaizhi	1	在职
+    zaigang	1	在岗
+    fanpin	0	返聘
+    jiediao	0	借调
+    shiyong	0	试用
+    yjbys	0	应届毕业生
+    kaoqin	1	是否读取考勤信息
+    xinchou	1	是否计算薪酬信息
+    xuhao	序号读取当前最大序号+1即可
+ 
 
 ## 潜在问题记录
 

@@ -113,7 +113,7 @@
             this.btnYear.Location = new System.Drawing.Point(137, 16);
             this.btnYear.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnYear.Name = "btnYear";
-            this.btnYear.Size = new System.Drawing.Size(55, 30);
+            this.btnYear.Size = new System.Drawing.Size(60, 30);
             this.btnYear.TabIndex = 14;
             this.btnYear.Text = "年度";
             this.btnYear.UseVisualStyleBackColor = true;
@@ -121,10 +121,10 @@
             // 
             // btnRslt
             // 
-            this.btnRslt.Location = new System.Drawing.Point(198, 16);
+            this.btnRslt.Location = new System.Drawing.Point(203, 16);
             this.btnRslt.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnRslt.Name = "btnRslt";
-            this.btnRslt.Size = new System.Drawing.Size(55, 30);
+            this.btnRslt.Size = new System.Drawing.Size(60, 30);
             this.btnRslt.TabIndex = 15;
             this.btnRslt.Text = "结果";
             this.btnRslt.UseVisualStyleBackColor = true;
@@ -132,10 +132,10 @@
             // 
             // btnSeq
             // 
-            this.btnSeq.Location = new System.Drawing.Point(259, 16);
+            this.btnSeq.Location = new System.Drawing.Point(269, 16);
             this.btnSeq.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnSeq.Name = "btnSeq";
-            this.btnSeq.Size = new System.Drawing.Size(55, 30);
+            this.btnSeq.Size = new System.Drawing.Size(60, 30);
             this.btnSeq.TabIndex = 16;
             this.btnSeq.Text = "序列";
             this.btnSeq.UseVisualStyleBackColor = true;
@@ -143,10 +143,10 @@
             // 
             // btnDept
             // 
-            this.btnDept.Location = new System.Drawing.Point(320, 16);
+            this.btnDept.Location = new System.Drawing.Point(335, 16);
             this.btnDept.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnDept.Name = "btnDept";
-            this.btnDept.Size = new System.Drawing.Size(55, 30);
+            this.btnDept.Size = new System.Drawing.Size(60, 30);
             this.btnDept.TabIndex = 17;
             this.btnDept.Text = "部门";
             this.btnDept.UseVisualStyleBackColor = true;
@@ -154,10 +154,10 @@
             // 
             // btnPost
             // 
-            this.btnPost.Location = new System.Drawing.Point(381, 16);
+            this.btnPost.Location = new System.Drawing.Point(401, 16);
             this.btnPost.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnPost.Name = "btnPost";
-            this.btnPost.Size = new System.Drawing.Size(55, 30);
+            this.btnPost.Size = new System.Drawing.Size(60, 30);
             this.btnPost.TabIndex = 18;
             this.btnPost.Text = "职务";
             this.btnPost.UseVisualStyleBackColor = true;
@@ -165,7 +165,7 @@
             // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(442, 16);
+            this.btnCondition.Location = new System.Drawing.Point(467, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
             this.btnCondition.Size = new System.Drawing.Size(90, 30);
@@ -177,7 +177,7 @@
             // btnQuery
             // 
             this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnQuery.Location = new System.Drawing.Point(538, 16);
+            this.btnQuery.Location = new System.Drawing.Point(563, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(55, 30);
@@ -188,7 +188,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(599, 16);
+            this.btnExport.Location = new System.Drawing.Point(624, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);
@@ -201,6 +201,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.Controls.Add(this.pnlBody);
             this.Controls.Add(this.flpnlTop);
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
