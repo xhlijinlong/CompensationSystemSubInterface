@@ -302,6 +302,7 @@
             this.btnAdd.TabIndex = 26;
             this.btnAdd.Text = "新增";
             this.btnAdd.UseVisualStyleBackColor = false;
+            this.btnAdd.Visible = false;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // UserControl_EmpMaint

@@ -296,6 +296,7 @@
             this.btnWithdraw.TabIndex = 17;
             this.btnWithdraw.Text = "撤销";
             this.btnWithdraw.UseVisualStyleBackColor = false;
+            this.btnWithdraw.Visible = false;
             this.btnWithdraw.Click += new System.EventHandler(this.btnWithdraw_Click);
             // 
             // UserControl_EmpCgQuery
