@@ -168,7 +168,7 @@
             this.btnCondition.Location = new System.Drawing.Point(467, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
-            this.btnCondition.Size = new System.Drawing.Size(90, 30);
+            this.btnCondition.Size = new System.Drawing.Size(95, 30);
             this.btnCondition.TabIndex = 12;
             this.btnCondition.Text = "员工设置";
             this.btnCondition.UseVisualStyleBackColor = true;
@@ -177,7 +177,7 @@
             // btnQuery
             // 
             this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnQuery.Location = new System.Drawing.Point(563, 16);
+            this.btnQuery.Location = new System.Drawing.Point(568, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(55, 30);
@@ -188,7 +188,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(624, 16);
+            this.btnExport.Location = new System.Drawing.Point(629, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);

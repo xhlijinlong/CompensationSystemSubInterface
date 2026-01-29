@@ -257,7 +257,7 @@
             this.btnCondition.Location = new System.Drawing.Point(811, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
-            this.btnCondition.Size = new System.Drawing.Size(90, 30);
+            this.btnCondition.Size = new System.Drawing.Size(95, 30);
             this.btnCondition.TabIndex = 12;
             this.btnCondition.Text = "员工设置";
             this.btnCondition.UseVisualStyleBackColor = true;
@@ -266,7 +266,7 @@
             // btnQuery
             // 
             this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnQuery.Location = new System.Drawing.Point(907, 16);
+            this.btnQuery.Location = new System.Drawing.Point(912, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(55, 30);
@@ -277,7 +277,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(1029, 16);
+            this.btnExport.Location = new System.Drawing.Point(1034, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);
@@ -289,7 +289,7 @@
             // btnWithdraw
             // 
             this.btnWithdraw.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnWithdraw.Location = new System.Drawing.Point(968, 16);
+            this.btnWithdraw.Location = new System.Drawing.Point(973, 16);
             this.btnWithdraw.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnWithdraw.Name = "btnWithdraw";
             this.btnWithdraw.Size = new System.Drawing.Size(55, 30);

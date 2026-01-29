@@ -195,7 +195,7 @@
             this.btnPS.Location = new System.Drawing.Point(533, 16);
             this.btnPS.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnPS.Name = "btnPS";
-            this.btnPS.Size = new System.Drawing.Size(90, 30);
+            this.btnPS.Size = new System.Drawing.Size(95, 30);
             this.btnPS.TabIndex = 21;
             this.btnPS.Text = "政治面貌";
             this.btnPS.UseVisualStyleBackColor = true;
@@ -203,7 +203,7 @@
             // 
             // btnEducation
             // 
-            this.btnEducation.Location = new System.Drawing.Point(629, 16);
+            this.btnEducation.Location = new System.Drawing.Point(634, 16);
             this.btnEducation.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnEducation.Name = "btnEducation";
             this.btnEducation.Size = new System.Drawing.Size(60, 30);
@@ -214,7 +214,7 @@
             // 
             // btnDegree
             // 
-            this.btnDegree.Location = new System.Drawing.Point(695, 16);
+            this.btnDegree.Location = new System.Drawing.Point(700, 16);
             this.btnDegree.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnDegree.Name = "btnDegree";
             this.btnDegree.Size = new System.Drawing.Size(60, 30);
@@ -225,10 +225,10 @@
             // 
             // btnTitleLevel
             // 
-            this.btnTitleLevel.Location = new System.Drawing.Point(761, 16);
+            this.btnTitleLevel.Location = new System.Drawing.Point(766, 16);
             this.btnTitleLevel.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnTitleLevel.Name = "btnTitleLevel";
-            this.btnTitleLevel.Size = new System.Drawing.Size(90, 30);
+            this.btnTitleLevel.Size = new System.Drawing.Size(95, 30);
             this.btnTitleLevel.TabIndex = 24;
             this.btnTitleLevel.Text = "职称等级";
             this.btnTitleLevel.UseVisualStyleBackColor = true;
@@ -236,10 +236,10 @@
             // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(857, 16);
+            this.btnCondition.Location = new System.Drawing.Point(867, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
-            this.btnCondition.Size = new System.Drawing.Size(90, 30);
+            this.btnCondition.Size = new System.Drawing.Size(95, 30);
             this.btnCondition.TabIndex = 12;
             this.btnCondition.Text = "员工设置";
             this.btnCondition.UseVisualStyleBackColor = true;
@@ -248,7 +248,7 @@
             // btnQuery
             // 
             this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnQuery.Location = new System.Drawing.Point(953, 16);
+            this.btnQuery.Location = new System.Drawing.Point(968, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(55, 30);
@@ -260,7 +260,7 @@
             // btnMaint
             // 
             this.btnMaint.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnMaint.Location = new System.Drawing.Point(1075, 16);
+            this.btnMaint.Location = new System.Drawing.Point(1090, 16);
             this.btnMaint.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnMaint.Name = "btnMaint";
             this.btnMaint.Size = new System.Drawing.Size(55, 30);
@@ -272,7 +272,7 @@
             // btnCg
             // 
             this.btnCg.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnCg.Location = new System.Drawing.Point(1136, 16);
+            this.btnCg.Location = new System.Drawing.Point(1151, 16);
             this.btnCg.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCg.Name = "btnCg";
             this.btnCg.Size = new System.Drawing.Size(55, 30);
@@ -283,7 +283,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(1197, 16);
+            this.btnExport.Location = new System.Drawing.Point(1212, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);
@@ -295,7 +295,7 @@
             // btnAdd
             // 
             this.btnAdd.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnAdd.Location = new System.Drawing.Point(1014, 16);
+            this.btnAdd.Location = new System.Drawing.Point(1029, 16);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(55, 30);
