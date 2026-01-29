@@ -251,7 +251,7 @@
             this.btnQuery.Location = new System.Drawing.Point(968, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
-            this.btnQuery.Size = new System.Drawing.Size(55, 30);
+            this.btnQuery.Size = new System.Drawing.Size(60, 30);
             this.btnQuery.TabIndex = 11;
             this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = false;
@@ -260,10 +260,10 @@
             // btnMaint
             // 
             this.btnMaint.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnMaint.Location = new System.Drawing.Point(1090, 16);
+            this.btnMaint.Location = new System.Drawing.Point(1100, 16);
             this.btnMaint.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnMaint.Name = "btnMaint";
-            this.btnMaint.Size = new System.Drawing.Size(55, 30);
+            this.btnMaint.Size = new System.Drawing.Size(60, 30);
             this.btnMaint.TabIndex = 14;
             this.btnMaint.Text = "修改";
             this.btnMaint.UseVisualStyleBackColor = false;
@@ -272,10 +272,10 @@
             // btnCg
             // 
             this.btnCg.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnCg.Location = new System.Drawing.Point(1151, 16);
+            this.btnCg.Location = new System.Drawing.Point(1166, 16);
             this.btnCg.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCg.Name = "btnCg";
-            this.btnCg.Size = new System.Drawing.Size(55, 30);
+            this.btnCg.Size = new System.Drawing.Size(60, 30);
             this.btnCg.TabIndex = 15;
             this.btnCg.Text = "变动";
             this.btnCg.UseVisualStyleBackColor = false;
@@ -283,7 +283,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(1212, 16);
+            this.btnExport.Location = new System.Drawing.Point(1232, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);
@@ -295,10 +295,10 @@
             // btnAdd
             // 
             this.btnAdd.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnAdd.Location = new System.Drawing.Point(1029, 16);
+            this.btnAdd.Location = new System.Drawing.Point(1034, 16);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(55, 30);
+            this.btnAdd.Size = new System.Drawing.Size(60, 30);
             this.btnAdd.TabIndex = 26;
             this.btnAdd.Text = "新增";
             this.btnAdd.UseVisualStyleBackColor = false;

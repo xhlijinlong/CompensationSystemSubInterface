@@ -180,7 +180,7 @@
             this.btnQuery.Location = new System.Drawing.Point(568, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
-            this.btnQuery.Size = new System.Drawing.Size(55, 30);
+            this.btnQuery.Size = new System.Drawing.Size(60, 30);
             this.btnQuery.TabIndex = 11;
             this.btnQuery.Text = "查询";
             this.btnQuery.UseVisualStyleBackColor = false;
@@ -188,7 +188,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(629, 16);
+            this.btnExport.Location = new System.Drawing.Point(634, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);
