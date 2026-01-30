@@ -185,6 +185,13 @@ namespace CompensationSystemSubInterface {
             if (dgvSalary.Columns["证件号码"] != null) dgvSalary.Columns["证件号码"].Width = wideColumnWidth;
             if (dgvSalary.Columns["联系电话"] != null) dgvSalary.Columns["联系电话"].Width = phoneColumnWidth;
             if (dgvSalary.Columns["工资卡号"] != null) dgvSalary.Columns["工资卡号"].Width = wideColumnWidth;
+            if (dgvSalary.Columns["出生日期"] != null) dgvSalary.Columns["出生日期"].Width = phoneColumnWidth;
+            if (dgvSalary.Columns["参加工作时间"] != null) dgvSalary.Columns["参加工作时间"].Width = phoneColumnWidth;
+            if (dgvSalary.Columns["入社时间"] != null) dgvSalary.Columns["入社时间"].Width = phoneColumnWidth;
+            if (dgvSalary.Columns["任现岗位时间"] != null) dgvSalary.Columns["任现岗位时间"].Width = phoneColumnWidth;
+            if (dgvSalary.Columns["取得时间"] != null) dgvSalary.Columns["取得时间"].Width = phoneColumnWidth;
+            if (dgvSalary.Columns["技能时间"] != null) dgvSalary.Columns["技能时间"].Width = phoneColumnWidth;
+            if (dgvSalary.Columns["专业技能"] != null) dgvSalary.Columns["专业技能"].Width = phoneColumnWidth;
 
             // 冻结前4列（员工编号, 部门, 职务, 姓名）
             if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].Frozen = true;

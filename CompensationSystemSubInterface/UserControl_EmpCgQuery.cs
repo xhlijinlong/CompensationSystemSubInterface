@@ -271,6 +271,11 @@ namespace CompensationSystemSubInterface {
                 }
             }
 
+            // 特殊列宽度调整（日期时间列使用与联系电话相同的宽度）
+            int phoneColumnWidth = DpiHelper.ScaleWidth(this, 120);
+            if (dgvSalary.Columns["变动时间"] != null) dgvSalary.Columns["变动时间"].Width = phoneColumnWidth;
+            if (dgvSalary.Columns["起薪时间"] != null) dgvSalary.Columns["起薪时间"].Width = phoneColumnWidth;
+
             // 设置前2列显示顺序：姓名, 编号
             if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].DisplayIndex = 0;
             if (dgvSalary.Columns["编号"] != null) dgvSalary.Columns["编号"].DisplayIndex = 1;
