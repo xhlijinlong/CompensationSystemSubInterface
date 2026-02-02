@@ -610,7 +610,10 @@ namespace CompensationSystemSubInterface.Services {
             jinengsj = @SkillDate,
 
             shenfenzheng = @IdCard,
-            gongzikh = @BankCard
+            gongzikh = @BankCard,
+
+            shiyong = @IsProbation,
+            yjbys = @IsFreshGraduate
         WHERE id = @Id";
 
             // 3. 执行更新 (补全参数)
@@ -640,7 +643,10 @@ namespace CompensationSystemSubInterface.Services {
                 new SqlParameter("@SkillDate", emp.SkillDate.HasValue ? emp.SkillDate.Value.ToString("yyyy-MM-dd") : (object)DBNull.Value),
 
                 new SqlParameter("@IdCard", encIdCard),
-                new SqlParameter("@BankCard", encBankCard)
+                new SqlParameter("@BankCard", encBankCard),
+
+                new SqlParameter("@IsProbation", emp.IsProbation ? 1 : 0),
+                new SqlParameter("@IsFreshGraduate", emp.IsFreshGraduate ? 1 : 0)
             );
         }
 
@@ -823,7 +829,11 @@ namespace CompensationSystemSubInterface.Services {
                 Phone = row["lianxidh"].ToString(),
                 BankCard = row["gongzikh"].ToString(), // 此时已解密
                 HujiAddr = row["hujidz"].ToString(),
-                CurrentAddr = row["xianzhuzhi"].ToString()
+                CurrentAddr = row["xianzhuzhi"].ToString(),
+
+                // 状态标记
+                IsProbation = row["shiyong"] != DBNull.Value && Convert.ToBoolean(row["shiyong"]),
+                IsFreshGraduate = row["yjbys"] != DBNull.Value && Convert.ToBoolean(row["yjbys"])
             };
         }
 
@@ -895,6 +905,107 @@ namespace CompensationSystemSubInterface.Services {
             }
 
             return dt;
+        }
+
+        /// <summary>
+        /// 获取员工表当前最大ID
+        /// </summary>
+        /// <returns>当前最大ID，如果表为空则返回0</returns>
+        public int GetMaxId() {
+            string sql = "SELECT ISNULL(MAX(id), 0) FROM ZX_config_yg";
+            object result = SqlHelper.ExecuteScalar(sql);
+            return Convert.ToInt32(result);
+        }
+
+        /// <summary>
+        /// 获取员工表当前最大序号
+        /// </summary>
+        /// <returns>当前最大序号，如果表为空则返回0</returns>
+        public int GetMaxXuhao() {
+            string sql = "SELECT ISNULL(MAX(xuhao), 0) FROM ZX_config_yg";
+            object result = SqlHelper.ExecuteScalar(sql);
+            return Convert.ToInt32(result);
+        }
+
+        /// <summary>
+        /// 插入新员工
+        /// 自动生成新ID和序号，并设置默认字段值
+        /// </summary>
+        /// <param name="emp">员工详细信息对象</param>
+        public void InsertEmployee(EmpDetail emp) {
+            // 1. 获取新ID和序号
+            int newId = GetMaxId() + 1;
+            int newXuhao = GetMaxXuhao() + 1;
+
+            // 2. 加密敏感字段
+            string encIdCard = "";
+            if (!string.IsNullOrEmpty(emp.IdCard)) {
+                encIdCard = _sm4.Encrypt_ECB_Str(emp.IdCard.Trim());
+            }
+            string encBankCard = "";
+            if (!string.IsNullOrEmpty(emp.BankCard)) {
+                encBankCard = _sm4.Encrypt_ECB_Str(emp.BankCard.Trim());
+            }
+
+            // 3. 构建INSERT SQL (包含默认字段)
+            string sql = @"
+        INSERT INTO ZX_config_yg (
+            id, yuangongbh, xingming, xingbie, minzu, zhengzhimm,
+            chushengrq, nianling, shuxing, shenfenzheng,
+            bmid, xlid, gwid, cjid,
+            gongzuosj, rusisj, gangweisj,
+            xueli, xuewei, zhuanyejs, zhichengdj, zhichengsj, zhuanyejn, jinengsj,
+            lianxidh, gongzikh,
+            shiyong, yjbys,
+            zaizhi, zaigang, fanpin, jiediao, kaoqin, xinchou, xuhao
+        ) VALUES (
+            @Id, @EmpNo, @Name, @Gender, @Nation, @Politic,
+            @Birthday, @Age, @Zodiac, @IdCard,
+            @DeptId, @SeqId, @JobId, @LevelId,
+            @WorkStart, @JoinDate, @PostDate,
+            @Education, @Degree, @Tech, @TitleLevel, @TitleDate, @Skill, @SkillDate,
+            @Phone, @BankCard,
+            @IsProbation, @IsFreshGraduate,
+            1, 1, 0, 0, 1, 1, @Xuhao
+        )";
+
+            // 4. 执行插入
+            SqlHelper.ExecuteNonQuery(sql,
+                new SqlParameter("@Id", newId),
+                new SqlParameter("@EmpNo", emp.EmployeeNo ?? ""),
+                new SqlParameter("@Name", emp.Name ?? ""),
+                new SqlParameter("@Gender", emp.Gender ?? ""),
+                new SqlParameter("@Nation", emp.Nation ?? ""),
+                new SqlParameter("@Politic", emp.Politic ?? ""),
+                new SqlParameter("@Birthday", emp.Birthday ?? (object)DBNull.Value),
+                new SqlParameter("@Age", emp.Age),
+                new SqlParameter("@Zodiac", emp.Zodiac ?? ""),
+                new SqlParameter("@IdCard", encIdCard),
+
+                new SqlParameter("@DeptId", emp.DeptId ?? (object)DBNull.Value),
+                new SqlParameter("@SeqId", emp.SeqId ?? (object)DBNull.Value),
+                new SqlParameter("@JobId", emp.JobId ?? (object)DBNull.Value),
+                new SqlParameter("@LevelId", emp.LevelId ?? (object)DBNull.Value),
+
+                new SqlParameter("@WorkStart", emp.WorkStart ?? (object)DBNull.Value),
+                new SqlParameter("@JoinDate", emp.JoinDate ?? (object)DBNull.Value),
+                new SqlParameter("@PostDate", emp.PostDate ?? (object)DBNull.Value),
+
+                new SqlParameter("@Education", emp.Education ?? ""),
+                new SqlParameter("@Degree", emp.Degree ?? ""),
+                new SqlParameter("@Tech", emp.TechSpecialty ?? ""),
+                new SqlParameter("@TitleLevel", emp.TitleLevel ?? ""),
+                new SqlParameter("@TitleDate", emp.TitleDate.HasValue ? emp.TitleDate.Value.ToString("yyyy-MM-dd") : (object)DBNull.Value),
+                new SqlParameter("@Skill", emp.Skill ?? ""),
+                new SqlParameter("@SkillDate", emp.SkillDate.HasValue ? emp.SkillDate.Value.ToString("yyyy-MM-dd") : (object)DBNull.Value),
+
+                new SqlParameter("@Phone", emp.Phone ?? ""),
+                new SqlParameter("@BankCard", encBankCard),
+
+                new SqlParameter("@IsProbation", emp.IsProbation ? 1 : 0),
+                new SqlParameter("@IsFreshGraduate", emp.IsFreshGraduate ? 1 : 0),
+                new SqlParameter("@Xuhao", newXuhao)
+            );
         }
         //
     }

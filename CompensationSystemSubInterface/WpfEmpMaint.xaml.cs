@@ -136,6 +136,9 @@ namespace CompensationSystemSubInterface {
                 dpJoinDate.SelectedDate = _currentEmp.JoinDate;
                 dpPostDate.SelectedDate = _currentEmp.PostDate;
 
+                // 试用标记
+                cbProbation.IsChecked = _currentEmp.IsProbation;
+
                 // === 3. 学历技能 (文本框赋值) ===
                 txtEducation.Text = _currentEmp.Education;
                 txtDegree.Text = _currentEmp.Degree;
@@ -144,6 +147,9 @@ namespace CompensationSystemSubInterface {
                 dpTitleDate.SelectedDate = _currentEmp.TitleDate;
                 txtSkill.Text = _currentEmp.Skill;
                 dpSkillDate.SelectedDate = _currentEmp.SkillDate;
+
+                // 应届生标记
+                cbFreshGraduate.IsChecked = _currentEmp.IsFreshGraduate;
 
                 // === 4. 联系 ===
                 txtPhone.Text = _currentEmp.Phone;
@@ -193,7 +199,11 @@ namespace CompensationSystemSubInterface {
                     TitleLevel = txtTitleLevel.Text,
                     TitleDate = dpTitleDate.SelectedDate,
                     Skill = txtSkill.Text,
-                    SkillDate = dpSkillDate.SelectedDate
+                    SkillDate = dpSkillDate.SelectedDate,
+
+                    // 状态标记
+                    IsProbation = cbProbation.IsChecked == true,
+                    IsFreshGraduate = cbFreshGraduate.IsChecked == true
                 };
 
                 // 2. 调用 Service 保存

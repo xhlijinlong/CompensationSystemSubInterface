@@ -42,8 +42,8 @@
             this.btnPost = new System.Windows.Forms.Button();
             this.btnCondition = new System.Windows.Forms.Button();
             this.btnQuery = new System.Windows.Forms.Button();
-            this.btnExport = new System.Windows.Forms.Button();
             this.btnWithdraw = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -275,17 +275,6 @@
             this.btnQuery.UseVisualStyleBackColor = false;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
-            // btnExport
-            // 
-            this.btnExport.Location = new System.Drawing.Point(1044, 16);
-            this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(95, 30);
-            this.btnExport.TabIndex = 13;
-            this.btnExport.Text = "导出Excel";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
             // btnWithdraw
             // 
             this.btnWithdraw.BackColor = System.Drawing.Color.AliceBlue;
@@ -296,8 +285,18 @@
             this.btnWithdraw.TabIndex = 17;
             this.btnWithdraw.Text = "撤销";
             this.btnWithdraw.UseVisualStyleBackColor = false;
-            this.btnWithdraw.Visible = false;
             this.btnWithdraw.Click += new System.EventHandler(this.btnWithdraw_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Location = new System.Drawing.Point(1044, 16);
+            this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(95, 30);
+            this.btnExport.TabIndex = 13;
+            this.btnExport.Text = "导出Excel";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // UserControl_EmpCgQuery
             // 

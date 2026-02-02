@@ -40,10 +40,10 @@
             this.btnTitleLevel = new System.Windows.Forms.Button();
             this.btnCondition = new System.Windows.Forms.Button();
             this.btnQuery = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.btnMaint = new System.Windows.Forms.Button();
             this.btnCg = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
-            this.btnAdd = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -257,6 +257,18 @@
             this.btnQuery.UseVisualStyleBackColor = false;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
+            // btnAdd
+            // 
+            this.btnAdd.BackColor = System.Drawing.Color.AliceBlue;
+            this.btnAdd.Location = new System.Drawing.Point(1034, 16);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(60, 30);
+            this.btnAdd.TabIndex = 26;
+            this.btnAdd.Text = "新增";
+            this.btnAdd.UseVisualStyleBackColor = false;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
             // btnMaint
             // 
             this.btnMaint.BackColor = System.Drawing.Color.AliceBlue;
@@ -291,19 +303,6 @@
             this.btnExport.Text = "导出Excel";
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnAdd.Location = new System.Drawing.Point(1034, 16);
-            this.btnAdd.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(60, 30);
-            this.btnAdd.TabIndex = 26;
-            this.btnAdd.Text = "新增";
-            this.btnAdd.UseVisualStyleBackColor = false;
-            this.btnAdd.Visible = false;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // UserControl_EmpMaint
             // 

@@ -21,6 +21,8 @@
   [newcj] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
   [wageStart] datetime  NULL,
   [wageEnd] varchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
+  [IsEffect] bit  NULL,
+  [DeleteType] bit  NULL,
   CONSTRAINT [PK_ZX_yuangong_change] PRIMARY KEY CLUSTERED ([id])
 WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
 ON [PRIMARY]
@@ -183,3 +185,17 @@ EXEC sp_addextendedproperty
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_yuangong_change',
 'COLUMN', N'wageEnd'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否已经生效(1生效0未生效)',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_yuangong_change',
+'COLUMN', N'IsEffect'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'是否删除或撤销(1删除0未删除)',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_yuangong_change',
+'COLUMN', N'DeleteType'

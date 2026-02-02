@@ -196,5 +196,15 @@ namespace CompensationSystemSubInterface.Models {
         /// 现住址
         /// </summary>
         public string CurrentAddr { get; set; }
+
+        /// <summary>
+        /// 是否试用期
+        /// </summary>
+        public bool IsProbation { get; set; }
+
+        /// <summary>
+        /// 是否应届毕业生
+        /// </summary>
+        public bool IsFreshGraduate { get; set; }
     }
 }

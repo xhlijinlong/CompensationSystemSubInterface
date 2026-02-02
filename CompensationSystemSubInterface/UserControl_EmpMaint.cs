@@ -550,8 +550,17 @@ namespace CompensationSystemSubInterface {
             _popupZodiac?.Show(btnChineseZodiac, 0, btnChineseZodiac.Height);
         }
 
+        /// <summary>
+        /// 入职按钮点击事件处理
+        /// 打开新员工入职窗口
+        /// </summary>
         private void btnAdd_Click(object sender, EventArgs e) {
+            WpfEmpAdd addWindow = new WpfEmpAdd();
+            bool? result = addWindow.ShowDialog();
 
+            if (result == true) {
+                PerformQuery(); // 刷新列表
+            }
         }
     }
 }

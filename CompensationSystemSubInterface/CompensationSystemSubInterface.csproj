@@ -209,6 +209,9 @@
     <Compile Include="Utilities\DpiHelper.cs" />
     <Compile Include="Utilities\ExcelHelper.cs" />
     <Compile Include="Utilities\SqlHelper.cs" />
+    <Compile Include="WpfEmpAdd.xaml.cs">
+      <DependentUpon>WpfEmpAdd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WpfFilterPanel.xaml.cs">
       <DependentUpon>WpfFilterPanel.xaml</DependentUpon>
     </Compile>
@@ -288,6 +291,10 @@
     <Content Include="Sql\ZX_config_yg.sql" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="WpfEmpAdd.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="WpfFilterPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

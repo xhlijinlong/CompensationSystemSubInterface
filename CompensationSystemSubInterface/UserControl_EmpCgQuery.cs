@@ -49,7 +49,7 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         public UserControl_EmpCgQuery() {
             InitializeComponent();
-            
+
             // 当控件销毁时关闭WPF弹窗
             this.HandleDestroyed += (s, e) => {
                 _wpfCondition?.Close();
@@ -70,10 +70,10 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void UserControl_EmpCgQuery_Load(object sender, EventArgs e) {
             if (this.DesignMode) return;
-            
+
             InitDateCombos();
             InitFilterControls(); // 初始化筛选控件数据
-            
+
             // 默认起止时间为今年1-12月
             int currentYear = DateTime.Now.Year;
             cbYear1.Text = currentYear.ToString();
@@ -163,7 +163,7 @@ namespace CompensationSystemSubInterface {
                 Child = treeContent,
                 Dock = DockStyle.Fill
             };
-            
+
             ToolStripControlHost tsHost = new ToolStripControlHost(host);
             tsHost.Margin = Padding.Empty;
             tsHost.Padding = Padding.Empty;
@@ -183,7 +183,7 @@ namespace CompensationSystemSubInterface {
         private void UpdateButtonText(Button btn, string name, WpfFilterPanel tree) {
             int count = tree.GetSelectedCount();
             bool isAll = tree.IsAllSelected();
-            
+
             if (count == 0) btn.Text = name;
             else if (isAll) btn.Text = name;
             else btn.Text = $"{name}*";
@@ -240,7 +240,7 @@ namespace CompensationSystemSubInterface {
         private void FormatGrid() {
             // 设置整体字体为微软雅黑 12pt
             dgvSalary.Font = new Font("微软雅黑", 12F, FontStyle.Regular);
-            
+
             // 统一表头样式
             dgvSalary.EnableHeadersVisualStyles = false;
             dgvSalary.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
@@ -295,11 +295,11 @@ namespace CompensationSystemSubInterface {
                     btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";
                     PerformQuery();
                 };
-                
+
                 _wpfCondition.Closed += (s, args) => {
                     _wpfCondition = null;
                 };
-                
+
                 _wpfCondition.Show();
             } else {
                 _wpfCondition.WindowState = System.Windows.WindowState.Normal;
@@ -346,7 +346,8 @@ namespace CompensationSystemSubInterface {
         }
 
         private void btnWithdraw_Click(object sender, EventArgs e) {
-
+            // 弹窗提示功能暂未实现
+            MessageBox.Show("该功能暂未实现。", "提示");
         }
     }
 }
