@@ -1,4 +1,4 @@
-using CompensationSystemSubInterface.Models;
+﻿using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Services;
 using System;
 using System.Collections.Generic;
@@ -113,6 +113,12 @@ namespace CompensationSystemSubInterface {
                 if (string.IsNullOrWhiteSpace(txtNameHeader.Text)) {
                     MessageBox.Show("请输入员工姓名");
                     txtNameHeader.Focus();
+                    return;
+                }
+
+                if (cbGender.SelectedValue == null) {
+                    MessageBox.Show("请选择性别");
+                    cbGender.Focus();
                     return;
                 }
 

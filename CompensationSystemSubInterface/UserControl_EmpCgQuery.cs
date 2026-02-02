@@ -346,7 +346,6 @@ namespace CompensationSystemSubInterface {
         }
 
         private void btnWithdraw_Click(object sender, EventArgs e) {
-            // 弹窗提示功能暂未实现
             MessageBox.Show("该功能暂未实现。", "提示");
         }
     }
