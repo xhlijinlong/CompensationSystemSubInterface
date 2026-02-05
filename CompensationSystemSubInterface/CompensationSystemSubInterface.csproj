@@ -270,6 +270,7 @@
   <ItemGroup>
     <Content Include="Libs\BouncyCastle.Crypto.dll" />
     <Content Include="Libs\Sm4Encode.dll" />
+    <Content Include="Sql\ZX_SalaryAuditBatches.sql" />
     <Content Include="Sql\部门信息查询.sql" />
     <Content Include="Sql\层级信息查询.sql" />
     <Content Include="Sql\薪资发放最新月份.sql" />

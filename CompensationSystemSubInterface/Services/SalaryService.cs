@@ -55,7 +55,7 @@ namespace CompensationSystemSubInterface.Services {
         /// </summary>
         /// <returns>最近的薪资月份；如果没有数据则返回 null</returns>
         public DateTime? GetLatestSalaryMonth() {
-            string sql = "SELECT TOP 1 SalaryMonth FROM ZX_SalaryHeaders ORDER BY SalaryMonth DESC";
+            string sql = "SELECT TOP 1 SalaryMonth FROM ZX_SalaryHeaders WHERE BatchId IN (3, 5) ORDER BY SalaryMonth DESC";
             object result = SqlHelper.ExecuteScalar(sql);
             if (result != null && result != DBNull.Value) return Convert.ToDateTime(result);
             return null;
@@ -96,7 +96,7 @@ namespace CompensationSystemSubInterface.Services {
                 JOIN ZX_config_xl xl ON h.SequenceId = xl.id
                 JOIN ZX_config_gw gw ON h.PositionId = gw.id
                 JOIN ZX_config_cj cj ON h.LevelId = cj.id
-                WHERE h.SalaryMonth BETWEEN @StartDate AND @EndDate
+                WHERE h.BatchId IN (3, 5) AND h.SalaryMonth BETWEEN @StartDate AND @EndDate
             ");
 
             List<SqlParameter> ps = new List<SqlParameter>();
