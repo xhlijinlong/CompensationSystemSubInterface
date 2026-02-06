@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>PRPRC.PaySys</id>
-    <version>1.10.0</version>
+    <version>1.11.0</version>
     <title>PaySys</title>
     <authors>LiJinLong</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
