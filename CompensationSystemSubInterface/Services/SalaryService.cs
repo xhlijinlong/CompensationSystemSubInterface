@@ -18,7 +18,7 @@ namespace CompensationSystemSubInterface.Services {
         private const string CAT_TECH = "专业技术人员";
         private const string CAT_ADMIN = "办事人员及有关人员";
         private const string CAT_PROD = "生产制造及有关人员";
-        
+
         // 人员类别显示顺序
         private static readonly string[] CATEGORY_ORDER = { CAT_MANAGER, CAT_TECH, CAT_ADMIN, CAT_PROD };
 
@@ -30,23 +30,23 @@ namespace CompensationSystemSubInterface.Services {
         /// <returns>人员类别名称，不属于4类则返回null</returns>
         private string GetPersonnelCategory(string deptName, string positionName) {
             bool isDeptManager = positionName == "部门主任" || positionName == "部门副主任";
-            
+
             // 领导班子(主任/副主任) 或 各部门的部门主任/副主任 → 中层及以上管理人员
             if (deptName == "领导班子" || isDeptManager)
                 return CAT_MANAGER;
-            
+
             // 技术部/资源事业部的非管理人员 → 专业技术人员
             if ((deptName == "技术部" || deptName == "资源事业部") && !isDeptManager)
                 return CAT_TECH;
-            
+
             // 综合管理部的非管理人员 → 办事人员
             if (deptName == "综合管理部" && !isDeptManager)
                 return CAT_ADMIN;
-            
+
             // 质量管控部/制作部/输出部的非管理人员 → 生产制造人员
             if ((deptName == "质量管控部" || deptName == "制作部" || deptName == "输出部") && !isDeptManager)
                 return CAT_PROD;
-            
+
             return null; // 不属于4类
         }
 
@@ -55,7 +55,7 @@ namespace CompensationSystemSubInterface.Services {
         /// </summary>
         /// <returns>最近的薪资月份；如果没有数据则返回 null</returns>
         public DateTime? GetLatestSalaryMonth() {
-            string sql = "SELECT TOP 1 SalaryMonth FROM ZX_SalaryHeaders WHERE BatchId IN (3, 5) ORDER BY SalaryMonth DESC";
+            string sql = "SELECT TOP 1 SalaryMonth FROM ZX_SalaryHeaders h JOIN ZX_SalaryAuditBatches ab ON h.BatchId = ab.BatchId WHERE ab.OverallStatus IN (3, 5) ORDER BY SalaryMonth DESC";
             object result = SqlHelper.ExecuteScalar(sql);
             if (result != null && result != DBNull.Value) return Convert.ToDateTime(result);
             return null;
@@ -96,7 +96,8 @@ namespace CompensationSystemSubInterface.Services {
                 JOIN ZX_config_xl xl ON h.SequenceId = xl.id
                 JOIN ZX_config_gw gw ON h.PositionId = gw.id
                 JOIN ZX_config_cj cj ON h.LevelId = cj.id
-                WHERE h.BatchId IN (3, 5) AND h.SalaryMonth BETWEEN @StartDate AND @EndDate
+                JOIN ZX_SalaryAuditBatches ab ON h.BatchId = ab.BatchId
+                WHERE ab.OverallStatus IN (3, 5) AND h.SalaryMonth BETWEEN @StartDate AND @EndDate
             ");
 
             List<SqlParameter> ps = new List<SqlParameter>();
@@ -262,7 +263,7 @@ namespace CompensationSystemSubInterface.Services {
 
                         if (showTotalColumn) row["TotalAmount"] = rowSum;
                         empRowTotal += rowSum;
-                        
+
                         // 累加到人员类别统计
                         string category = GetPersonnelCategory(deptName, row["PositionName"]?.ToString() ?? "");
                         if (category != null) {
@@ -277,7 +278,7 @@ namespace CompensationSystemSubInterface.Services {
                             }
                             if (showTotalColumn) categoryRowTotals[category] += rowSum;
                         }
-                        
+
                         dt.Rows.Add(row);
                     }
 
