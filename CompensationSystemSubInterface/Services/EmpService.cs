@@ -453,6 +453,7 @@ namespace CompensationSystemSubInterface.Services {
                 WHERE 
                     yg.id > 0
                     AND cg.changeTime BETWEEN @StartDate AND @EndDate
+                    AND (cg.DeleteType = 0 OR cg.DeleteType IS NULL)
             ");
 
             // 参数列表
@@ -692,18 +693,21 @@ namespace CompensationSystemSubInterface.Services {
                 conn.Open();
                 using (SqlTransaction trans = conn.BeginTransaction()) {
                     try {
-                        // 1. 插入变动记录 (补全 Old ID 和 New Name)
+                        // 判断变动时间是否为今天（使用数据库时间）
+                        bool isToday = changeTime.Date <= DateTime.Today;
+
+                        // 1. 插入变动记录 (包含 IsEffect 和 DeleteType)
                         string insertSql = @"
                     INSERT INTO ZX_yuangong_change 
                     (ygid, changeType, changeTime, 
                         oldbmid, oldbm, oldxlid, oldxl, oldzwid, oldzw, oldcjid, oldcj, 
                         newbmid, newbm, newxlid, newxl, newzwid, newzw, newcjid, newcj, 
-                        wageStart, wageEnd)
+                        wageStart, wageEnd, IsEffect, DeleteType)
                     VALUES 
                     (@YgId, @Type, @Time, 
                         @OldBmId, @OldBm, @OldXlId, @OldXl, @OldZwId, @OldZw, @OldCjId, @OldCj, 
                         @NewBmId, @NewBm, @NewXlId, @NewXl, @NewZwId, @NewZw, @NewCjId, @NewCj, 
-                        @WageStart, @WageEnd)";
+                        @WageStart, @WageEnd, @IsEffect, 0)";
 
                         SqlHelper.ExecuteNonQuery(trans, insertSql,
                             new SqlParameter("@YgId", empId),
@@ -711,7 +715,6 @@ namespace CompensationSystemSubInterface.Services {
                             new SqlParameter("@Time", changeTime),
 
                             // --- 原信息 (ID + Name) ---
-                            // 注意：ID可能是null，需要处理 DBNull
                             new SqlParameter("@OldBmId", oldBmId ?? (object)DBNull.Value),
                             new SqlParameter("@OldBm", oldBmName ?? ""),
                             new SqlParameter("@OldXlId", oldXlId ?? (object)DBNull.Value),
@@ -732,31 +735,34 @@ namespace CompensationSystemSubInterface.Services {
                             new SqlParameter("@NewCj", newCjName ?? ""),
 
                             new SqlParameter("@WageStart", wageStart ?? (object)DBNull.Value),
-                            new SqlParameter("@WageEnd", wageEnd ?? (object)DBNull.Value)
+                            new SqlParameter("@WageEnd", wageEnd ?? (object)DBNull.Value),
+                            new SqlParameter("@IsEffect", isToday ? 1 : 0)
                         );
 
-                        // 2. 更新员工主表 (逻辑不变) 增加 newChange = 1
-                        string updateSql = @"
-                    UPDATE ZX_config_yg 
-                    SET bmid=@Bm, xlid=@Xl, gwid=@Zw, cjid=@Cj, newChange=1 
-                    WHERE id=@Id";
-
-                        if (changeType == "离职") {
-                            updateSql = @"
+                        // 2. 仅当变动时间是今天（或已过去）才立即更新员工主表
+                        if (isToday) {
+                            string updateSql = @"
                         UPDATE ZX_config_yg 
-                        SET bmid=@Bm, xlid=@Xl, gwid=@Zw, cjid=@Cj, 
-                            zaizhi=0, lizhisj=@Time, newChange=1 
+                        SET bmid=@Bm, xlid=@Xl, gwid=@Zw, cjid=@Cj, newChange=1 
                         WHERE id=@Id";
-                        }
 
-                        SqlHelper.ExecuteNonQuery(trans, updateSql,
-                            new SqlParameter("@Bm", newBm),
-                            new SqlParameter("@Xl", newXl),
-                            new SqlParameter("@Zw", newZw),
-                            new SqlParameter("@Cj", newCj),
-                            new SqlParameter("@Time", changeTime),
-                            new SqlParameter("@Id", empId)
-                        );
+                            if (changeType == "离职") {
+                                updateSql = @"
+                            UPDATE ZX_config_yg 
+                            SET bmid=@Bm, xlid=@Xl, gwid=@Zw, cjid=@Cj, 
+                                zaizhi=0, lizhisj=@Time, newChange=1 
+                            WHERE id=@Id";
+                            }
+
+                            SqlHelper.ExecuteNonQuery(trans, updateSql,
+                                new SqlParameter("@Bm", newBm),
+                                new SqlParameter("@Xl", newXl),
+                                new SqlParameter("@Zw", newZw),
+                                new SqlParameter("@Cj", newCj),
+                                new SqlParameter("@Time", changeTime),
+                                new SqlParameter("@Id", empId)
+                            );
+                        }
 
                         trans.Commit();
                     } catch {
@@ -905,6 +911,152 @@ namespace CompensationSystemSubInterface.Services {
             }
 
             return dt;
+        }
+
+        /// <summary>
+        /// 撤回变动记录
+        /// 仅允许撤回指定员工的最新一条未删除记录
+        /// </summary>
+        /// <param name="changeId">选中的变动记录ID</param>
+        /// <param name="empId">员工ID</param>
+        /// <param name="empName">员工姓名（用于提示信息）</param>
+        public void RevokeChange(int changeId, int empId, string empName) {
+            // 1. 查询该员工最新一条未删除的变动记录
+            string checkSql = @"
+                SELECT TOP 1 id FROM ZX_yuangong_change 
+                WHERE ygid = @EmpId AND (DeleteType = 0 OR DeleteType IS NULL)
+                ORDER BY id DESC";
+            object latestIdObj = SqlHelper.ExecuteScalar(checkSql, new SqlParameter("@EmpId", empId));
+
+            if (latestIdObj == null) {
+                throw new Exception("该员工没有可撤销的变动记录！");
+            }
+
+            int latestId = Convert.ToInt32(latestIdObj);
+            if (latestId != changeId) {
+                throw new Exception($"仅可撤销{empName}的最新变动记录！");
+            }
+
+            // 2. 获取该变动记录详情
+            string detailSql = @"
+                SELECT * FROM ZX_yuangong_change WHERE id = @Id";
+            DataTable dtChange = SqlHelper.ExecuteDataTable(detailSql, new SqlParameter("@Id", changeId));
+            if (dtChange.Rows.Count == 0) {
+                throw new Exception("变动记录不存在！");
+            }
+            DataRow row = dtChange.Rows[0];
+
+            bool isEffect = row["IsEffect"] != DBNull.Value && Convert.ToBoolean(row["IsEffect"]);
+            string changeType = row["changeType"].ToString();
+
+            using (SqlConnection conn = new SqlConnection(SqlHelper.ConnString)) {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction()) {
+                    try {
+                        // 3. 如果已生效，需要回滚员工表
+                        if (isEffect) {
+                            string rollbackSql;
+                            if (changeType == "离职") {
+                                // 离职撤回：恢复在职状态和原组织信息
+                                rollbackSql = @"
+                                    UPDATE ZX_config_yg 
+                                    SET bmid = @OldBmId, xlid = @OldXlId, 
+                                        gwid = @OldZwId, cjid = @OldCjId,
+                                        zaizhi = 1, lizhisj = NULL
+                                    WHERE id = @EmpId";
+                            } else {
+                                // 普通变动撤回：恢复原组织信息
+                                rollbackSql = @"
+                                    UPDATE ZX_config_yg 
+                                    SET bmid = @OldBmId, xlid = @OldXlId, 
+                                        gwid = @OldZwId, cjid = @OldCjId
+                                    WHERE id = @EmpId";
+                            }
+
+                            SqlHelper.ExecuteNonQuery(trans, rollbackSql,
+                                new SqlParameter("@OldBmId", row["oldbmid"] != DBNull.Value ? row["oldbmid"] : (object)DBNull.Value),
+                                new SqlParameter("@OldXlId", row["oldxlid"] != DBNull.Value ? row["oldxlid"] : (object)DBNull.Value),
+                                new SqlParameter("@OldZwId", row["oldzwid"] != DBNull.Value ? row["oldzwid"] : (object)DBNull.Value),
+                                new SqlParameter("@OldCjId", row["oldcjid"] != DBNull.Value ? row["oldcjid"] : (object)DBNull.Value),
+                                new SqlParameter("@EmpId", empId)
+                            );
+                        }
+
+                        // 4. 标记变动记录为已撤销
+                        string revokeSql = @"
+                            UPDATE ZX_yuangong_change SET DeleteType = 1 WHERE id = @Id";
+                        SqlHelper.ExecuteNonQuery(trans, revokeSql, new SqlParameter("@Id", changeId));
+
+                        trans.Commit();
+                    } catch {
+                        trans.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 检查并应用待生效的变动记录
+        /// 查找 IsEffect=0 且 DeleteType=0 且 changeTime <= 当前数据库日期 的记录，逐条生效
+        /// </summary>
+        public void ApplyPendingChanges() {
+            // 查找到期的待生效记录
+            string querySql = @"
+                SELECT * FROM ZX_yuangong_change 
+                WHERE (IsEffect = 0 OR IsEffect IS NULL)
+                  AND (DeleteType = 0 OR DeleteType IS NULL)
+                  AND CAST(changeTime AS DATE) <= CAST(GETDATE() AS DATE)
+                ORDER BY id ASC";
+
+            DataTable dt = SqlHelper.ExecuteDataTable(querySql);
+            if (dt.Rows.Count == 0) return;
+
+            foreach (DataRow row in dt.Rows) {
+                int changeId = Convert.ToInt32(row["id"]);
+                int empId = Convert.ToInt32(row["ygid"]);
+                string changeType = row["changeType"].ToString();
+
+                using (SqlConnection conn = new SqlConnection(SqlHelper.ConnString)) {
+                    conn.Open();
+                    using (SqlTransaction trans = conn.BeginTransaction()) {
+                        try {
+                            // 1. 更新员工表
+                            string updateSql = @"
+                                UPDATE ZX_config_yg 
+                                SET bmid = @Bm, xlid = @Xl, gwid = @Zw, cjid = @Cj, newChange = 1
+                                WHERE id = @Id";
+
+                            if (changeType == "离职") {
+                                updateSql = @"
+                                    UPDATE ZX_config_yg 
+                                    SET bmid = @Bm, xlid = @Xl, gwid = @Zw, cjid = @Cj,
+                                        zaizhi = 0, lizhisj = @Time, newChange = 1
+                                    WHERE id = @Id";
+                            }
+
+                            SqlHelper.ExecuteNonQuery(trans, updateSql,
+                                new SqlParameter("@Bm", row["newbmid"] != DBNull.Value ? row["newbmid"] : (object)DBNull.Value),
+                                new SqlParameter("@Xl", row["newxlid"] != DBNull.Value ? row["newxlid"] : (object)DBNull.Value),
+                                new SqlParameter("@Zw", row["newzwid"] != DBNull.Value ? row["newzwid"] : (object)DBNull.Value),
+                                new SqlParameter("@Cj", row["newcjid"] != DBNull.Value ? row["newcjid"] : (object)DBNull.Value),
+                                new SqlParameter("@Time", row["changeTime"]),
+                                new SqlParameter("@Id", empId)
+                            );
+
+                            // 2. 标记为已生效
+                            string effectSql = @"
+                                UPDATE ZX_yuangong_change SET IsEffect = 1 WHERE id = @CgId";
+                            SqlHelper.ExecuteNonQuery(trans, effectSql, new SqlParameter("@CgId", changeId));
+
+                            trans.Commit();
+                        } catch {
+                            trans.Rollback();
+                            // 单条失败不影响其他记录继续处理
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>

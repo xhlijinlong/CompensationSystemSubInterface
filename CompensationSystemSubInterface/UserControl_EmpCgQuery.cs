@@ -345,8 +345,32 @@ namespace CompensationSystemSubInterface {
             _popupPost?.Show(btnPost, 0, btnPost.Height);
         }
 
+        /// <summary>
+        /// 撤回按钮点击事件处理
+        /// 撤回选中员工的最新一条变动记录
+        /// </summary>
         private void btnWithdraw_Click(object sender, EventArgs e) {
-            MessageBox.Show("该功能暂未实现。", "提示");
+            if (dgvSalary.SelectedRows.Count == 0) {
+                MessageBox.Show("请先选择一条变动记录", "提示");
+                return;
+            }
+
+            int changeId = Convert.ToInt32(dgvSalary.SelectedRows[0].Cells["id"].Value);
+            int empId = Convert.ToInt32(dgvSalary.SelectedRows[0].Cells["ygid"].Value);
+            string empName = dgvSalary.SelectedRows[0].Cells["姓名"].Value.ToString();
+
+            if (MessageBox.Show($"确定要撤回{empName}的这条变动记录吗？", "确认撤回",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) {
+                return;
+            }
+
+            try {
+                _service.RevokeChange(changeId, empId, empName);
+                MessageBox.Show("撤回成功！", "提示");
+                PerformQuery(); // 刷新列表
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message, "撤回失败", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }
