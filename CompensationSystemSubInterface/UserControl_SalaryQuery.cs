@@ -320,7 +320,7 @@ namespace CompensationSystemSubInterface {
 
             if (dgvSalary.Columns.Contains("EmployeeName")) {
                 dgvSalary.Columns["EmployeeName"].HeaderText = "姓名";
-                dgvSalary.Columns["EmployeeName"].Width = scaledWidth;
+                dgvSalary.Columns["EmployeeName"].Width = DpiHelper.ScaleWidth(this, 64);
             }
 
             if (dgvSalary.Columns.Contains("DeptName")) {

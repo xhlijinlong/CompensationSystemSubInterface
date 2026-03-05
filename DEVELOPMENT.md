@@ -133,6 +133,32 @@ jiediao 0 借调
 kaoqin 1 是否读取考勤信息
 xinchou 1 是否计算薪酬信息
 xuhao 序号读取当前最大序号+1即可
+4.状态栏
+以下界面中的表格查询数据后需要显示状态栏,状态栏显示查询到的数据条数.
+UserControl_EmpMaint
+UserControl_EmpQuery
+UserControl_EmpRsQuery
+UserControl_PfmcQuery
+UserControl_EmpCgQuery
+UserControl_SalaryQuery
+UserControl_SalaryStatistics
+5.表格表头字段点击可以排序
+需要排序的字段
+6.表格行支持拖拽移动
+UserControl_EmpQuery展示查询的员工信息,默认排序是根据员工的序号升序排列,拖拽移动后需要更新员工的序号,并且需要保存到数据库中
+7.以下界面的表格不再展示层级信息
+UserControl_EmpQuery
+UserControl_EmpRsQuery
+8.调整列宽✅已完成
+当前默认列宽是100,有些列需要调整:
+姓名,民族列宽改为 64
+序号,性别,学位,层级,属相,年龄 列宽改为 56
+UserControl_PfmcQuery 页面的表格中,后面跟的年份列宽设置为 80
+9.调整变动项目列表顺序✅已完成
+晋升,平调,入职,变更,入职,离职,降职
+10.人员信息和工资汇总查询 供部门主任使用
+11.年终奖 上一年 下一年 4.30
+
 
 
 

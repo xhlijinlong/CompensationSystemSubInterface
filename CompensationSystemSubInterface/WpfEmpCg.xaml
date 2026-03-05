@@ -65,12 +65,12 @@
 
                         <TextBlock Text="变动项目:" HorizontalAlignment="Right" Margin="0,0,10,0" />
                         <ComboBox Grid.Column="1" x:Name="cbChangeType" SelectedIndex="0">
-                            <ComboBoxItem>平调</ComboBoxItem>
                             <ComboBoxItem>晋升</ComboBoxItem>
-                            <ComboBoxItem>降职</ComboBoxItem>
+                            <ComboBoxItem>平调</ComboBoxItem>
                             <ComboBoxItem>变更</ComboBoxItem>
                             <ComboBoxItem Foreground="Green">入职</ComboBoxItem>
                             <ComboBoxItem Foreground="Red">离职</ComboBoxItem>
+                            <ComboBoxItem>降职</ComboBoxItem>
                         </ComboBox>
 
                         <TextBlock Text="变动时间:" HorizontalAlignment="Right" Grid.Column="2"

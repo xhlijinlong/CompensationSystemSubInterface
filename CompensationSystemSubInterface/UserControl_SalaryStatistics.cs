@@ -311,7 +311,7 @@ namespace CompensationSystemSubInterface {
             // 序号列
             if (dgvSalary.Columns.Contains("Seq")) {
                 dgvSalary.Columns["Seq"].HeaderText = "序号";
-                dgvSalary.Columns["Seq"].Width = scaledWidth;
+                dgvSalary.Columns["Seq"].Width = DpiHelper.ScaleWidth(this, 56);
                 dgvSalary.Columns["Seq"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 dgvSalary.Columns["Seq"].Frozen = true;
             }
@@ -324,7 +324,7 @@ namespace CompensationSystemSubInterface {
 
             if (dgvSalary.Columns.Contains("EmployeeName")) {
                 dgvSalary.Columns["EmployeeName"].HeaderText = "姓名";
-                dgvSalary.Columns["EmployeeName"].Width = scaledWidth;
+                dgvSalary.Columns["EmployeeName"].Width = DpiHelper.ScaleWidth(this, 64);
             }
 
             if (dgvSalary.Columns.Contains("DeptName")) {

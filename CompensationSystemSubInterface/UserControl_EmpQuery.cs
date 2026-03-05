@@ -344,6 +344,18 @@ namespace CompensationSystemSubInterface {
             if (dgvSalary.Columns["技能时间"] != null) dgvSalary.Columns["技能时间"].Width = phoneColumnWidth;
             if (dgvSalary.Columns["专业技能"] != null) dgvSalary.Columns["专业技能"].Width = phoneColumnWidth;
 
+            // 窄列宽度调整
+            int nameColumnWidth = DpiHelper.ScaleWidth(this, 64);
+            int narrowColumnWidth = DpiHelper.ScaleWidth(this, 56);
+            if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].Width = nameColumnWidth;
+            if (dgvSalary.Columns["民族"] != null) dgvSalary.Columns["民族"].Width = nameColumnWidth;
+            if (dgvSalary.Columns["序号"] != null) dgvSalary.Columns["序号"].Width = narrowColumnWidth;
+            if (dgvSalary.Columns["性别"] != null) dgvSalary.Columns["性别"].Width = narrowColumnWidth;
+            if (dgvSalary.Columns["学位"] != null) dgvSalary.Columns["学位"].Width = narrowColumnWidth;
+            if (dgvSalary.Columns["层级"] != null) dgvSalary.Columns["层级"].Width = narrowColumnWidth;
+            if (dgvSalary.Columns["属相"] != null) dgvSalary.Columns["属相"].Width = narrowColumnWidth;
+            if (dgvSalary.Columns["年龄"] != null) dgvSalary.Columns["年龄"].Width = narrowColumnWidth;
+
             // 冻结前4列（员工编号, 部门, 职务, 姓名）
             if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].Frozen = true;
         }
