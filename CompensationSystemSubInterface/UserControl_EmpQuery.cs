@@ -58,6 +58,19 @@ namespace CompensationSystemSubInterface {
         private ToolStripDropDown _popupDegree;
         private ToolStripDropDown _popupTitleLevel;
 
+        // 部门限制（由主程序设置，用于部门主任查看本部门数据）
+        private int _departmentId = -1; //-1 所有部门
+
+        /// <summary>
+        /// 获取或设置限定的部门ID
+        /// 设为大于0的值时，锁定查询范围为该部门，并禁用序列和部门筛选按钮
+        /// 默认值-1表示不限制，显示所有部门
+        /// </summary>
+        public int DepartmentId {
+            get => _departmentId;
+            set => _departmentId = value;
+        }
+
         /// <summary>
         /// 初始化员工信息查询用户控件
         /// </summary>
@@ -86,6 +99,13 @@ namespace CompensationSystemSubInterface {
             if (this.DesignMode) return;
 
             InitFilterControls(); // 初始化筛选控件数据
+
+            // 如果主程序传入了部门ID，则锁定到该部门
+            if (_departmentId > 0) {
+                _condition.DepartmentIds = new List<int> { _departmentId };
+                btnSeq.Enabled = false;   // 禁用序列筛选
+                btnDept.Enabled = false;  // 禁用部门筛选
+            }
 
             // 加载时默认查询所有
             PerformQuery();

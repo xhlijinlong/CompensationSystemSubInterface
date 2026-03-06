@@ -45,8 +45,19 @@ namespace CompensationSystemSubInterface {
         private ToolStripDropDown _popupDept;
         private ToolStripDropDown _popupPost;
         private ToolStripDropDown _popupStatus;
-        // 避免重复事件绑定的标志（虽然这里不需要，因为事件在 InitializeComponent 中绑定了）
-        // 但我们需要确保 Popup 已初始化
+
+        // 部门限制（由主程序设置，用于部门主任查看本部门数据）
+        private int _departmentId = -1;
+
+        /// <summary>
+        /// 获取或设置限定的部门ID
+        /// 设为大于0的值时，锁定查询范围为该部门，并禁用序列和部门筛选按钮
+        /// 默认值-1表示不限制，显示所有部门
+        /// </summary>
+        public int DepartmentId {
+            get => _departmentId;
+            set => _departmentId = value;
+        }
 
         /// <summary>
         /// 初始化薪资查询用户控件
@@ -78,6 +89,13 @@ namespace CompensationSystemSubInterface {
 
             InitDateCombos();
             InitFilterControls(); // 初始化筛选控件数据
+
+            // 如果主程序传入了部门ID，则锁定到该部门
+            if (_departmentId > 0) {
+                _condition.DepartmentIds = new List<int> { _departmentId };
+                btnSeq.Enabled = false;   // 禁用序列筛选
+                btnDept.Enabled = false;  // 禁用部门筛选
+            }
 
             // 默认起止时间为今年1-12月
             int currentYear = DateTime.Now.Year;
