@@ -283,6 +283,9 @@ namespace CompensationSystemSubInterface {
                 // 3. 格式化界面
                 FormatGrid();
 
+                // 4. 更新状态栏
+                lblStatus.Text = $"共查询到 {dt.Rows.Count} 条记录";
+
             } catch (Exception ex) {
                 LogManager.Error("查询员工信息失败", ex);
                 MessageBox.Show("查询出错: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);

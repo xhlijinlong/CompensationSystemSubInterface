@@ -226,6 +226,9 @@ namespace CompensationSystemSubInterface {
 
                 FormatGrid();
 
+                // 更新状态栏
+                lblStatus.Text = $"共查询到 {dt.Rows.Count} 条记录";
+
             } catch (Exception ex) {
                 LogManager.Error("查询员工变动失败", ex);
                 MessageBox.Show("查询出错: " + ex.Message);

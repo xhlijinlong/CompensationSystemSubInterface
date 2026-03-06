@@ -216,6 +216,9 @@ namespace CompensationSystemSubInterface {
                 dgvSalary.DataSource = report;
                 FormatGrid();
 
+                // 更新状态栏
+                lblStatus.Text = $"共查询到 {report.Rows.Count} 条记录";
+
             } catch (Exception ex) {
                 LogManager.Error("查询绩效信息失败", ex);
                 MessageBox.Show("查询出错: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);

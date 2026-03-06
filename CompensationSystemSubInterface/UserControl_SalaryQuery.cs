@@ -255,6 +255,9 @@ namespace CompensationSystemSubInterface {
 
                 // 4. 格式化
                 FormatGrid(report);
+
+                // 5. 更新状态栏
+                lblStatus.Text = $"共查询到 {report.Rows.Count} 条记录";
             } catch (Exception ex) {
                 MessageBox.Show("查询出错: " + ex.Message);
             } finally {
