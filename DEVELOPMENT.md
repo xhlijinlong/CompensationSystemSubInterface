@@ -146,7 +146,7 @@ UserControl_SalaryStatistics
 需要排序的字段,有些字段需按照指定序列排列
 6.表格行支持拖拽移动
 UserControl_EmpQuery展示查询的员工信息,默认排序是根据员工的序号升序排列,拖拽移动后需要更新员工的序号,并且需要保存到数据库中
-7.以下界面的表格不再展示层级信息
+7.以下界面的表格不再展示层级信息 ✅已完成
 UserControl_EmpQuery
 UserControl_EmpRsQuery
 8.调整列宽 ✅已完成
@@ -156,11 +156,14 @@ UserControl_EmpRsQuery
 UserControl_PfmcQuery 页面的表格中,后面跟的年份列宽设置为 80
 9.调整变动项目列表顺序 ✅已完成
 晋升,平调,入职,变更,入职,离职,降职
-10.人员信息和工资汇总查询供部门主任使用
+10.人员信息和工资汇总查询供部门主任使用 ✅已完成
 UserControl_EmpQuery和UserControl_SalaryStatistics
 接收主程序的部门信息,如果主程序没有传递部门信息,则显示所有部门
 具体实现可以参考UserControl_EmpMaint接收变动权限的逻辑
-11.年终奖 上一年 下一年 4.30
+11.不显示层级 ✅已完成
+员工信息查询页 UserControl_EmpQuery
+员工离职信息页 UserControl_EmpRsQuery
+12.年终奖 上一年 下一年 4.30
 
 
 
