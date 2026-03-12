@@ -1,4 +1,4 @@
-﻿using CompensationSystemSubInterface.Models;
+using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Utilities;
 using System;
 using System.Collections.Generic;
@@ -321,6 +321,7 @@ namespace CompensationSystemSubInterface.Services {
                     yg.nianling AS '年龄',
                     yg.lianxidh AS '联系电话',
                     yg.gongzikh AS '工资卡号',
+                    yg.xuhao AS '序号',
                     yg.id, yg.bmid, yg.xlid, yg.gwid, yg.cjid
                 FROM 
                     ZX_config_yg yg
@@ -1158,6 +1159,30 @@ namespace CompensationSystemSubInterface.Services {
                 new SqlParameter("@IsFreshGraduate", emp.IsFreshGraduate ? 1 : 0),
                 new SqlParameter("@Xuhao", newXuhao)
             );
+        }
+        /// <summary>
+        /// 批量更新员工序号 (用于拖拽排序后保存)
+        /// </summary>
+        /// <param name="orderList">员工ID和新序号的列表</param>
+        public void UpdateEmpOrder(List<KeyValuePair<int, int>> orderList) {
+            using (SqlConnection conn = new SqlConnection(SqlHelper.ConnString)) {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction()) {
+                    try {
+                        string sql = "UPDATE ZX_config_yg SET xuhao = @Xuhao WHERE id = @Id";
+                        foreach (var item in orderList) {
+                            SqlHelper.ExecuteNonQuery(trans, sql,
+                                new SqlParameter("@Id", item.Key),
+                                new SqlParameter("@Xuhao", item.Value)
+                            );
+                        }
+                        trans.Commit();
+                    } catch {
+                        trans.Rollback();
+                        throw;
+                    }
+                }
+            }
         }
         //
     }

@@ -62,6 +62,11 @@ namespace CompensationSystemSubInterface {
         // 右键菜单项（变动）
         private ToolStripMenuItem _tsmiCg;
 
+        // 拖拽起始行索引
+        private int _dragRowIndex = -1;
+        // 拖拽目标插入位置（用于绘制插入指示线）
+        private int _dragTargetIndex = -1;
+
         // 是否显示变动功能（由主程序控制）
         private bool _canChange = true;
 
@@ -288,6 +293,15 @@ namespace CompensationSystemSubInterface {
             cms.Items.Add(tsmiMod);
             cms.Items.Add(_tsmiCg);
             dgvSalary.ContextMenuStrip = cms;
+
+            // 绑定拖拽事件
+            dgvSalary.AllowDrop = true;
+            dgvSalary.MouseDown += DgvSalary_MouseDown;
+            dgvSalary.MouseMove += DgvSalary_MouseMove;
+            dgvSalary.DragOver += DgvSalary_DragOver;
+            dgvSalary.DragDrop += DgvSalary_DragDrop;
+            dgvSalary.DragLeave += DgvSalary_DragLeave;
+            dgvSalary.Paint += DgvSalary_Paint;
         }
 
         /// <summary>
@@ -577,5 +591,160 @@ namespace CompensationSystemSubInterface {
                 PerformQuery(); // 刷新列表
             }
         }
+
+        #region 拖拽排序
+
+        /// <summary>
+        /// 判断当前是否允许拖拽（无筛选条件且无搜索关键字时允许）
+        /// </summary>
+        private bool IsDragEnabled() {
+            return !_condition.HasFilter && string.IsNullOrWhiteSpace(txtName.Text);
+        }
+
+        /// <summary>
+        /// MouseDown 事件：记录拖拽起始行
+        /// </summary>
+        private void DgvSalary_MouseDown(object sender, MouseEventArgs e) {
+            if (e.Button == MouseButtons.Left) {
+                var hitTest = dgvSalary.HitTest(e.X, e.Y);
+                if (hitTest.Type == DataGridViewHitTestType.Cell && hitTest.RowIndex >= 0) {
+                    _dragRowIndex = hitTest.RowIndex;
+                } else {
+                    _dragRowIndex = -1;
+                }
+            }
+        }
+
+        /// <summary>
+        /// MouseMove 事件：开始拖拽操作
+        /// </summary>
+        private void DgvSalary_MouseMove(object sender, MouseEventArgs e) {
+            if (e.Button == MouseButtons.Left && _dragRowIndex >= 0) {
+                // 检查是否超过拖拽阈值（避免误触发）
+                if (Math.Abs(e.X - dgvSalary.GetCellDisplayRectangle(0, _dragRowIndex, false).X) > 5 ||
+                    Math.Abs(e.Y - dgvSalary.GetCellDisplayRectangle(0, _dragRowIndex, false).Y) > 5) {
+
+                    if (!IsDragEnabled()) {
+                        MessageBox.Show("请清除筛选条件后再进行拖拽排序", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        _dragRowIndex = -1;
+                        return;
+                    }
+
+                    dgvSalary.DoDragDrop(dgvSalary.Rows[_dragRowIndex], DragDropEffects.Move);
+                }
+            }
+        }
+
+        /// <summary>
+        /// DragOver 事件：设置拖拽效果并更新插入指示线位置
+        /// </summary>
+        private void DgvSalary_DragOver(object sender, DragEventArgs e) {
+            e.Effect = DragDropEffects.Move;
+
+            Point clientPoint = dgvSalary.PointToClient(new Point(e.X, e.Y));
+            int targetRow = dgvSalary.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
+
+            if (targetRow >= 0 && targetRow < dgvSalary.Rows.Count && targetRow != _dragTargetIndex) {
+                _dragTargetIndex = targetRow;
+                dgvSalary.Invalidate(); // 触发重绘以更新指示线
+            }
+        }
+
+        /// <summary>
+        /// DragLeave 事件：清除插入指示线
+        /// </summary>
+        private void DgvSalary_DragLeave(object sender, EventArgs e) {
+            _dragTargetIndex = -1;
+            dgvSalary.Invalidate();
+        }
+
+        /// <summary>
+        /// Paint 事件：绘制拖拽插入指示线
+        /// </summary>
+        private void DgvSalary_Paint(object sender, PaintEventArgs e) {
+            if (_dragTargetIndex < 0 || _dragTargetIndex >= dgvSalary.Rows.Count) return;
+
+            // 获取目标行的显示区域
+            Rectangle rowRect = dgvSalary.GetRowDisplayRectangle(_dragTargetIndex, false);
+            if (rowRect.Height == 0) return; // 行不可见
+
+            // 在目标行的顶部绘制指示线
+            int y = rowRect.Top;
+            int x1 = rowRect.Left;
+            int x2 = rowRect.Right;
+
+            using (Pen pen = new Pen(Color.FromArgb(0, 120, 215), 2)) {
+                e.Graphics.DrawLine(pen, x1, y, x2, y);
+
+                // 左侧三角箭头
+                e.Graphics.FillPolygon(pen.Brush, new Point[] {
+                    new Point(x1, y - 4),
+                    new Point(x1, y + 4),
+                    new Point(x1 + 6, y)
+                });
+
+                // 右侧三角箭头
+                e.Graphics.FillPolygon(pen.Brush, new Point[] {
+                    new Point(x2, y - 4),
+                    new Point(x2, y + 4),
+                    new Point(x2 - 6, y)
+                });
+            }
+        }
+
+        /// <summary>
+        /// DragDrop 事件：完成拖拽，更新行顺序并保存序号
+        /// </summary>
+        private void DgvSalary_DragDrop(object sender, DragEventArgs e) {
+            Point clientPoint = dgvSalary.PointToClient(new Point(e.X, e.Y));
+            int targetRowIndex = dgvSalary.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
+
+            if (targetRowIndex < 0 || targetRowIndex == _dragRowIndex) {
+                _dragRowIndex = -1;
+                _dragTargetIndex = -1;
+                dgvSalary.Invalidate();
+                return;
+            }
+
+            try {
+                this.Cursor = Cursors.WaitCursor;
+
+                // 1. 获取 DataTable 并移动行
+                DataTable dt = (DataTable)dgvSalary.DataSource;
+                DataRow dragRow = dt.NewRow();
+                dragRow.ItemArray = dt.Rows[_dragRowIndex].ItemArray;
+
+                dt.Rows.RemoveAt(_dragRowIndex);
+                dt.Rows.InsertAt(dragRow, targetRowIndex);
+
+                // 2. 重新分配序号并收集更新列表
+                var orderList = new List<KeyValuePair<int, int>>();
+                for (int i = 0; i < dt.Rows.Count; i++) {
+                    int empId = Convert.ToInt32(dt.Rows[i]["id"]);
+                    int newXuhao = i + 1;
+                    dt.Rows[i]["序号"] = newXuhao;
+                    orderList.Add(new KeyValuePair<int, int>(empId, newXuhao));
+                }
+
+                // 3. 保存到数据库
+                _service.UpdateEmpOrder(orderList);
+
+                // 4. 选中目标行
+                dgvSalary.ClearSelection();
+                dgvSalary.Rows[targetRowIndex].Selected = true;
+
+            } catch (Exception ex) {
+                LogManager.Error("拖拽排序失败", ex);
+                MessageBox.Show("排序失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                PerformQuery(); // 失败时刷新恢复原始顺序
+            } finally {
+                _dragRowIndex = -1;
+                _dragTargetIndex = -1;
+                dgvSalary.Invalidate();
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        #endregion
     }
 }

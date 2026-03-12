@@ -144,8 +144,8 @@ UserControl_SalaryQuery
 UserControl_SalaryStatistics
 5.表格表头字段点击可以排序
 需要排序的字段,有些字段需按照指定序列排列
-6.表格行支持拖拽移动
-UserControl_EmpQuery展示查询的员工信息,默认排序是根据员工的序号升序排列,拖拽移动后需要更新员工的序号,并且需要保存到数据库中
+6.表格行支持拖拽移动 ✅已完成
+UserControl_EmpMaint页面的表格默认排序是根据员工的序号升序排列,拖拽移动后需要更新员工的序号,并且需要保存到数据库中.
 7.以下界面的表格不再展示层级信息 ✅已完成
 UserControl_EmpQuery
 UserControl_EmpRsQuery
