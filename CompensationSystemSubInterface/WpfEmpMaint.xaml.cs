@@ -1,4 +1,4 @@
-﻿using CompensationSystemSubInterface;
+using CompensationSystemSubInterface;
 using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Services;
 using System;
@@ -94,8 +94,6 @@ namespace CompensationSystemSubInterface {
                 cbJob.ItemsSource = _service.GetComboList("ZX_config_gw");
                 cbJob.DisplayMemberPath = "Name"; cbJob.SelectedValuePath = "Id";
 
-                cbLevel.ItemsSource = _service.GetComboList("ZX_config_cj");
-                cbLevel.DisplayMemberPath = "Name"; cbLevel.SelectedValuePath = "Id";
             } catch { /* 忽略下拉框加载错误，仅显示Text */ }
         }
 
@@ -130,7 +128,6 @@ namespace CompensationSystemSubInterface {
                 // === 2. 组织职务 (锁定区域) ===
                 cbSequence.SelectedValue = _currentEmp.SeqId;
                 cbJob.SelectedValue = _currentEmp.JobId;
-                cbLevel.SelectedValue = _currentEmp.LevelId;
 
                 dpWorkStart.SelectedDate = _currentEmp.WorkStart;
                 dpJoinDate.SelectedDate = _currentEmp.JoinDate;

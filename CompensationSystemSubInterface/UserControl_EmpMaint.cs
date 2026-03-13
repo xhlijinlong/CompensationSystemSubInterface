@@ -1,4 +1,4 @@
-using CompensationSystemSubInterface.Common;
+﻿using CompensationSystemSubInterface.Common;
 using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Services;
 using CompensationSystemSubInterface.Utilities;
@@ -209,7 +209,10 @@ namespace CompensationSystemSubInterface {
             if (dgvSalary.Columns["序号"] != null) dgvSalary.Columns["序号"].Width = narrowColumnWidth;
             if (dgvSalary.Columns["性别"] != null) dgvSalary.Columns["性别"].Width = narrowColumnWidth;
             if (dgvSalary.Columns["学位"] != null) dgvSalary.Columns["学位"].Width = narrowColumnWidth;
-            if (dgvSalary.Columns["层级"] != null) dgvSalary.Columns["层级"].Width = narrowColumnWidth;
+            if (dgvSalary.Columns["层级"] != null) {
+                dgvSalary.Columns["层级"].Width = narrowColumnWidth;
+                dgvSalary.Columns["层级"].Visible = _canChange;
+            }
             if (dgvSalary.Columns["属相"] != null) dgvSalary.Columns["属相"].Width = narrowColumnWidth;
             if (dgvSalary.Columns["年龄"] != null) dgvSalary.Columns["年龄"].Width = narrowColumnWidth;
 

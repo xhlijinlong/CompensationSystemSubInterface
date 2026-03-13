@@ -149,6 +149,10 @@ UserControl_EmpMaint页面的表格默认排序是根据员工的序号升序排
 7.以下界面的表格不再展示层级信息 ✅已完成
 UserControl_EmpQuery
 UserControl_EmpRsQuery
+7.1 UserControl_EmpMaint 界面表格的层级信息根据调用方的CanChange值来决定是否显示
+如果CanChange为false,则不显示层级信息
+如果CanChange为true,则显示层级信息
+7.2 WpfEmpMaint.xaml 的层级信息不再展示
 8.调整列宽 ✅已完成
 当前默认列宽是100,有些列需要调整:
 姓名,民族列宽改为 64
