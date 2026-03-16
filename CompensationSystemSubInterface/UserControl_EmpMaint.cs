@@ -1,4 +1,4 @@
-﻿using CompensationSystemSubInterface.Common;
+using CompensationSystemSubInterface.Common;
 using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Services;
 using CompensationSystemSubInterface.Utilities;
@@ -227,6 +227,7 @@ namespace CompensationSystemSubInterface {
         private void btnCondition_Click(object sender, EventArgs e) {
             if (_wpfCondition == null) {
                 _wpfCondition = new WpfEmpCondition(_condition.EmployeeIds, _condition.DepartmentIds);
+                _wpfCondition.RefreshFilterConditions(_condition);
                 _wpfCondition.ApplySelect += (empIds) => {
                     _condition.EmployeeIds = empIds;
                     btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";

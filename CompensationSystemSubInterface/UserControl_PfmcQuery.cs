@@ -1,4 +1,4 @@
-﻿using CompensationSystemSubInterface.Common;
+using CompensationSystemSubInterface.Common;
 using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Services;
 using CompensationSystemSubInterface.Utilities;
@@ -299,6 +299,11 @@ namespace CompensationSystemSubInterface {
             if (_wpfCondition == null) {
                 // 使用通用的 WpfEmpCondition，不传部门筛选条件
                 _wpfCondition = new WpfEmpCondition(_condition.EmployeeIds, null);
+                _wpfCondition.RefreshFilterConditions(new EmpCondition {
+                    SequenceIds = _condition.SequenceIds,
+                    DepartmentIds = _condition.DepartmentIds,
+                    PositionIds = _condition.PositionIds
+                });
                 _wpfCondition.ApplySelect += (empIds) => {
                     _condition.EmployeeIds = empIds;
                     btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";
