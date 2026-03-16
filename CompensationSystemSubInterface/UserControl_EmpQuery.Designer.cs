@@ -48,13 +48,13 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
+            this.btnSkill = new System.Windows.Forms.Button();
+            this.btnAge = new System.Windows.Forms.Button();
+            this.btnBirthday = new System.Windows.Forms.Button();
+            this.btnWorkDate = new System.Windows.Forms.Button();
+            this.btnHiredate = new System.Windows.Forms.Button();
+            this.btnPositionDate = new System.Windows.Forms.Button();
+            this.btnTechnology = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -101,15 +101,15 @@
             this.flpnlTop.Controls.Add(this.btnPS);
             this.flpnlTop.Controls.Add(this.btnEducation);
             this.flpnlTop.Controls.Add(this.btnDegree);
-            this.flpnlTop.Controls.Add(this.button3);
-            this.flpnlTop.Controls.Add(this.button4);
-            this.flpnlTop.Controls.Add(this.button5);
-            this.flpnlTop.Controls.Add(this.button6);
-            this.flpnlTop.Controls.Add(this.button7);
+            this.flpnlTop.Controls.Add(this.btnBirthday);
+            this.flpnlTop.Controls.Add(this.btnWorkDate);
+            this.flpnlTop.Controls.Add(this.btnHiredate);
+            this.flpnlTop.Controls.Add(this.btnPositionDate);
+            this.flpnlTop.Controls.Add(this.btnTechnology);
             this.flpnlTop.Controls.Add(this.btnTitleLevel);
-            this.flpnlTop.Controls.Add(this.button1);
+            this.flpnlTop.Controls.Add(this.btnSkill);
             this.flpnlTop.Controls.Add(this.btnChineseZodiac);
-            this.flpnlTop.Controls.Add(this.button2);
+            this.flpnlTop.Controls.Add(this.btnAge);
             this.flpnlTop.Controls.Add(this.btnQuery);
             this.flpnlTop.Controls.Add(this.btnExport);
             this.flpnlTop.Dock = System.Windows.Forms.DockStyle.Top;
@@ -300,75 +300,75 @@
             this.lblStatus.Size = new System.Drawing.Size(32, 17);
             this.lblStatus.Text = "就绪";
             // 
-            // button1
+            // btnSkill
             // 
-            this.button1.Location = new System.Drawing.Point(344, 50);
-            this.button1.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(95, 30);
-            this.button1.TabIndex = 24;
-            this.button1.Text = "专业技能";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSkill.Location = new System.Drawing.Point(344, 50);
+            this.btnSkill.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.btnSkill.Name = "btnSkill";
+            this.btnSkill.Size = new System.Drawing.Size(95, 30);
+            this.btnSkill.TabIndex = 24;
+            this.btnSkill.Text = "专业技能";
+            this.btnSkill.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnAge
             // 
-            this.button2.Location = new System.Drawing.Point(511, 50);
-            this.button2.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(60, 30);
-            this.button2.TabIndex = 25;
-            this.button2.Text = "年龄";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnAge.Location = new System.Drawing.Point(511, 50);
+            this.btnAge.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.btnAge.Name = "btnAge";
+            this.btnAge.Size = new System.Drawing.Size(60, 30);
+            this.btnAge.TabIndex = 25;
+            this.btnAge.Text = "年龄";
+            this.btnAge.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // btnBirthday
             // 
-            this.button3.Location = new System.Drawing.Point(766, 10);
-            this.button3.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(95, 30);
-            this.button3.TabIndex = 26;
-            this.button3.Text = "出生日期";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnBirthday.Location = new System.Drawing.Point(766, 10);
+            this.btnBirthday.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.btnBirthday.Name = "btnBirthday";
+            this.btnBirthday.Size = new System.Drawing.Size(95, 30);
+            this.btnBirthday.TabIndex = 26;
+            this.btnBirthday.Text = "出生日期";
+            this.btnBirthday.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // btnWorkDate
             // 
-            this.button4.Location = new System.Drawing.Point(867, 10);
-            this.button4.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(130, 30);
-            this.button4.TabIndex = 27;
-            this.button4.Text = "参加工作时间";
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnWorkDate.Location = new System.Drawing.Point(867, 10);
+            this.btnWorkDate.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.btnWorkDate.Name = "btnWorkDate";
+            this.btnWorkDate.Size = new System.Drawing.Size(130, 30);
+            this.btnWorkDate.TabIndex = 27;
+            this.btnWorkDate.Text = "参加工作时间";
+            this.btnWorkDate.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // btnHiredate
             // 
-            this.button5.Location = new System.Drawing.Point(1003, 10);
-            this.button5.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(95, 30);
-            this.button5.TabIndex = 28;
-            this.button5.Text = "入社时间";
-            this.button5.UseVisualStyleBackColor = true;
+            this.btnHiredate.Location = new System.Drawing.Point(1003, 10);
+            this.btnHiredate.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.btnHiredate.Name = "btnHiredate";
+            this.btnHiredate.Size = new System.Drawing.Size(95, 30);
+            this.btnHiredate.TabIndex = 28;
+            this.btnHiredate.Text = "入社时间";
+            this.btnHiredate.UseVisualStyleBackColor = true;
             // 
-            // button6
+            // btnPositionDate
             // 
-            this.button6.Location = new System.Drawing.Point(6, 50);
-            this.button6.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(130, 30);
-            this.button6.TabIndex = 29;
-            this.button6.Text = "任现岗位时间";
-            this.button6.UseVisualStyleBackColor = true;
+            this.btnPositionDate.Location = new System.Drawing.Point(6, 50);
+            this.btnPositionDate.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.btnPositionDate.Name = "btnPositionDate";
+            this.btnPositionDate.Size = new System.Drawing.Size(130, 30);
+            this.btnPositionDate.TabIndex = 29;
+            this.btnPositionDate.Text = "任现岗位时间";
+            this.btnPositionDate.UseVisualStyleBackColor = true;
             // 
-            // button7
+            // btnTechnology
             // 
-            this.button7.Location = new System.Drawing.Point(142, 50);
-            this.button7.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(95, 30);
-            this.button7.TabIndex = 30;
-            this.button7.Text = "专业技术";
-            this.button7.UseVisualStyleBackColor = true;
+            this.btnTechnology.Location = new System.Drawing.Point(142, 50);
+            this.btnTechnology.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.btnTechnology.Name = "btnTechnology";
+            this.btnTechnology.Size = new System.Drawing.Size(95, 30);
+            this.btnTechnology.TabIndex = 30;
+            this.btnTechnology.Text = "专业技术";
+            this.btnTechnology.UseVisualStyleBackColor = true;
             // 
             // UserControl_EmpQuery
             // 
@@ -415,12 +415,12 @@
         private System.Windows.Forms.Button btnChineseZodiac;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button btnSkill;
+        private System.Windows.Forms.Button btnAge;
+        private System.Windows.Forms.Button btnBirthday;
+        private System.Windows.Forms.Button btnWorkDate;
+        private System.Windows.Forms.Button btnHiredate;
+        private System.Windows.Forms.Button btnPositionDate;
+        private System.Windows.Forms.Button btnTechnology;
     }
 }
