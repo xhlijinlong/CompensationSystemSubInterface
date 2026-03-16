@@ -1,4 +1,4 @@
-using CompensationSystemSubInterface.Common;
+﻿using CompensationSystemSubInterface.Common;
 using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Services;
 using CompensationSystemSubInterface.Utilities;
@@ -206,7 +206,10 @@ namespace CompensationSystemSubInterface {
             int narrowColumnWidth = DpiHelper.ScaleWidth(this, 56);
             if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].Width = nameColumnWidth;
             if (dgvSalary.Columns["民族"] != null) dgvSalary.Columns["民族"].Width = nameColumnWidth;
-            if (dgvSalary.Columns["序号"] != null) dgvSalary.Columns["序号"].Width = narrowColumnWidth;
+            if (dgvSalary.Columns["序号"] != null) {
+                dgvSalary.Columns["序号"].Width = narrowColumnWidth;
+                dgvSalary.Columns["序号"].Visible = false;
+            }
             if (dgvSalary.Columns["性别"] != null) dgvSalary.Columns["性别"].Width = narrowColumnWidth;
             if (dgvSalary.Columns["学位"] != null) dgvSalary.Columns["学位"].Width = narrowColumnWidth;
             if (dgvSalary.Columns["层级"] != null) {
