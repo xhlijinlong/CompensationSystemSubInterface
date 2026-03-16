@@ -61,6 +61,40 @@ namespace CompensationSystemSubInterface {
         // 部门限制（由主程序设置，用于部门主任查看本部门数据）
         private int _departmentId = -1; //-1 所有部门
 
+        // ===== 排序相关字段 =====
+        /// <summary>
+        /// 当前排序的列名（null 表示无排序，使用原始顺序）
+        /// </summary>
+        private string _currentSortColumn = null;
+
+        /// <summary>
+        /// 年龄列的三态排序状态: 0=无排序, 1=降序(大→小), 2=升序(小→大)
+        /// </summary>
+        private int _ageSortState = 0;
+
+        /// <summary>
+        /// 保存原始查询数据的 DataTable 副本（用于恢复初始排序）
+        /// </summary>
+        private DataTable _originalData = null;
+
+        /// <summary>
+        /// 可排序列及其自定义排序优先级字典
+        /// </summary>
+        private static readonly Dictionary<string, Dictionary<string, int>> _enumSortOrders = new Dictionary<string, Dictionary<string, int>> {
+            { "性别", new Dictionary<string, int> { {"男", 0}, {"女", 1} } },
+            { "政治面貌", new Dictionary<string, int> { {"中共党员", 0}, {"团员", 1}, {"群众", 2} } },
+            { "学历", new Dictionary<string, int> { {"博士研究生", 0}, {"硕士研究生", 1}, {"本科", 2}, {"专科", 3}, {"中专", 4}, {"高中及以下", 5} } },
+            { "学位", new Dictionary<string, int> { {"博士", 0}, {"硕士", 1}, {"学士", 2}, {"无", 3} } },
+            { "序列", new Dictionary<string, int> { {"管理序列", 0}, {"生产序列", 1} } },
+        };
+
+        /// <summary>
+        /// 日期类型的可排序列
+        /// </summary>
+        private static readonly HashSet<string> _dateSortColumns = new HashSet<string> {
+            "出生日期", "参加工作时间", "入社时间"
+        };
+
         /// <summary>
         /// 获取或设置限定的部门ID
         /// 设为大于0的值时，锁定查询范围为该部门，并禁用序列和部门筛选按钮
@@ -90,6 +124,9 @@ namespace CompensationSystemSubInterface {
                     e.SuppressKeyPress = true;
                 }
             };
+
+            // 注册表头点击排序事件
+            dgvSalary.ColumnHeaderMouseClick += dgvSalary_ColumnHeaderMouseClick;
         }
 
         /// <summary>
@@ -295,15 +332,20 @@ namespace CompensationSystemSubInterface {
                 string keyword = txtName.Text.Trim();
                 DataTable dt = _service.GetEmpData(keyword, _condition);
 
-                // 2. 绑定数据
+                // 2. 保存原始数据副本（用于恢复初始排序）
+                _originalData = dt.Copy();
+                _currentSortColumn = null;
+                _ageSortState = 0;
+
+                // 3. 绑定数据
                 dgvSalary.DataSource = null;
                 dgvSalary.Columns.Clear();
                 dgvSalary.DataSource = dt;
 
-                // 3. 格式化界面
+                // 4. 格式化界面
                 FormatGrid();
 
-                // 4. 更新状态栏
+                // 5. 更新状态栏
                 lblStatus.Text = $"共查询到 {dt.Rows.Count} 条记录";
 
             } catch (Exception ex) {
@@ -472,6 +514,139 @@ namespace CompensationSystemSubInterface {
 
         private void btnChineseZodiac_Click(object sender, EventArgs e) {
             _popupZodiac?.Show(btnChineseZodiac, 0, btnChineseZodiac.Height);
+        }
+
+        // ===== 表头排序逻辑 =====
+
+        /// <summary>
+        /// DataGridView 列头点击事件处理，实现自定义排序
+        /// </summary>
+        private void dgvSalary_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e) {
+            if (_originalData == null || _originalData.Rows.Count == 0) return;
+
+            string columnName = dgvSalary.Columns[e.ColumnIndex].Name;
+
+            // 判断是否为可排序列
+            bool isEnumColumn = _enumSortOrders.ContainsKey(columnName);
+            bool isDateColumn = _dateSortColumns.Contains(columnName);
+            bool isAgeColumn = columnName == "年龄";
+
+            if (!isEnumColumn && !isDateColumn && !isAgeColumn) return;
+
+            // 处理年龄列的三态排序
+            if (isAgeColumn) {
+                HandleAgeSortClick(columnName);
+                return;
+            }
+
+            // 其他列：两态切换（排序 ↔ 恢复初始）
+            if (_currentSortColumn == columnName) {
+                // 已在排序状态，恢复初始排序
+                RestoreOriginalOrder();
+            } else {
+                // 应用排序
+                _currentSortColumn = columnName;
+                _ageSortState = 0;
+
+                if (isEnumColumn) {
+                    ApplyEnumSort(columnName);
+                } else if (isDateColumn) {
+                    ApplyDateSort(columnName);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 处理年龄列的三态排序: 降序(大→小) → 升序(小→大) → 恢复初始
+        /// </summary>
+        private void HandleAgeSortClick(string columnName) {
+            // 如果当前排序列不是年龄，从头开始
+            if (_currentSortColumn != columnName) {
+                _ageSortState = 0;
+            }
+
+            _ageSortState++;
+            _currentSortColumn = columnName;
+
+            if (_ageSortState == 1) {
+                // 第一次点击：从大到小
+                ApplySimpleSort(columnName, "DESC");
+            } else if (_ageSortState == 2) {
+                // 第二次点击：从小到大
+                ApplySimpleSort(columnName, "ASC");
+            } else {
+                // 第三次点击：恢复初始排序
+                _ageSortState = 0;
+                RestoreOriginalOrder();
+            }
+        }
+
+        /// <summary>
+        /// 恢复初始排序（使用原始数据副本）
+        /// </summary>
+        private void RestoreOriginalOrder() {
+            _currentSortColumn = null;
+            _ageSortState = 0;
+
+            DataTable dt = _originalData.Copy();
+            dgvSalary.DataSource = null;
+            dgvSalary.Columns.Clear();
+            dgvSalary.DataSource = dt;
+            FormatGrid();
+        }
+
+        /// <summary>
+        /// 对日期/数值列应用简单排序
+        /// </summary>
+        private void ApplySimpleSort(string columnName, string direction) {
+            DataTable dt = _originalData.Copy();
+            DataView dv = dt.DefaultView;
+            dv.Sort = $"[{columnName}] {direction}";
+            DataTable sorted = dv.ToTable();
+
+            dgvSalary.DataSource = null;
+            dgvSalary.Columns.Clear();
+            dgvSalary.DataSource = sorted;
+            FormatGrid();
+        }
+
+        /// <summary>
+        /// 对日期列应用升序排序（从早到晚）
+        /// </summary>
+        private void ApplyDateSort(string columnName) {
+            ApplySimpleSort(columnName, "ASC");
+        }
+
+        /// <summary>
+        /// 对枚举类型列应用自定义排序（按预定义优先级排序）
+        /// </summary>
+        private void ApplyEnumSort(string columnName) {
+            if (!_enumSortOrders.ContainsKey(columnName)) return;
+
+            var sortOrder = _enumSortOrders[columnName];
+            DataTable dt = _originalData.Copy();
+
+            // 添加临时排序辅助列
+            string sortKeyCol = "_sort_key_";
+            dt.Columns.Add(sortKeyCol, typeof(int));
+
+            foreach (DataRow row in dt.Rows) {
+                string val = row[columnName]?.ToString() ?? "";
+                row[sortKeyCol] = sortOrder.ContainsKey(val) ? sortOrder[val] : 999;
+            }
+
+            // 按辅助列排序
+            DataView dv = dt.DefaultView;
+            dv.Sort = $"[{sortKeyCol}] ASC";
+            DataTable sorted = dv.ToTable();
+
+            // 移除辅助列
+            sorted.Columns.Remove(sortKeyCol);
+
+            dgvSalary.DataSource = null;
+            dgvSalary.Columns.Clear();
+            dgvSalary.DataSource = sorted;
+            FormatGrid();
         }
     }
 }

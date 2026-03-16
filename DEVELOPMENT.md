@@ -55,8 +55,6 @@
 
   中共党员
 
-  中共预备党员
-
   团员
 
   群众
@@ -142,17 +140,28 @@ UserControl_PfmcQuery
 UserControl_EmpCgQuery
 UserControl_SalaryQuery
 UserControl_SalaryStatistics
-5.表格表头字段点击可以排序
-需要排序的字段,有些字段需按照指定序列排列
+5.表格表头字段点击可以排序 ✅已完成
+UserControl_EmpQuery 页面的表格中 点击某些列的表头进行排序
+性别（男、女）
+政治面貌（中共党员、团员、群众）
+学历（博士研究生,硕士研究生,本科,专科,中专,高中及以下）
+学位（博士,硕士,学士,无）
+出生日期（从早到晚）
+参加工作时间（从早到晚）
+入社时间（从早到晚）
+序列（管理序列、生产序列）
+年龄（点击→从大到小，再点击→从小到大, 第三次点击恢复初始排序）
+除了年龄字段稍微特殊,其他列举的字段点击之后排序,再次点击恢复初始排序(按照员工序号排序,相当于点击查询按钮)
+每次排序只有一个字段生效,比如点击序列(对序列排序),点击年龄(对年龄排序,忽略序列排序)
 6.表格行支持拖拽移动 ✅已完成
 UserControl_EmpMaint页面的表格默认排序是根据员工的序号升序排列,拖拽移动后需要更新员工的序号,并且需要保存到数据库中.
 7.以下界面的表格不再展示层级信息 ✅已完成
 UserControl_EmpQuery
 UserControl_EmpRsQuery
-7.1 UserControl_EmpMaint 界面表格的层级信息根据调用方的CanChange值来决定是否显示
+7.1 UserControl_EmpMaint 界面表格的层级信息根据调用方的CanChange值来决定是否显示 ✅已完成
 如果CanChange为false,则不显示层级信息
 如果CanChange为true,则显示层级信息
-7.2 WpfEmpMaint.xaml 的层级信息不再展示
+7.2 WpfEmpMaint.xaml 的层级信息不再展示 ✅已完成
 8.调整列宽 ✅已完成
 当前默认列宽是100,有些列需要调整:
 姓名,民族列宽改为 64
