@@ -86,14 +86,14 @@
             this.flpnlTop.Controls.Add(this.btnSeq);
             this.flpnlTop.Controls.Add(this.btnDept);
             this.flpnlTop.Controls.Add(this.btnPost);
+            this.flpnlTop.Controls.Add(this.btnCondition);
             this.flpnlTop.Controls.Add(this.btnGender);
             this.flpnlTop.Controls.Add(this.btnEthnic);
-            this.flpnlTop.Controls.Add(this.btnChineseZodiac);
             this.flpnlTop.Controls.Add(this.btnPS);
             this.flpnlTop.Controls.Add(this.btnEducation);
             this.flpnlTop.Controls.Add(this.btnDegree);
             this.flpnlTop.Controls.Add(this.btnTitleLevel);
-            this.flpnlTop.Controls.Add(this.btnCondition);
+            this.flpnlTop.Controls.Add(this.btnChineseZodiac);
             this.flpnlTop.Controls.Add(this.btnQuery);
             this.flpnlTop.Controls.Add(this.btnAdd);
             this.flpnlTop.Controls.Add(this.btnMaint);
@@ -162,7 +162,7 @@
             // 
             // btnGender
             // 
-            this.btnGender.Location = new System.Drawing.Point(335, 16);
+            this.btnGender.Location = new System.Drawing.Point(401, 16);
             this.btnGender.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnGender.Name = "btnGender";
             this.btnGender.Size = new System.Drawing.Size(60, 30);
@@ -173,7 +173,7 @@
             // 
             // btnEthnic
             // 
-            this.btnEthnic.Location = new System.Drawing.Point(401, 16);
+            this.btnEthnic.Location = new System.Drawing.Point(467, 16);
             this.btnEthnic.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnEthnic.Name = "btnEthnic";
             this.btnEthnic.Size = new System.Drawing.Size(60, 30);
@@ -184,7 +184,7 @@
             // 
             // btnChineseZodiac
             // 
-            this.btnChineseZodiac.Location = new System.Drawing.Point(467, 16);
+            this.btnChineseZodiac.Location = new System.Drawing.Point(867, 16);
             this.btnChineseZodiac.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnChineseZodiac.Name = "btnChineseZodiac";
             this.btnChineseZodiac.Size = new System.Drawing.Size(60, 30);
@@ -239,19 +239,19 @@
             // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(867, 16);
+            this.btnCondition.Location = new System.Drawing.Point(335, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
-            this.btnCondition.Size = new System.Drawing.Size(95, 30);
+            this.btnCondition.Size = new System.Drawing.Size(60, 30);
             this.btnCondition.TabIndex = 12;
-            this.btnCondition.Text = "员工设置";
+            this.btnCondition.Text = "姓名";
             this.btnCondition.UseVisualStyleBackColor = true;
             this.btnCondition.Click += new System.EventHandler(this.btnCondition_Click);
             // 
             // btnQuery
             // 
             this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnQuery.Location = new System.Drawing.Point(968, 16);
+            this.btnQuery.Location = new System.Drawing.Point(933, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(60, 30);
@@ -263,7 +263,7 @@
             // btnAdd
             // 
             this.btnAdd.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnAdd.Location = new System.Drawing.Point(1034, 16);
+            this.btnAdd.Location = new System.Drawing.Point(999, 16);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(60, 30);
@@ -275,7 +275,7 @@
             // btnMaint
             // 
             this.btnMaint.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnMaint.Location = new System.Drawing.Point(1100, 16);
+            this.btnMaint.Location = new System.Drawing.Point(1065, 16);
             this.btnMaint.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnMaint.Name = "btnMaint";
             this.btnMaint.Size = new System.Drawing.Size(60, 30);
@@ -287,7 +287,7 @@
             // btnCg
             // 
             this.btnCg.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnCg.Location = new System.Drawing.Point(1166, 16);
+            this.btnCg.Location = new System.Drawing.Point(1131, 16);
             this.btnCg.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCg.Name = "btnCg";
             this.btnCg.Size = new System.Drawing.Size(60, 30);
@@ -298,7 +298,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(1232, 16);
+            this.btnExport.Location = new System.Drawing.Point(1197, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);

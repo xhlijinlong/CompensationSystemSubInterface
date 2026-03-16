@@ -260,16 +260,16 @@
             this.btnCondition.Location = new System.Drawing.Point(811, 16);
             this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnCondition.Name = "btnCondition";
-            this.btnCondition.Size = new System.Drawing.Size(95, 30);
+            this.btnCondition.Size = new System.Drawing.Size(60, 30);
             this.btnCondition.TabIndex = 12;
-            this.btnCondition.Text = "员工设置";
+            this.btnCondition.Text = "姓名";
             this.btnCondition.UseVisualStyleBackColor = true;
             this.btnCondition.Click += new System.EventHandler(this.btnCondition_Click);
             // 
             // btnQuery
             // 
             this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnQuery.Location = new System.Drawing.Point(912, 16);
+            this.btnQuery.Location = new System.Drawing.Point(877, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(60, 30);
@@ -281,7 +281,7 @@
             // btnWithdraw
             // 
             this.btnWithdraw.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnWithdraw.Location = new System.Drawing.Point(978, 16);
+            this.btnWithdraw.Location = new System.Drawing.Point(943, 16);
             this.btnWithdraw.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnWithdraw.Name = "btnWithdraw";
             this.btnWithdraw.Size = new System.Drawing.Size(60, 30);
@@ -292,7 +292,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(1044, 16);
+            this.btnExport.Location = new System.Drawing.Point(1009, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);

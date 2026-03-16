@@ -48,6 +48,13 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
             this.flpnlTop.SuspendLayout();
@@ -58,11 +65,11 @@
             // 
             this.pnlBody.Controls.Add(this.dgvSalary);
             this.pnlBody.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlBody.Location = new System.Drawing.Point(0, 60);
+            this.pnlBody.Location = new System.Drawing.Point(0, 90);
             this.pnlBody.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnlBody.Name = "pnlBody";
             this.pnlBody.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.pnlBody.Size = new System.Drawing.Size(1200, 518);
+            this.pnlBody.Size = new System.Drawing.Size(1200, 488);
             this.pnlBody.TabIndex = 1;
             // 
             // dgvSalary
@@ -78,7 +85,7 @@
             this.dgvSalary.ReadOnly = true;
             this.dgvSalary.RowTemplate.Height = 23;
             this.dgvSalary.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSalary.Size = new System.Drawing.Size(1188, 508);
+            this.dgvSalary.Size = new System.Drawing.Size(1188, 478);
             this.dgvSalary.TabIndex = 0;
             // 
             // flpnlTop
@@ -88,14 +95,21 @@
             this.flpnlTop.Controls.Add(this.btnSeq);
             this.flpnlTop.Controls.Add(this.btnDept);
             this.flpnlTop.Controls.Add(this.btnPost);
+            this.flpnlTop.Controls.Add(this.btnCondition);
             this.flpnlTop.Controls.Add(this.btnGender);
             this.flpnlTop.Controls.Add(this.btnEthnic);
-            this.flpnlTop.Controls.Add(this.btnChineseZodiac);
             this.flpnlTop.Controls.Add(this.btnPS);
             this.flpnlTop.Controls.Add(this.btnEducation);
             this.flpnlTop.Controls.Add(this.btnDegree);
+            this.flpnlTop.Controls.Add(this.button3);
+            this.flpnlTop.Controls.Add(this.button4);
+            this.flpnlTop.Controls.Add(this.button5);
+            this.flpnlTop.Controls.Add(this.button6);
+            this.flpnlTop.Controls.Add(this.button7);
             this.flpnlTop.Controls.Add(this.btnTitleLevel);
-            this.flpnlTop.Controls.Add(this.btnCondition);
+            this.flpnlTop.Controls.Add(this.button1);
+            this.flpnlTop.Controls.Add(this.btnChineseZodiac);
+            this.flpnlTop.Controls.Add(this.button2);
             this.flpnlTop.Controls.Add(this.btnQuery);
             this.flpnlTop.Controls.Add(this.btnExport);
             this.flpnlTop.Dock = System.Windows.Forms.DockStyle.Top;
@@ -104,14 +118,14 @@
             this.flpnlTop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.flpnlTop.Name = "flpnlTop";
             this.flpnlTop.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.flpnlTop.Size = new System.Drawing.Size(1200, 60);
+            this.flpnlTop.Size = new System.Drawing.Size(1200, 90);
             this.flpnlTop.TabIndex = 0;
             // 
             // lbName
             // 
             this.lbName.AutoSize = true;
-            this.lbName.Location = new System.Drawing.Point(6, 16);
-            this.lbName.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.lbName.Location = new System.Drawing.Point(6, 10);
+            this.lbName.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.lbName.Name = "lbName";
             this.lbName.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.lbName.Size = new System.Drawing.Size(54, 27);
@@ -120,16 +134,16 @@
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(66, 16);
-            this.txtName.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.txtName.Location = new System.Drawing.Point(66, 10);
+            this.txtName.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(65, 29);
             this.txtName.TabIndex = 10;
             // 
             // btnSeq
             // 
-            this.btnSeq.Location = new System.Drawing.Point(137, 16);
-            this.btnSeq.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnSeq.Location = new System.Drawing.Point(137, 10);
+            this.btnSeq.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnSeq.Name = "btnSeq";
             this.btnSeq.Size = new System.Drawing.Size(60, 30);
             this.btnSeq.TabIndex = 15;
@@ -139,8 +153,8 @@
             // 
             // btnDept
             // 
-            this.btnDept.Location = new System.Drawing.Point(203, 16);
-            this.btnDept.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnDept.Location = new System.Drawing.Point(203, 10);
+            this.btnDept.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnDept.Name = "btnDept";
             this.btnDept.Size = new System.Drawing.Size(60, 30);
             this.btnDept.TabIndex = 14;
@@ -150,8 +164,8 @@
             // 
             // btnPost
             // 
-            this.btnPost.Location = new System.Drawing.Point(269, 16);
-            this.btnPost.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnPost.Location = new System.Drawing.Point(269, 10);
+            this.btnPost.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnPost.Name = "btnPost";
             this.btnPost.Size = new System.Drawing.Size(60, 30);
             this.btnPost.TabIndex = 16;
@@ -161,8 +175,8 @@
             // 
             // btnGender
             // 
-            this.btnGender.Location = new System.Drawing.Point(335, 16);
-            this.btnGender.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnGender.Location = new System.Drawing.Point(401, 10);
+            this.btnGender.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnGender.Name = "btnGender";
             this.btnGender.Size = new System.Drawing.Size(60, 30);
             this.btnGender.TabIndex = 17;
@@ -172,8 +186,8 @@
             // 
             // btnEthnic
             // 
-            this.btnEthnic.Location = new System.Drawing.Point(401, 16);
-            this.btnEthnic.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnEthnic.Location = new System.Drawing.Point(467, 10);
+            this.btnEthnic.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnEthnic.Name = "btnEthnic";
             this.btnEthnic.Size = new System.Drawing.Size(60, 30);
             this.btnEthnic.TabIndex = 18;
@@ -183,8 +197,8 @@
             // 
             // btnChineseZodiac
             // 
-            this.btnChineseZodiac.Location = new System.Drawing.Point(467, 16);
-            this.btnChineseZodiac.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnChineseZodiac.Location = new System.Drawing.Point(445, 50);
+            this.btnChineseZodiac.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnChineseZodiac.Name = "btnChineseZodiac";
             this.btnChineseZodiac.Size = new System.Drawing.Size(60, 30);
             this.btnChineseZodiac.TabIndex = 23;
@@ -194,8 +208,8 @@
             // 
             // btnPS
             // 
-            this.btnPS.Location = new System.Drawing.Point(533, 16);
-            this.btnPS.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnPS.Location = new System.Drawing.Point(533, 10);
+            this.btnPS.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnPS.Name = "btnPS";
             this.btnPS.Size = new System.Drawing.Size(95, 30);
             this.btnPS.TabIndex = 19;
@@ -205,8 +219,8 @@
             // 
             // btnEducation
             // 
-            this.btnEducation.Location = new System.Drawing.Point(634, 16);
-            this.btnEducation.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnEducation.Location = new System.Drawing.Point(634, 10);
+            this.btnEducation.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnEducation.Name = "btnEducation";
             this.btnEducation.Size = new System.Drawing.Size(60, 30);
             this.btnEducation.TabIndex = 20;
@@ -216,8 +230,8 @@
             // 
             // btnDegree
             // 
-            this.btnDegree.Location = new System.Drawing.Point(700, 16);
-            this.btnDegree.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnDegree.Location = new System.Drawing.Point(700, 10);
+            this.btnDegree.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnDegree.Name = "btnDegree";
             this.btnDegree.Size = new System.Drawing.Size(60, 30);
             this.btnDegree.TabIndex = 21;
@@ -227,8 +241,8 @@
             // 
             // btnTitleLevel
             // 
-            this.btnTitleLevel.Location = new System.Drawing.Point(766, 16);
-            this.btnTitleLevel.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnTitleLevel.Location = new System.Drawing.Point(243, 50);
+            this.btnTitleLevel.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnTitleLevel.Name = "btnTitleLevel";
             this.btnTitleLevel.Size = new System.Drawing.Size(95, 30);
             this.btnTitleLevel.TabIndex = 22;
@@ -238,20 +252,20 @@
             // 
             // btnCondition
             // 
-            this.btnCondition.Location = new System.Drawing.Point(867, 16);
-            this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnCondition.Location = new System.Drawing.Point(335, 10);
+            this.btnCondition.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnCondition.Name = "btnCondition";
-            this.btnCondition.Size = new System.Drawing.Size(95, 30);
+            this.btnCondition.Size = new System.Drawing.Size(60, 30);
             this.btnCondition.TabIndex = 12;
-            this.btnCondition.Text = "员工设置";
+            this.btnCondition.Text = "姓名";
             this.btnCondition.UseVisualStyleBackColor = true;
             this.btnCondition.Click += new System.EventHandler(this.btnCondition_Click);
             // 
             // btnQuery
             // 
             this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnQuery.Location = new System.Drawing.Point(968, 16);
-            this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnQuery.Location = new System.Drawing.Point(577, 50);
+            this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(60, 30);
             this.btnQuery.TabIndex = 11;
@@ -261,8 +275,8 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(1034, 16);
-            this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
+            this.btnExport.Location = new System.Drawing.Point(643, 50);
+            this.btnExport.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);
             this.btnExport.TabIndex = 13;
@@ -285,6 +299,76 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(32, 17);
             this.lblStatus.Text = "就绪";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(344, 50);
+            this.button1.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(95, 30);
+            this.button1.TabIndex = 24;
+            this.button1.Text = "专业技能";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(511, 50);
+            this.button2.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(60, 30);
+            this.button2.TabIndex = 25;
+            this.button2.Text = "年龄";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(766, 10);
+            this.button3.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(95, 30);
+            this.button3.TabIndex = 26;
+            this.button3.Text = "出生日期";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(867, 10);
+            this.button4.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(130, 30);
+            this.button4.TabIndex = 27;
+            this.button4.Text = "参加工作时间";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(1003, 10);
+            this.button5.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(95, 30);
+            this.button5.TabIndex = 28;
+            this.button5.Text = "入社时间";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(6, 50);
+            this.button6.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(130, 30);
+            this.button6.TabIndex = 29;
+            this.button6.Text = "任现岗位时间";
+            this.button6.UseVisualStyleBackColor = true;
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(142, 50);
+            this.button7.Margin = new System.Windows.Forms.Padding(0, 5, 6, 5);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(95, 30);
+            this.button7.TabIndex = 30;
+            this.button7.Text = "专业技术";
+            this.button7.UseVisualStyleBackColor = true;
             // 
             // UserControl_EmpQuery
             // 
@@ -331,5 +415,12 @@
         private System.Windows.Forms.Button btnChineseZodiac;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button7;
     }
 }
