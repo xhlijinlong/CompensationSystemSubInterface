@@ -1,4 +1,4 @@
-﻿using CompensationSystemSubInterface.Models;
+using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Utilities;
 using System;
 using System.Collections.Generic;
@@ -90,7 +90,9 @@ namespace CompensationSystemSubInterface {
                 int zaizhi = _showTerminatedEmployees ? 0 : 1;
                 string empSql = $@"SELECT y.id, y.xingming, y.yonghuming, y.xlid, y.bmid, y.gwid, 
                                   y.xingbie, y.minzu, y.shuxing, y.zhengzhimm, 
-                                  y.xueli, y.xuewei, y.zhichengdj 
+                                  y.xueli, y.xuewei, y.zhichengdj,
+                                  y.chushengrq, y.gongzuosj, y.rusisj, y.gangweisj,
+                                  y.nianling, y.zhuanyejn, y.zhuanyejs
                                   FROM ZX_config_yg y WHERE y.zaizhi={zaizhi} ORDER BY y.xuhao";
                 DataTable dtEmp = SqlHelper.ExecuteDataTable(empSql);
 
@@ -141,6 +143,52 @@ namespace CompensationSystemSubInterface {
                     if (_filterCondition.Degrees.Count > 0 && !_filterCondition.Degrees.Contains(xuewei)) continue;
                     // 按职称等级筛选
                     if (_filterCondition.TitleLevels.Count > 0 && !_filterCondition.TitleLevels.Contains(zhichengdj)) continue;
+
+                    // 按出生日期年月筛选
+                    if (_filterCondition.BirthdayYearMonths.Count > 0) {
+                        DateTime? dt2 = dr["chushengrq"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(dr["chushengrq"]) : null;
+                        if (dt2 == null || !_filterCondition.BirthdayYearMonths.Contains(dt2.Value.ToString("yyyy-MM"))) continue;
+                    }
+                    // 按参加工作时间年月筛选
+                    if (_filterCondition.WorkDateYearMonths.Count > 0) {
+                        DateTime? dt2 = dr["gongzuosj"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(dr["gongzuosj"]) : null;
+                        if (dt2 == null || !_filterCondition.WorkDateYearMonths.Contains(dt2.Value.ToString("yyyy-MM"))) continue;
+                    }
+                    // 按入社时间年月筛选
+                    if (_filterCondition.HireDateYearMonths.Count > 0) {
+                        DateTime? dt2 = dr["rusisj"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(dr["rusisj"]) : null;
+                        if (dt2 == null || !_filterCondition.HireDateYearMonths.Contains(dt2.Value.ToString("yyyy-MM"))) continue;
+                    }
+                    // 按任现岗位时间年月筛选
+                    if (_filterCondition.PositionDateYearMonths.Count > 0) {
+                        DateTime? dt2 = dr["gangweisj"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(dr["gangweisj"]) : null;
+                        if (dt2 == null || !_filterCondition.PositionDateYearMonths.Contains(dt2.Value.ToString("yyyy-MM"))) continue;
+                    }
+                    // 按年龄段筛选
+                    if (_filterCondition.AgeRanges.Count > 0) {
+                        int age = dr["nianling"] != DBNull.Value ? Convert.ToInt32(dr["nianling"]) : -1;
+                        bool matched = false;
+                        foreach (var range in _filterCondition.AgeRanges) {
+                            if (range == "35岁以下" && age >= 0 && age < 35) { matched = true; break; }
+                            else if (range == "35-39" && age >= 35 && age <= 39) { matched = true; break; }
+                            else if (range == "40-44" && age >= 40 && age <= 44) { matched = true; break; }
+                            else if (range == "45-49" && age >= 45 && age <= 49) { matched = true; break; }
+                            else if (range == "50-54" && age >= 50 && age <= 54) { matched = true; break; }
+                            else if (range == "55岁以上" && age >= 55) { matched = true; break; }
+                        }
+                        if (!matched) continue;
+                    }
+                    // 按专业技能筛选
+                    if (_filterCondition.Skills.Count > 0) {
+                        string skill = dr["zhuanyejn"]?.ToString() ?? "";
+                        if (!_filterCondition.Skills.Contains(skill)) continue;
+                    }
+                    // 按专业技术筛选
+                    if (_filterCondition.Technologies.Count > 0) {
+                        string tech = dr["zhuanyejs"]?.ToString() ?? "";
+                        if (!_filterCondition.Technologies.Contains(tech)) continue;
+                    }
+
                     // 按搜索文本筛选（姓名或用户名）
                     if (!string.IsNullOrEmpty(searchText) && !name.Contains(searchText) && !yonghuming.Contains(searchText)) continue;
 

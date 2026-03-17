@@ -1,4 +1,4 @@
-﻿using CompensationSystemSubInterface.Common;
+using CompensationSystemSubInterface.Common;
 using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Services;
 using CompensationSystemSubInterface.Utilities;
@@ -315,6 +315,11 @@ namespace CompensationSystemSubInterface {
                 _wpfCondition.Closed += (s, args) => {
                     _wpfCondition = null;
                 };
+
+                // 计算按钮在屏幕上的位置，将窗口显示在按钮下方
+                var screenPoint = btnCondition.PointToScreen(new System.Drawing.Point(0, btnCondition.Height));
+                _wpfCondition.Left = screenPoint.X;
+                _wpfCondition.Top = screenPoint.Y;
 
                 _wpfCondition.Show();
             } else {

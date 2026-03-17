@@ -111,6 +111,42 @@ namespace CompensationSystemSubInterface.Services {
 
                 if (cond.TitleLevels.Count > 0)
                     sb.Append($" AND yg.zhichengdj IN ({string.Join(",", cond.TitleLevels.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                // 日期年月筛选（格式 "yyyy-MM"）
+                if (cond.BirthdayYearMonths.Count > 0)
+                    sb.Append($" AND FORMAT(yg.chushengrq, 'yyyy-MM') IN ({string.Join(",", cond.BirthdayYearMonths.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.WorkDateYearMonths.Count > 0)
+                    sb.Append($" AND FORMAT(yg.gongzuosj, 'yyyy-MM') IN ({string.Join(",", cond.WorkDateYearMonths.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.HireDateYearMonths.Count > 0)
+                    sb.Append($" AND FORMAT(yg.rusisj, 'yyyy-MM') IN ({string.Join(",", cond.HireDateYearMonths.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                if (cond.PositionDateYearMonths.Count > 0)
+                    sb.Append($" AND FORMAT(yg.gangweisj, 'yyyy-MM') IN ({string.Join(",", cond.PositionDateYearMonths.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                // 年龄段筛选
+                if (cond.AgeRanges.Count > 0) {
+                    var ageClauses = new List<string>();
+                    foreach (var range in cond.AgeRanges) {
+                        if (range == "35岁以下") ageClauses.Add("yg.nianling < 35");
+                        else if (range == "35-39") ageClauses.Add("yg.nianling BETWEEN 35 AND 39");
+                        else if (range == "40-44") ageClauses.Add("yg.nianling BETWEEN 40 AND 44");
+                        else if (range == "45-49") ageClauses.Add("yg.nianling BETWEEN 45 AND 49");
+                        else if (range == "50-54") ageClauses.Add("yg.nianling BETWEEN 50 AND 54");
+                        else if (range == "55岁以上") ageClauses.Add("yg.nianling >= 55");
+                    }
+                    if (ageClauses.Count > 0)
+                        sb.Append($" AND ({string.Join(" OR ", ageClauses)})");
+                }
+
+                // 专业技能筛选
+                if (cond.Skills.Count > 0)
+                    sb.Append($" AND yg.zhuanyejn IN ({string.Join(",", cond.Skills.Select(x => "'" + x.Replace("'", "''") + "'"))})");
+
+                // 专业技术筛选
+                if (cond.Technologies.Count > 0)
+                    sb.Append($" AND yg.zhuanyejs IN ({string.Join(",", cond.Technologies.Select(x => "'" + x.Replace("'", "''") + "'"))})");
             }
 
             // 3. 排序

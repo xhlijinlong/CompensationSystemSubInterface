@@ -1,4 +1,4 @@
-﻿namespace CompensationSystemSubInterface
+namespace CompensationSystemSubInterface
 {
     partial class UserControl_EmpQuery
     {
@@ -309,6 +309,7 @@
             this.btnSkill.TabIndex = 24;
             this.btnSkill.Text = "专业技能";
             this.btnSkill.UseVisualStyleBackColor = true;
+            this.btnSkill.Click += new System.EventHandler(this.btnSkill_Click);
             // 
             // btnAge
             // 
@@ -319,6 +320,7 @@
             this.btnAge.TabIndex = 25;
             this.btnAge.Text = "年龄";
             this.btnAge.UseVisualStyleBackColor = true;
+            this.btnAge.Click += new System.EventHandler(this.btnAge_Click);
             // 
             // btnBirthday
             // 
@@ -329,6 +331,7 @@
             this.btnBirthday.TabIndex = 26;
             this.btnBirthday.Text = "出生日期";
             this.btnBirthday.UseVisualStyleBackColor = true;
+            this.btnBirthday.Click += new System.EventHandler(this.btnBirthday_Click);
             // 
             // btnWorkDate
             // 
@@ -339,6 +342,7 @@
             this.btnWorkDate.TabIndex = 27;
             this.btnWorkDate.Text = "参加工作时间";
             this.btnWorkDate.UseVisualStyleBackColor = true;
+            this.btnWorkDate.Click += new System.EventHandler(this.btnWorkDate_Click);
             // 
             // btnHiredate
             // 
@@ -349,6 +353,7 @@
             this.btnHiredate.TabIndex = 28;
             this.btnHiredate.Text = "入社时间";
             this.btnHiredate.UseVisualStyleBackColor = true;
+            this.btnHiredate.Click += new System.EventHandler(this.btnHiredate_Click);
             // 
             // btnPositionDate
             // 
@@ -359,6 +364,7 @@
             this.btnPositionDate.TabIndex = 29;
             this.btnPositionDate.Text = "任现岗位时间";
             this.btnPositionDate.UseVisualStyleBackColor = true;
+            this.btnPositionDate.Click += new System.EventHandler(this.btnPositionDate_Click);
             // 
             // btnTechnology
             // 
@@ -369,6 +375,7 @@
             this.btnTechnology.TabIndex = 30;
             this.btnTechnology.Text = "专业技术";
             this.btnTechnology.UseVisualStyleBackColor = true;
+            this.btnTechnology.Click += new System.EventHandler(this.btnTechnology_Click);
             // 
             // UserControl_EmpQuery
             // 

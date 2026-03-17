@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="CompensationSystemSubInterface.WpfFilterPanel"
+<UserControl x:Class="CompensationSystemSubInterface.WpfFilterPanel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <!-- TreeViewItem 样式 -->
         <Style TargetType="TreeViewItem">
-            <Setter Property="IsExpanded" Value="True" />
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
             <Setter Property="Padding" Value="2" />
         </Style>
     </UserControl.Resources>

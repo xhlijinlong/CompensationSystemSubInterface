@@ -1,4 +1,4 @@
-﻿using CompensationSystemSubInterface.Common;
+using CompensationSystemSubInterface.Common;
 using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Services;
 using CompensationSystemSubInterface.Utilities;
@@ -45,6 +45,13 @@ namespace CompensationSystemSubInterface {
         private WpfFilterPanel _treeEducation;
         private WpfFilterPanel _treeDegree;
         private WpfFilterPanel _treeTitleLevel;
+        private WpfFilterPanel _treeBirthday;
+        private WpfFilterPanel _treeWorkDate;
+        private WpfFilterPanel _treeHiredate;
+        private WpfFilterPanel _treePositionDate;
+        private WpfFilterPanel _treeAge;
+        private WpfFilterPanel _treeSkill;
+        private WpfFilterPanel _treeTechnology;
 
         // 下拉弹窗
         private ToolStripDropDown _popupSeq;
@@ -57,6 +64,13 @@ namespace CompensationSystemSubInterface {
         private ToolStripDropDown _popupEducation;
         private ToolStripDropDown _popupDegree;
         private ToolStripDropDown _popupTitleLevel;
+        private ToolStripDropDown _popupBirthday;
+        private ToolStripDropDown _popupWorkDate;
+        private ToolStripDropDown _popupHiredate;
+        private ToolStripDropDown _popupPositionDate;
+        private ToolStripDropDown _popupAge;
+        private ToolStripDropDown _popupSkill;
+        private ToolStripDropDown _popupTechnology;
 
         // 部门限制（由主程序设置，用于部门主任查看本部门数据）
         private int _departmentId = -1; //-1 所有部门
@@ -259,6 +273,76 @@ namespace CompensationSystemSubInterface {
             };
             _popupTitleLevel = CreatePopup(_treeTitleLevel, popWidth, popHeight);
 
+            // 11. 出生日期（年月二级树）
+            _treeBirthday = new WpfFilterPanel();
+            _treeBirthday.LoadDateYearMonths("chushengrq", "出生日期");
+            _treeBirthday.SelectionChanged += ids => {
+                _condition.BirthdayYearMonths = _treeBirthday.GetAllLeafSelectedTexts();
+                UpdateButtonText(btnBirthday, "出生日期", _treeBirthday);
+                RefreshConditionWindowEmployees();
+            };
+            _popupBirthday = CreatePopup(_treeBirthday, popWidth, popHeight);
+
+            // 12. 参加工作时间（年月二级树）
+            _treeWorkDate = new WpfFilterPanel();
+            _treeWorkDate.LoadDateYearMonths("gongzuosj", "参加工作时间");
+            _treeWorkDate.SelectionChanged += ids => {
+                _condition.WorkDateYearMonths = _treeWorkDate.GetAllLeafSelectedTexts();
+                UpdateButtonText(btnWorkDate, "参加工作时间", _treeWorkDate);
+                RefreshConditionWindowEmployees();
+            };
+            _popupWorkDate = CreatePopup(_treeWorkDate, popWidth, popHeight);
+
+            // 13. 入社时间（年月二级树）
+            _treeHiredate = new WpfFilterPanel();
+            _treeHiredate.LoadDateYearMonths("rusisj", "入社时间");
+            _treeHiredate.SelectionChanged += ids => {
+                _condition.HireDateYearMonths = _treeHiredate.GetAllLeafSelectedTexts();
+                UpdateButtonText(btnHiredate, "入社时间", _treeHiredate);
+                RefreshConditionWindowEmployees();
+            };
+            _popupHiredate = CreatePopup(_treeHiredate, popWidth, popHeight);
+
+            // 14. 任现岗位时间（年月二级树）
+            _treePositionDate = new WpfFilterPanel();
+            _treePositionDate.LoadDateYearMonths("gangweisj", "任现岗位时间");
+            _treePositionDate.SelectionChanged += ids => {
+                _condition.PositionDateYearMonths = _treePositionDate.GetAllLeafSelectedTexts();
+                UpdateButtonText(btnPositionDate, "任现岗位时间", _treePositionDate);
+                RefreshConditionWindowEmployees();
+            };
+            _popupPositionDate = CreatePopup(_treePositionDate, popWidth, popHeight);
+
+            // 15. 年龄段
+            _treeAge = new WpfFilterPanel();
+            _treeAge.LoadAgeRanges();
+            _treeAge.SelectionChanged += ids => {
+                _condition.AgeRanges = _treeAge.GetSelectedTexts();
+                UpdateButtonText(btnAge, "年龄", _treeAge);
+                RefreshConditionWindowEmployees();
+            };
+            _popupAge = CreatePopup(_treeAge, 200, 250);
+
+            // 16. 专业技能（多选）
+            _treeSkill = new WpfFilterPanel();
+            _treeSkill.LoadSkills();
+            _treeSkill.SelectionChanged += ids => {
+                _condition.Skills = _treeSkill.GetSelectedTexts();
+                UpdateButtonText(btnSkill, "专业技能", _treeSkill);
+                RefreshConditionWindowEmployees();
+            };
+            _popupSkill = CreatePopup(_treeSkill, popWidth, popHeight);
+
+            // 17. 专业技术（多选）
+            _treeTechnology = new WpfFilterPanel();
+            _treeTechnology.LoadTechnologies();
+            _treeTechnology.SelectionChanged += ids => {
+                _condition.Technologies = _treeTechnology.GetSelectedTexts();
+                UpdateButtonText(btnTechnology, "专业技术", _treeTechnology);
+                RefreshConditionWindowEmployees();
+            };
+            _popupTechnology = CreatePopup(_treeTechnology, popWidth, popHeight);
+
             // 初始化按钮文本
             UpdateButtonText(btnSeq, "序列", _treeSeq);
             UpdateButtonText(btnDept, "部门", _treeDept);
@@ -269,6 +353,13 @@ namespace CompensationSystemSubInterface {
             UpdateButtonText(btnEducation, "学历", _treeEducation);
             UpdateButtonText(btnDegree, "学位", _treeDegree);
             UpdateButtonText(btnTitleLevel, "职称等级", _treeTitleLevel);
+            UpdateButtonText(btnBirthday, "出生日期", _treeBirthday);
+            UpdateButtonText(btnWorkDate, "参加工作时间", _treeWorkDate);
+            UpdateButtonText(btnHiredate, "入社时间", _treeHiredate);
+            UpdateButtonText(btnPositionDate, "任现岗位时间", _treePositionDate);
+            UpdateButtonText(btnAge, "年龄", _treeAge);
+            UpdateButtonText(btnSkill, "专业技能", _treeSkill);
+            UpdateButtonText(btnTechnology, "专业技术", _treeTechnology);
         }
 
         /// <summary>
@@ -442,6 +533,11 @@ namespace CompensationSystemSubInterface {
                     _wpfCondition = null;
                 };
 
+                // 计算按钮在屏幕上的位置，将窗口显示在按钮下方
+                var screenPoint = btnCondition.PointToScreen(new System.Drawing.Point(0, btnCondition.Height));
+                _wpfCondition.Left = screenPoint.X;
+                _wpfCondition.Top = screenPoint.Y;
+
                 _wpfCondition.Show();
             } else {
                 _wpfCondition.WindowState = System.Windows.WindowState.Normal;
@@ -515,6 +611,34 @@ namespace CompensationSystemSubInterface {
 
         private void btnChineseZodiac_Click(object sender, EventArgs e) {
             _popupZodiac?.Show(btnChineseZodiac, 0, btnChineseZodiac.Height);
+        }
+
+        private void btnBirthday_Click(object sender, EventArgs e) {
+            _popupBirthday?.Show(btnBirthday, 0, btnBirthday.Height);
+        }
+
+        private void btnWorkDate_Click(object sender, EventArgs e) {
+            _popupWorkDate?.Show(btnWorkDate, 0, btnWorkDate.Height);
+        }
+
+        private void btnHiredate_Click(object sender, EventArgs e) {
+            _popupHiredate?.Show(btnHiredate, 0, btnHiredate.Height);
+        }
+
+        private void btnPositionDate_Click(object sender, EventArgs e) {
+            _popupPositionDate?.Show(btnPositionDate, 0, btnPositionDate.Height);
+        }
+
+        private void btnAge_Click(object sender, EventArgs e) {
+            _popupAge?.Show(btnAge, 0, btnAge.Height);
+        }
+
+        private void btnSkill_Click(object sender, EventArgs e) {
+            _popupSkill?.Show(btnSkill, 0, btnSkill.Height);
+        }
+
+        private void btnTechnology_Click(object sender, EventArgs e) {
+            _popupTechnology?.Show(btnTechnology, 0, btnTechnology.Height);
         }
 
         // ===== 表头排序逻辑 =====

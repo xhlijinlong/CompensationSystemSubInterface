@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -220,11 +220,118 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
+        /// 加载日期年月（从数据库查询实际存在的年月，构建二级树：年→月）
+        /// </summary>
+        /// <param name="dbFieldName">数据库字段名（如 chushengrq, gongzuosj 等）</param>
+        /// <param name="displayName">显示名称（如 "出生日期"）</param>
+        public void LoadDateYearMonths(string dbFieldName, string displayName) {
+            _root = new FilterTreeNode { DisplayText = "全部" + displayName, IsThreeState = true, FontWeight = FontWeights.Bold };
+
+            string sql = $@"SELECT DISTINCT YEAR({dbFieldName}) AS y, MONTH({dbFieldName}) AS m 
+                           FROM ZX_config_yg 
+                           WHERE {dbFieldName} IS NOT NULL AND {dbFieldName} > '1900-01-01' AND zaizhi=1 
+                           ORDER BY y, m";
+            DataTable dt = SqlHelper.ExecuteDataTable(sql);
+
+            // 按年分组构建二级树
+            var yearGroups = new Dictionary<int, FilterTreeNode>();
+            int id = 1;
+            foreach (DataRow row in dt.Rows) {
+                int year = Convert.ToInt32(row["y"]);
+                int month = Convert.ToInt32(row["m"]);
+
+                if (!yearGroups.ContainsKey(year)) {
+                    var yearNode = new FilterTreeNode {
+                        Id = year,
+                        DisplayText = year + "年",
+                        IsThreeState = true,
+                        FontWeight = FontWeights.Bold,
+                        IsExpanded = false,
+                        Parent = _root
+                    };
+                    _root.Children.Add(yearNode);
+                    yearGroups[year] = yearNode;
+                }
+
+                var monthNode = new FilterTreeNode {
+                    Id = id++,
+                    DisplayText = year.ToString("D4") + "-" + month.ToString("D2"),
+                    Parent = yearGroups[year]
+                };
+                yearGroups[year].Children.Add(monthNode);
+            }
+            BindTree();
+        }
+
+        /// <summary>
+        /// 加载年龄段（固定6个档位）
+        /// </summary>
+        public void LoadAgeRanges() {
+            _root = new FilterTreeNode { DisplayText = "全部年龄", IsThreeState = true, FontWeight = FontWeights.Bold };
+            string[] ranges = new[] { "35岁以下", "35-39", "40-44", "45-49", "50-54", "55岁以上" };
+            int id = 1;
+            foreach (var r in ranges) {
+                _root.Children.Add(new FilterTreeNode { Id = id++, DisplayText = r, Parent = _root });
+            }
+            BindTree();
+        }
+
+        /// <summary>
+        /// 加载专业技能（从数据库DISTINCT查询）
+        /// </summary>
+        public void LoadSkills() {
+            _root = new FilterTreeNode { DisplayText = "全部专业技能", IsThreeState = true, FontWeight = FontWeights.Bold };
+            string sql = "SELECT DISTINCT zhuanyejn FROM ZX_config_yg WHERE zhuanyejn IS NOT NULL AND zhuanyejn <> '' AND zaizhi=1 ORDER BY zhuanyejn";
+            DataTable dt = SqlHelper.ExecuteDataTable(sql);
+            int id = 1;
+            foreach (DataRow row in dt.Rows) {
+                _root.Children.Add(new FilterTreeNode { Id = id++, DisplayText = row["zhuanyejn"].ToString(), Parent = _root });
+            }
+            BindTree();
+        }
+
+        /// <summary>
+        /// 加载专业技术（从数据库DISTINCT查询）
+        /// </summary>
+        public void LoadTechnologies() {
+            _root = new FilterTreeNode { DisplayText = "全部专业技术", IsThreeState = true, FontWeight = FontWeights.Bold };
+            string sql = "SELECT DISTINCT zhuanyejs FROM ZX_config_yg WHERE zhuanyejs IS NOT NULL AND zhuanyejs <> '' AND zaizhi=1 ORDER BY zhuanyejs";
+            DataTable dt = SqlHelper.ExecuteDataTable(sql);
+            int id = 1;
+            foreach (DataRow row in dt.Rows) {
+                _root.Children.Add(new FilterTreeNode { Id = id++, DisplayText = row["zhuanyejs"].ToString(), Parent = _root });
+            }
+            BindTree();
+        }
+
+        /// <summary>
         /// 获取选中项的显示文本列表（用于考核结果等字符串类型筛选）
+        /// 仅获取一级子节点
         /// </summary>
         public List<string> GetSelectedTexts() {
             if (_root == null) return new List<string>();
             return _root.Children.Where(x => x.IsChecked == true).Select(x => x.DisplayText).ToList();
+        }
+
+        /// <summary>
+        /// 获取所有叶子节点中选中项的显示文本列表（用于二级树，如日期年月）
+        /// 递归遍历所有层级，只返回没有子节点（叶子节点）的选中项
+        /// </summary>
+        public List<string> GetAllLeafSelectedTexts() {
+            if (_root == null) return new List<string>();
+            var result = new List<string>();
+            CollectLeafTexts(_root, result);
+            return result;
+        }
+
+        private void CollectLeafTexts(FilterTreeNode node, List<string> result) {
+            foreach (var child in node.Children) {
+                if (child.Children.Count > 0) {
+                    CollectLeafTexts(child, result);
+                } else if (child.IsChecked == true) {
+                    result.Add(child.DisplayText);
+                }
+            }
         }
 
         private void BindTree() {
@@ -242,12 +349,13 @@ namespace CompensationSystemSubInterface {
 
         public int GetSelectedCount() {
             if (_root == null) return 0;
-            return _root.Children.Count(x => x.IsChecked == true);
+            // 对于二级树，部分选中（IsChecked==null）也应计入已选中
+            return _root.Children.Count(x => x.IsChecked == true || x.IsChecked == null);
         }
 
         public bool IsAllSelected() {
             if (_root == null || _root.Children.Count == 0) return false;
-            return _root.Children.All(x => x.IsChecked == true);
+            return _root.IsChecked == true;
         }
 
         private void CheckBox_Click(object sender, RoutedEventArgs e) {
@@ -256,28 +364,47 @@ namespace CompensationSystemSubInterface {
             if (node == null) return;
 
             if (node.Children.Count > 0) {
-                // 父节点点击
+                // 父节点点击 - 递归设置所有子孙节点
                 bool isChecked = node.IsChecked == true;
-                foreach (var child in node.Children) {
-                    child.IsChecked = isChecked;
+                SetAllChildrenChecked(node, isChecked);
+                // 更新父节点状态（如果有父节点）
+                if (node.Parent != null) {
+                    UpdateParentState(node.Parent);
                 }
             } else {
-                // 子节点点击
+                // 叶子节点点击 - 逐级向上更新父节点状态
                 UpdateParentState(node.Parent);
             }
 
             SelectionChanged?.Invoke(GetSelectedIds());
         }
 
+        /// <summary>
+        /// 递归设置所有子节点的选中状态
+        /// </summary>
+        private void SetAllChildrenChecked(FilterTreeNode node, bool isChecked) {
+            foreach (var child in node.Children) {
+                child.IsChecked = isChecked;
+                if (child.Children.Count > 0) {
+                    SetAllChildrenChecked(child, isChecked);
+                }
+            }
+        }
+
         private void UpdateParentState(FilterTreeNode parent) {
             if (parent == null || parent.Children.Count == 0) return;
 
             bool allChecked = parent.Children.All(x => x.IsChecked == true);
-            bool anyChecked = parent.Children.Any(x => x.IsChecked == true);
+            bool anyChecked = parent.Children.Any(x => x.IsChecked == true || x.IsChecked == null);
 
             if (allChecked) parent.IsChecked = true;
             else if (anyChecked) parent.IsChecked = null;
             else parent.IsChecked = false;
+
+            // 递归向上更新
+            if (parent.Parent != null) {
+                UpdateParentState(parent.Parent);
+            }
         }
 
         #endregion
@@ -289,6 +416,7 @@ namespace CompensationSystemSubInterface {
 
     public class FilterTreeNode : INotifyPropertyChanged {
         private bool? _isChecked = false;
+        private bool _isExpanded = true;
 
         public int Id { get; set; }
         public string DisplayText { get; set; }
@@ -296,6 +424,19 @@ namespace CompensationSystemSubInterface {
         public FontWeight FontWeight { get; set; } = FontWeights.Normal;
         public FilterTreeNode Parent { get; set; }
         public ObservableCollection<FilterTreeNode> Children { get; set; } = new ObservableCollection<FilterTreeNode>();
+
+        /// <summary>
+        /// 节点是否展开（默认为true，日期年月的年节点设为false）
+        /// </summary>
+        public bool IsExpanded {
+            get => _isExpanded;
+            set {
+                if (_isExpanded != value) {
+                    _isExpanded = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsExpanded)));
+                }
+            }
+        }
 
         public bool? IsChecked {
             get => _isChecked;
