@@ -176,7 +176,7 @@ UserControl_EmpQuery和UserControl_SalaryStatistics
 11.不显示层级 ✅已完成
 员工信息查询页 UserControl_EmpQuery
 员工离职信息页 UserControl_EmpRsQuery
-12.员工信息查询页新增查询按钮
+12.员工信息查询页新增查询按钮 ✅已完成
 UserControl_EmpQuery 新增条件: 出生日期 参加工作时间 入社时间 任现岗位时间 年龄 专业技能 专业技术
 
 其中专业技能和专业技术是多选,具体值以数据库查询数据为准

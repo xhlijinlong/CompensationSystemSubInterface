@@ -29,10 +29,9 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private EmpCondition _condition = new EmpCondition();
 
-        /// <summary>
-        /// 高级筛选条件窗体实例（WPF版本）
-        /// </summary>
-        private WpfEmpCondition _wpfCondition = null;
+        // 姓名筛选控件
+        private WpfEmpCondition _wpfCondition;
+        private ToolStripDropDown _popupCondition;
 
         // WPF 筛选树控件
         private WpfFilterPanel _treeSeq;
@@ -125,10 +124,7 @@ namespace CompensationSystemSubInterface {
         public UserControl_EmpQuery() {
             InitializeComponent();
 
-            // 当控件销毁时关闭WPF弹窗
-            this.HandleDestroyed += (s, e) => {
-                _wpfCondition?.Close();
-            };
+
 
             // 搜索框回车触发查询
             txtName.KeyDown += (s, e) => {
@@ -343,6 +339,16 @@ namespace CompensationSystemSubInterface {
             };
             _popupTechnology = CreatePopup(_treeTechnology, popWidth, popHeight);
 
+            // 姓名筛选
+            _wpfCondition = new WpfEmpCondition(_condition.EmployeeIds, _condition.DepartmentIds);
+            _wpfCondition.RefreshFilterConditions(_condition);
+            _wpfCondition.ApplySelect += (empIds) => {
+                _condition.EmployeeIds = empIds;
+                UpdateConditionButtonText();
+                PerformQuery();
+            };
+            _popupCondition = CreatePopup(_wpfCondition, 300, 400);
+
             // 初始化按钮文本
             UpdateButtonText(btnSeq, "序列", _treeSeq);
             UpdateButtonText(btnDept, "部门", _treeDept);
@@ -360,6 +366,7 @@ namespace CompensationSystemSubInterface {
             UpdateButtonText(btnAge, "年龄", _treeAge);
             UpdateButtonText(btnSkill, "专业技能", _treeSkill);
             UpdateButtonText(btnTechnology, "专业技术", _treeTechnology);
+            UpdateConditionButtonText();
         }
 
         /// <summary>
@@ -370,13 +377,24 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
+        /// 更新姓名按钮文本
+        /// </summary>
+        private void UpdateConditionButtonText() {
+            if (_wpfCondition == null) return;
+            int count = _wpfCondition.GetSelectedCount();
+            bool isAll = _wpfCondition.IsAllSelected();
+            if (count == 0 || isAll) btnCondition.Text = "姓名";
+            else btnCondition.Text = "姓名*";
+        }
+
+        /// <summary>
         /// 创建包含 WPF 控件的下拉弹窗
         /// </summary>
-        private ToolStripDropDown CreatePopup(WpfFilterPanel treeContent, int width, int height) {
+        private ToolStripDropDown CreatePopup(System.Windows.UIElement wpfContent, int width, int height) {
             ElementHost host = new ElementHost {
                 AutoSize = false,
                 Size = new System.Drawing.Size(width, height),
-                Child = treeContent,
+                Child = wpfContent,
                 Dock = DockStyle.Fill
             };
 
@@ -514,35 +532,48 @@ namespace CompensationSystemSubInterface {
 
             // 冻结前4列（员工编号, 部门, 职务, 姓名）
             if (dgvSalary.Columns["姓名"] != null) dgvSalary.Columns["姓名"].Frozen = true;
+
+            // 标记可排序列：蓝色表头文字 + 排序方向箭头
+            UpdateSortIndicators();
+        }
+
+        /// <summary>
+        /// 更新可排序列的表头样式：蓝色文字提示可排序，活跃排序列显示方向箭头
+        /// </summary>
+        private void UpdateSortIndicators() {
+            Color sortableColor = Color.FromArgb(0, 102, 204); // 蓝色
+
+            foreach (DataGridViewColumn col in dgvSalary.Columns) {
+                string colName = col.Name;
+                bool isSortable = _enumSortOrders.ContainsKey(colName) || _dateSortColumns.Contains(colName) || colName == "年龄";
+
+                if (isSortable) {
+                    // 蓝色表头文字表示可排序
+                    col.HeaderCell.Style.ForeColor = sortableColor;
+
+                    // 如果是当前排序列，显示排序方向箭头
+                    if (_currentSortColumn == colName) {
+                        string arrow = "";
+                        if (colName == "年龄") {
+                            arrow = _ageSortState == 1 ? " ▼" : (_ageSortState == 2 ? " ▲" : "");
+                        } else if (_dateSortColumns.Contains(colName)) {
+                            arrow = " ▲"; // 日期默认升序
+                        } else {
+                            arrow = " ▲"; // 枚举按优先级排序
+                        }
+                        col.HeaderText = colName + arrow;
+                    } else {
+                        col.HeaderText = colName;
+                    }
+                }
+            }
         }
 
         /// <summary>
         /// 条件设置按钮点击事件处理，打开或激活员工筛选条件窗体
         /// </summary>
         private void btnCondition_Click(object sender, EventArgs e) {
-            if (_wpfCondition == null) {
-                _wpfCondition = new WpfEmpCondition(_condition.EmployeeIds, _condition.DepartmentIds);
-                _wpfCondition.RefreshFilterConditions(_condition);
-                _wpfCondition.ApplySelect += (empIds) => {
-                    _condition.EmployeeIds = empIds;
-                    btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";
-                    PerformQuery();
-                };
-
-                _wpfCondition.Closed += (s, args) => {
-                    _wpfCondition = null;
-                };
-
-                // 计算按钮在屏幕上的位置，将窗口显示在按钮下方
-                var screenPoint = btnCondition.PointToScreen(new System.Drawing.Point(0, btnCondition.Height));
-                _wpfCondition.Left = screenPoint.X;
-                _wpfCondition.Top = screenPoint.Y;
-
-                _wpfCondition.Show();
-            } else {
-                _wpfCondition.WindowState = System.Windows.WindowState.Normal;
-                _wpfCondition.Activate();
-            }
+            _popupCondition?.Show(btnCondition, 0, btnCondition.Height);
         }
 
         /// <summary>
@@ -560,8 +591,21 @@ namespace CompensationSystemSubInterface {
 
             if (sfd.ShowDialog() == DialogResult.OK) {
                 try {
-                    // 直接复用之前的 ExcelHelper
+                    // 导出前去掉排序箭头，避免污染 Excel 表头
+                    var savedHeaders = new Dictionary<int, string>();
+                    foreach (DataGridViewColumn col in dgvSalary.Columns) {
+                        if (col.HeaderText.EndsWith(" ▲") || col.HeaderText.EndsWith(" ▼")) {
+                            savedHeaders[col.Index] = col.HeaderText;
+                            col.HeaderText = col.Name;
+                        }
+                    }
+
                     ExcelHelper.ExportToExcel(dgvSalary, sfd.FileName);
+
+                    // 导出后恢复排序箭头
+                    foreach (var kv in savedHeaders) {
+                        dgvSalary.Columns[kv.Key].HeaderText = kv.Value;
+                    }
 
                     if (MessageBox.Show("导出成功！是否立即打开文件？", "成功", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
                         System.Diagnostics.Process.Start(sfd.FileName);

@@ -11,17 +11,17 @@ using System.Windows.Controls;
 
 namespace CompensationSystemSubInterface {
     /// <summary>
-    /// 通用员工筛选条件窗体（WPF版本）
-    /// 只包含员工筛选功能，带搜索框
+    /// 通用员工筛选条件控件（WPF UserControl 版本）
+    /// 只包含员工筛选功能，带搜索框，CheckBox 即时触发筛选
     /// </summary>
-    public partial class WpfEmpCondition : Window {
+    public partial class WpfEmpCondition : UserControl {
         /// <summary>
         /// 获取当前选中的员工ID列表
         /// </summary>
         public List<int> SelectedEmployeeIds => _persistentEmpIds.ToList();
 
         /// <summary>
-        /// 定义事件: 点击查询时将最新的条件传给主界面
+        /// 定义事件: CheckBox 变化时将最新的条件传给主界面
         /// </summary>
         public event Action<List<int>> ApplySelect;
 
@@ -42,8 +42,11 @@ namespace CompensationSystemSubInterface {
         // 是否显示离职员工（false=在职，true=离职）
         private bool _showTerminatedEmployees = false;
 
+        // 是否正在刷新数据（防止搜索时触发多余事件）
+        private bool _isRefreshing = false;
+
         /// <summary>
-        /// 初始化员工筛选条件窗体
+        /// 初始化员工筛选条件控件
         /// </summary>
         /// <param name="existingIds">现有的员工ID列表</param>
         /// <param name="departmentIds">部门筛选条件（可选）</param>
@@ -72,6 +75,20 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
+        /// 获取选中的员工数量
+        /// </summary>
+        public int GetSelectedCount() {
+            return _persistentEmpIds.Count;
+        }
+
+        /// <summary>
+        /// 判断是否全选（持久化ID为空表示没有筛选，等同于全选）
+        /// </summary>
+        public bool IsAllSelected() {
+            return _persistentEmpIds.Count == 0;
+        }
+
+        /// <summary>
         /// 初始化树形结构根节点
         /// </summary>
         private void InitializeStructure() {
@@ -86,6 +103,8 @@ namespace CompensationSystemSubInterface {
         /// </summary>
         private void RefreshEmployeeData() {
             try {
+                _isRefreshing = true;
+
                 // 查询所有需要的字段，根据_showTerminatedEmployees决定查询在职或离职员工
                 int zaizhi = _showTerminatedEmployees ? 0 : 1;
                 string empSql = $@"SELECT y.id, y.xingming, y.yonghuming, y.xlid, y.bmid, y.gwid, 
@@ -205,6 +224,8 @@ namespace CompensationSystemSubInterface {
 
             } catch (Exception ex) {
                 System.Diagnostics.Debug.WriteLine($"RefreshEmployeeData error: {ex}");
+            } finally {
+                _isRefreshing = false;
             }
         }
 
@@ -234,6 +255,11 @@ namespace CompensationSystemSubInterface {
 
             HandleCheckLogic(node);
             UpdatePersistentEmpIds(node);
+
+            // 即时触发筛选事件
+            if (!_isRefreshing) {
+                ApplySelect?.Invoke(_persistentEmpIds.ToList());
+            }
         }
 
         private void HandleCheckLogic(EmpConditionTreeNode node) {
@@ -295,6 +321,9 @@ namespace CompensationSystemSubInterface {
 
             // 更新持久化ID
             UpdatePersistentEmpIds(targetNode);
+
+            // 即时触发筛选事件
+            ApplySelect?.Invoke(_persistentEmpIds.ToList());
         }
 
         private EmpConditionTreeNode GetContextMenuNode(object sender) {
@@ -302,20 +331,6 @@ namespace CompensationSystemSubInterface {
             var contextMenu = menuItem?.Parent as ContextMenu;
             var stackPanel = contextMenu?.PlacementTarget as StackPanel;
             return stackPanel?.DataContext as EmpConditionTreeNode;
-        }
-
-        private void btnReset_Click(object sender, RoutedEventArgs e) {
-            _persistentEmpIds.Clear();
-            InitializeStructure();
-            RefreshEmployeeData();
-        }
-
-        private void btnApply_Click(object sender, RoutedEventArgs e) {
-            ApplySelect?.Invoke(_persistentEmpIds.ToList());
-        }
-
-        private void btnClose_Click(object sender, RoutedEventArgs e) {
-            this.Close();
         }
     }
 
