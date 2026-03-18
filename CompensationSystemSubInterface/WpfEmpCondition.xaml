@@ -38,9 +38,7 @@
             <TreeView.Resources>
                 <!-- 右键菜单 -->
                 <ContextMenu x:Key="NodeContextMenu">
-                    <MenuItem Header="全选" Click="ContextMenu_SelectAll_Click" />
                     <MenuItem Header="反选" Click="ContextMenu_Invert_Click" />
-                    <MenuItem Header="取消全选" Click="ContextMenu_ClearAll_Click" />
                 </ContextMenu>
             </TreeView.Resources>
 

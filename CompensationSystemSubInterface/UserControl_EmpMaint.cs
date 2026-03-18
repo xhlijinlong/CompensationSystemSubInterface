@@ -399,12 +399,11 @@ namespace CompensationSystemSubInterface {
             // 姓名筛选
             _wpfCondition = new WpfEmpCondition(_condition.EmployeeIds, _condition.DepartmentIds);
             _wpfCondition.RefreshFilterConditions(_condition);
-            _wpfCondition.ApplySelect += (empIds) => {
-                _condition.EmployeeIds = empIds;
-                UpdateConditionButtonText();
-                PerformQuery();
-            };
             _popupCondition = CreatePopup(_wpfCondition, 300, 400);
+            _popupCondition.Closed += (s, args) => {
+                _condition.EmployeeIds = _wpfCondition.SelectedEmployeeIds;
+                UpdateConditionButtonText();
+            };
 
             // 初始化按钮文本
             UpdateButtonText(btnSeq, "序列", _treeSeq);

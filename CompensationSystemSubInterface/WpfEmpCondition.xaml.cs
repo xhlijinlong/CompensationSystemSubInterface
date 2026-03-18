@@ -255,11 +255,6 @@ namespace CompensationSystemSubInterface {
 
             HandleCheckLogic(node);
             UpdatePersistentEmpIds(node);
-
-            // 即时触发筛选事件
-            if (!_isRefreshing) {
-                ApplySelect?.Invoke(_persistentEmpIds.ToList());
-            }
         }
 
         private void HandleCheckLogic(EmpConditionTreeNode node) {
@@ -293,16 +288,8 @@ namespace CompensationSystemSubInterface {
             RefreshEmployeeData();
         }
 
-        private void ContextMenu_SelectAll_Click(object sender, RoutedEventArgs e) {
-            ProcessContextMenuAction(sender, child => child.IsChecked = true);
-        }
-
         private void ContextMenu_Invert_Click(object sender, RoutedEventArgs e) {
             ProcessContextMenuAction(sender, child => child.IsChecked = !(child.IsChecked == true));
-        }
-
-        private void ContextMenu_ClearAll_Click(object sender, RoutedEventArgs e) {
-            ProcessContextMenuAction(sender, child => child.IsChecked = false);
         }
 
         private void ProcessContextMenuAction(object sender, Action<EmpConditionTreeNode> action) {
@@ -321,9 +308,6 @@ namespace CompensationSystemSubInterface {
 
             // 更新持久化ID
             UpdatePersistentEmpIds(targetNode);
-
-            // 即时触发筛选事件
-            ApplySelect?.Invoke(_persistentEmpIds.ToList());
         }
 
         private EmpConditionTreeNode GetContextMenuNode(object sender) {
