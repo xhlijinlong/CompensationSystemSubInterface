@@ -16,12 +16,13 @@ namespace CompensationSystemSubInterface.Utilities {
     /// </summary>
     public class SqlHelper {
         // 0. 暂时直接写死，等以后集成到主程序（EXE）里再换回 ConfigurationManager
-        //public static readonly string ConnString =
-        //    "Data Source=192.168.100.16;Initial Catalog=jzcw_t;User ID=PEPTest;Password=Test1511*;";
+        //private static string _connString = "Data Source=192.168.100.16;Initial Catalog=jzcw;User ID=PEPZY;Password=ziyuan^1511;";
+        //public static readonly string ConnString = "Data Source=192.168.100.16;Initial Catalog=jzcw_t;User ID=PEPTest;Password=Test1511*;";
 
         // 1. 从配置文件读取连接字符串，避免硬编码
         //public static readonly string ConnString = ConfigurationManager.ConnectionStrings["DefaultConnection"]?.ConnectionString
         //                                           ?? throw new Exception("未在配置文件中找到名为 DefaultConnection 的连接字符串");
+
 
         /// <summary>
         /// 数据库连接字符串的私有字段（默认测试环境地址）

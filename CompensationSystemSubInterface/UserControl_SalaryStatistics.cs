@@ -266,7 +266,7 @@ namespace CompensationSystemSubInterface {
 
                 // 2. 调用 Service
                 DataTable allItems = _service.GetSalaryItems();
-                DataTable rawData = _service.GetRawSalaryData(start, end, txtName.Text.Trim(), _condition);
+                DataTable rawData = _service.GetRawSalaryDataForStatistics(start, end, txtName.Text.Trim(), _condition);
                 DataTable report = _service.BuildStatisticsReportData(rawData, allItems, _condition);
 
                 // 3. 绑定
@@ -389,6 +389,7 @@ namespace CompensationSystemSubInterface {
         private void btnCondition_Click(object sender, EventArgs e) {
             if (_wpfCondition == null) {
                 _wpfCondition = new WpfSalaryCondition(_condition);
+                _wpfCondition.ShowBonusOption = true; // 统计页显示年终奖选项
 
                 _wpfCondition.ApplySelect += (newCond) => {
                     _condition = newCond;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,6 +40,13 @@ namespace CompensationSystemSubInterface.Models {
         /// 0 = 离职
         /// </summary>
         public List<int> EmploymentStatusIds { get; set; } = new List<int>();
+        /// <summary>
+        /// 年终奖统计到实际发放年
+        /// false（默认）= 年终奖统计到上一年12月
+        /// true = 年终奖统计到实际发放月
+        /// 仅在 UserControl_SalaryStatistics 中使用
+        /// </summary>
+        public bool BonusToActualYear { get; set; } = false;
 
         /// <summary>
         /// 获取一个值，指示是否设置了任何筛选条件
@@ -52,7 +59,8 @@ namespace CompensationSystemSubInterface.Models {
                     (PositionIds.Count > 0) ||
                     (EmployeeIds.Count > 0) ||
                     (SalaryItemIds.Count > 0) ||
-                    (EmploymentStatusIds.Count > 0);
+                    (EmploymentStatusIds.Count > 0) ||
+                    BonusToActualYear;
             }
         }
 
@@ -68,7 +76,8 @@ namespace CompensationSystemSubInterface.Models {
                 LevelIds = new List<int>(this.LevelIds),
                 EmployeeIds = new List<int>(this.EmployeeIds),
                 SalaryItemIds = new List<int>(this.SalaryItemIds),
-                EmploymentStatusIds = new List<int>(this.EmploymentStatusIds)
+                EmploymentStatusIds = new List<int>(this.EmploymentStatusIds),
+                BonusToActualYear = this.BonusToActualYear
             };
         }
     }

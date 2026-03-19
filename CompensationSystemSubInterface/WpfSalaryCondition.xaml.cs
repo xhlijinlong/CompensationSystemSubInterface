@@ -1,4 +1,4 @@
-﻿using CompensationSystemSubInterface.Models;
+using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Utilities;
 using System;
 using System.Collections.Generic;
@@ -71,6 +71,18 @@ namespace CompensationSystemSubInterface {
             RefreshCascadingData(); // Load cascading data (departments, employees)
 
             RestoreSelection();
+
+            // 默认隐藏年终奖复选框（仅 UserControl_SalaryStatistics 需要显示）
+            chkBonusToActualYear.Visibility = Visibility.Collapsed;
+            chkBonusToActualYear.IsChecked = CurrentCondition.BonusToActualYear;
+        }
+
+        /// <summary>
+        /// 是否显示年终奖统计选项，仅在 UserControl_SalaryStatistics 中调用时设为 true
+        /// </summary>
+        public bool ShowBonusOption {
+            get => chkBonusToActualYear.Visibility == Visibility.Visible;
+            set => chkBonusToActualYear.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
         }
 
         /// <summary>
@@ -465,6 +477,7 @@ namespace CompensationSystemSubInterface {
             InitializeStructure();
             LoadStaticData();
             RefreshCascadingData();
+            chkBonusToActualYear.IsChecked = false; // 重置年终奖选项
         }
 
         /// <summary>
@@ -489,6 +502,8 @@ namespace CompensationSystemSubInterface {
             CurrentCondition.EmployeeIds = _persistentEmpIds.ToList();
             // Note: Using _persistentItemIds instead of GetCheckedIdsRecursive to include hidden selected items
             CurrentCondition.SalaryItemIds = _persistentItemIds.ToList();
+            // 保存年终奖选项状态
+            CurrentCondition.BonusToActualYear = chkBonusToActualYear.IsChecked == true;
 
             ApplySelect?.Invoke(CurrentCondition);
         }

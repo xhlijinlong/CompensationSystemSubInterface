@@ -1,4 +1,4 @@
-﻿using CompensationSystemSubInterface.Models;
+using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Utilities;
 using System;
 using System.Collections.Generic;
@@ -343,6 +343,167 @@ namespace CompensationSystemSubInterface.Services {
             dt.Rows.Add(subGrand);
 
             return dt;
+        }
+
+        /// <summary>
+        /// 获取年终奖薪资项目的 ItemId 列表
+        /// </summary>
+        private List<int> GetBonusItemIds() {
+            string sql = "SELECT ItemId FROM ZX_SalaryItems WHERE ItemName = '年终奖' AND IsEnabled = 1";
+            DataTable dt = SqlHelper.ExecuteDataTable(sql);
+            return dt.AsEnumerable().Select(r => Convert.ToInt32(r["ItemId"])).ToList();
+        }
+
+        /// <summary>
+        /// 【统计页专用】查询原始薪资数据，支持年终奖日期重映射
+        /// 当 bonusToActualYear=false（默认）时，将年终奖的 SalaryMonth 重映射到上一年12月
+        /// 当 bonusToActualYear=true 时，行为与 GetRawSalaryData 完全一致
+        /// </summary>
+        public DataTable GetRawSalaryDataForStatistics(DateTime startDate, DateTime endDate, string keyword, SalaryQueryCondition cond) {
+            bool bonusToActualYear = cond.BonusToActualYear;
+
+            // 如果勾选"年终奖统计到实际发放年"，与普通查询完全一致
+            if (bonusToActualYear) {
+                return GetRawSalaryData(startDate, endDate, keyword, cond);
+            }
+
+            // === 默认模式：年终奖统计到上一年12月 ===
+            List<int> bonusItemIds = GetBonusItemIds();
+            // 如果没有年终奖项目，直接返回普通查询结果
+            if (bonusItemIds.Count == 0) {
+                return GetRawSalaryData(startDate, endDate, keyword, cond);
+            }
+
+            string bonusIdList = string.Join(",", bonusItemIds);
+
+            // 1. 查询用户时间范围内的"非年终奖"数据 + 用户时间范围内12月的年终奖数据（这部分不需要重映射）
+            //    同时排除1-11月的年终奖数据（因为这些数据会被重映射，需要单独处理）
+            DataTable normalData;
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(@"
+                    SELECT h.SalaryMonth, yg.id AS EmployeeId, yg.yuangongbh AS EmployeeNo, yg.xingming AS EmployeeName,
+                           si.ItemId, si.ItemName, d.Amount, bm.bmname AS DeptName, gw.gwname AS PositionName,
+                           h.DisplayOrder, si.DisplayOrder AS ItemOrder
+                    FROM ZX_SalaryHeaders h
+                    JOIN ZX_SalaryDetails d ON h.SalaryId = d.SalaryId
+                    JOIN ZX_SalaryItems si ON d.ItemId = si.ItemId
+                    JOIN ZX_config_yg yg ON h.EmployeeId = yg.id
+                    JOIN ZX_config_bm bm ON h.DepartmentId = bm.id
+                    JOIN ZX_config_xl xl ON h.SequenceId = xl.id
+                    JOIN ZX_config_gw gw ON h.PositionId = gw.id
+                    JOIN ZX_config_cj cj ON h.LevelId = cj.id
+                    JOIN ZX_SalaryAuditBatches ab ON h.BatchId = ab.BatchId
+                    WHERE ab.OverallStatus IN (3, 5) AND h.SalaryMonth BETWEEN @StartDate AND @EndDate
+                ");
+                // 排除非12月的年终奖数据（这些会通过 bonusData 查询后重映射）
+                sb.Append($" AND (si.ItemId NOT IN ({bonusIdList}) OR MONTH(h.SalaryMonth) = 12)");
+
+                List<SqlParameter> ps = new List<SqlParameter>();
+                ps.Add(new SqlParameter("@StartDate", startDate));
+                ps.Add(new SqlParameter("@EndDate", endDate));
+
+                AppendFilterConditions(sb, ps, keyword, cond);
+                sb.Append(" ORDER BY h.DisplayOrder, h.SalaryMonth, si.DisplayOrder");
+                normalData = SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
+            }
+
+            // 2. 查询需要重映射的年终奖数据
+            //    查询范围：用户选择的每个覆盖到12月的年份，对应次年1-11月的年终奖记录
+            //    然后将这些记录的 SalaryMonth 重映射到上一年12月
+            DataTable bonusData;
+            {
+                // 确定用户选择的时间范围覆盖了哪些年份的12月
+                List<int> decemberYears = new List<int>();
+                for (int y = startDate.Year; y <= endDate.Year; y++) {
+                    DateTime dec1 = new DateTime(y, 12, 1);
+                    DateTime dec31 = new DateTime(y, 12, 31);
+                    // 检查该年12月是否在用户选择的时间范围内
+                    if (dec1 <= endDate && dec31 >= startDate) {
+                        decemberYears.Add(y);
+                    }
+                }
+
+                if (decemberYears.Count == 0) {
+                    // 没有覆盖到任何年份的12月，不需要查年终奖
+                    return normalData;
+                }
+
+                // 构建年终奖查询：对每个包含12月的年，查询次年1-11月的年终奖数据
+                StringBuilder sb = new StringBuilder();
+                sb.Append(@"
+                    SELECT h.SalaryMonth, yg.id AS EmployeeId, yg.yuangongbh AS EmployeeNo, yg.xingming AS EmployeeName,
+                           si.ItemId, si.ItemName, d.Amount, bm.bmname AS DeptName, gw.gwname AS PositionName,
+                           h.DisplayOrder, si.DisplayOrder AS ItemOrder
+                    FROM ZX_SalaryHeaders h
+                    JOIN ZX_SalaryDetails d ON h.SalaryId = d.SalaryId
+                    JOIN ZX_SalaryItems si ON d.ItemId = si.ItemId
+                    JOIN ZX_config_yg yg ON h.EmployeeId = yg.id
+                    JOIN ZX_config_bm bm ON h.DepartmentId = bm.id
+                    JOIN ZX_config_xl xl ON h.SequenceId = xl.id
+                    JOIN ZX_config_gw gw ON h.PositionId = gw.id
+                    JOIN ZX_config_cj cj ON h.LevelId = cj.id
+                    JOIN ZX_SalaryAuditBatches ab ON h.BatchId = ab.BatchId
+                    WHERE ab.OverallStatus IN (3, 5)
+                    AND si.ItemId IN (") ;
+                sb.Append(bonusIdList);
+                sb.Append(") AND MONTH(h.SalaryMonth) != 12 AND (");
+
+                List<SqlParameter> ps = new List<SqlParameter>();
+
+                // 构建每个12月年份对应的次年范围条件
+                for (int i = 0; i < decemberYears.Count; i++) {
+                    int nextYear = decemberYears[i] + 1;
+                    string startParam = $"@BonusStart{i}";
+                    string endParam = $"@BonusEnd{i}";
+
+                    if (i > 0) sb.Append(" OR ");
+                    sb.Append($"(h.SalaryMonth BETWEEN {startParam} AND {endParam})");
+
+                    ps.Add(new SqlParameter(startParam, new DateTime(nextYear, 1, 1)));
+                    ps.Add(new SqlParameter(endParam, new DateTime(nextYear, 11, 30)));
+                }
+                sb.Append(")");
+
+                AppendFilterConditions(sb, ps, keyword, cond);
+                sb.Append(" ORDER BY h.DisplayOrder, h.SalaryMonth, si.DisplayOrder");
+                bonusData = SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
+            }
+
+            // 3. 将年终奖数据的 SalaryMonth 重映射到上一年12月，然后合并到 normalData
+            foreach (DataRow row in bonusData.Rows) {
+                DateTime originalMonth = Convert.ToDateTime(row["SalaryMonth"]);
+                // 重映射到上一年12月1日
+                DateTime remappedMonth = new DateTime(originalMonth.Year - 1, 12, 1);
+                
+                DataRow newRow = normalData.NewRow();
+                foreach (DataColumn col in bonusData.Columns) {
+                    newRow[col.ColumnName] = row[col.ColumnName];
+                }
+                newRow["SalaryMonth"] = remappedMonth;
+                normalData.Rows.Add(newRow);
+            }
+
+            return normalData;
+        }
+
+        /// <summary>
+        /// 将通用的筛选条件拼接到 SQL 语句中（提取公共逻辑，避免代码重复）
+        /// </summary>
+        private void AppendFilterConditions(StringBuilder sb, List<SqlParameter> ps, string keyword, SalaryQueryCondition cond) {
+            if (!string.IsNullOrWhiteSpace(keyword)) {
+                sb.Append(" AND (yg.xingming LIKE @Key OR yg.yuangongbh LIKE @Key OR yg.yonghuming LIKE @Key)");
+                // 避免重复添加参数
+                if (!ps.Any(p => p.ParameterName == "@Key")) {
+                    ps.Add(new SqlParameter("@Key", "%" + keyword.Trim() + "%"));
+                }
+            }
+            if (cond.DepartmentIds.Count > 0) sb.Append($" AND h.DepartmentId IN ({string.Join(",", cond.DepartmentIds)})");
+            if (cond.SequenceIds.Count > 0) sb.Append($" AND h.SequenceId IN ({string.Join(",", cond.SequenceIds)})");
+            if (cond.PositionIds.Count > 0) sb.Append($" AND h.PositionId IN ({string.Join(",", cond.PositionIds)})");
+            if (cond.LevelIds.Count > 0) sb.Append($" AND h.LevelId IN ({string.Join(",", cond.LevelIds)})");
+            if (cond.EmployeeIds.Count > 0) sb.Append($" AND yg.id IN ({string.Join(",", cond.EmployeeIds)})");
+            if (cond.EmploymentStatusIds.Count > 0) sb.Append($" AND yg.zaizhi IN ({string.Join(",", cond.EmploymentStatusIds)})");
         }
 
 

@@ -86,8 +86,8 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock x:Name="lblStatus" Text="" Foreground="#666"
-                VerticalAlignment="Center" FontSize="11" />
+            <CheckBox x:Name="chkBonusToActualYear" Content="年终奖统计到实际发放年"
+                VerticalAlignment="Center" FontSize="13" />
 
             <Button Content="重置" Grid.Column="2" Click="btnReset_Click"
                 Width="70" Height="30" Margin="5,0"
