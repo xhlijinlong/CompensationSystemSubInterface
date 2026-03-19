@@ -15,16 +15,26 @@ namespace CompensationSystemSubInterface {
     /// WpfSalaryCondition.xaml 的交互逻辑
     /// 薪资查询高级筛选条件窗体（WPF版本）
     /// </summary>
-    public partial class WpfSalaryCondition : Window {
+    public partial class WpfSalaryCondition : UserControl {
         /// <summary>
         /// 获取当前的筛选条件
         /// </summary>
         public SalaryQueryCondition CurrentCondition { get; private set; }
 
         /// <summary>
-        /// 定义事件: 点击查询时将最新的条件传给主界面
+        /// 获取当前选中的员工ID列表
         /// </summary>
-        public event Action<SalaryQueryCondition> ApplySelect;
+        public List<int> SelectedEmployeeIds => _persistentEmpIds.ToList();
+
+        /// <summary>
+        /// 获取当前选中的薪资项目ID列表
+        /// </summary>
+        public List<int> SelectedSalaryItemIds => _persistentItemIds.ToList();
+
+        /// <summary>
+        /// 获取年终奖是否统计到实际发放年
+        /// </summary>
+        public bool IsBonusToActualYear => chkBonusToActualYear.IsChecked == true;
 
         /// <summary>
         /// 树形结构的根节点集合
@@ -473,13 +483,6 @@ namespace CompensationSystemSubInterface {
             return stackPanel?.DataContext as ConditionTreeNode;
         }
 
-        private void btnReset_Click(object sender, RoutedEventArgs e) {
-            InitializeStructure();
-            LoadStaticData();
-            RefreshCascadingData();
-            chkBonusToActualYear.IsChecked = false; // 重置年终奖选项
-        }
-
         /// <summary>
         /// 外部调用：更新筛选条件并刷新员工列表
         /// 当主界面的序列/部门/职务(岗位)/状态筛选条件变化时调用此方法
@@ -496,42 +499,27 @@ namespace CompensationSystemSubInterface {
             RefreshCascadingData();
         }
 
-        private void btnApply_Click(object sender, RoutedEventArgs e) {
-            // Note: Sequence/department/position IDs are managed by main control, not modified here
-            // Note: Using _persistentEmpIds to include hidden selected employees during search
-            CurrentCondition.EmployeeIds = _persistentEmpIds.ToList();
-            // Note: Using _persistentItemIds instead of GetCheckedIdsRecursive to include hidden selected items
-            CurrentCondition.SalaryItemIds = _persistentItemIds.ToList();
-            // 保存年终奖选项状态
-            CurrentCondition.BonusToActualYear = chkBonusToActualYear.IsChecked == true;
-
-            ApplySelect?.Invoke(CurrentCondition);
-        }
-
-        private List<int> GetCheckedIds(ConditionTreeNode parent) {
-            return parent.Children
-                .Where(c => c.IsChecked == true && c.NodeType == ConditionNodeType.Item)
-                .Select(c => c.Id)
-                .ToList();
-        }
-        
-        private List<int> GetCheckedIdsRecursive(ConditionTreeNode parent) {
-            var ids = new List<int>();
-            foreach(var child in parent.Children) {
-                if(child.NodeType == ConditionNodeType.Item && child.IsChecked == true) {
-                    ids.Add(child.Id);
-                } else if (child.NodeType == ConditionNodeType.Group) {
-                    ids.AddRange(GetCheckedIdsRecursive(child));
-                }
-            }
-            return ids;
+        /// <summary>
+        /// 获取选中的条件数量（员工+薪资项目）
+        /// </summary>
+        public int GetSelectedCount() {
+            return _persistentEmpIds.Count + _persistentItemIds.Count;
         }
 
         /// <summary>
-        /// 关闭按钮点击事件处理
+        /// 判断是否全选（无筛选）
         /// </summary>
-        private void btnClose_Click(object sender, RoutedEventArgs e) {
-            this.Close();
+        public bool IsAllSelected() {
+            return _persistentEmpIds.Count == 0 && _persistentItemIds.Count == 0;
+        }
+
+        /// <summary>
+        /// 判断是否有任何筛选条件
+        /// </summary>
+        public bool HasFilter {
+            get {
+                return _persistentEmpIds.Count > 0 || _persistentItemIds.Count > 0 || IsBonusToActualYear;
+            }
         }
     }
 

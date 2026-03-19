@@ -29,9 +29,10 @@ namespace CompensationSystemSubInterface {
         private SalaryQueryCondition _condition = new SalaryQueryCondition();
 
         /// <summary>
-        /// 高级筛选条件窗体实例（WPF版本）
+        /// 高级筛选条件控件实例（WPF版本）
         /// </summary>
         private WpfSalaryCondition _wpfCondition = null;
+        private ToolStripDropDown _popupCondition;
 
         // WPF 筛选树控件
         private WpfFilterPanel _treeSeq;
@@ -51,11 +52,6 @@ namespace CompensationSystemSubInterface {
         public UserControl_SalaryQuery() {
             InitializeComponent();
             dgvSalary.RowPrePaint += dgvSalary_RowPrePaint; // 绑定行绘制前事件
-            
-            // 当控件销毁时关闭WPF弹窗
-            this.HandleDestroyed += (s, e) => {
-                _wpfCondition?.Close();
-            };
 
             // 搜索框回车触发查询
             txtName.KeyDown += (s, e) => {
@@ -157,11 +153,21 @@ namespace CompensationSystemSubInterface {
             };
             _popupStatus = CreatePopup(_treeStatus, 150, 150);
 
+            // 5. 初始化条件设置控件
+            _wpfCondition = new WpfSalaryCondition(_condition);
+            _popupCondition = CreatePopup(_wpfCondition, 300, 400);
+            _popupCondition.Closed += (s, args) => {
+                _condition.EmployeeIds = _wpfCondition.SelectedEmployeeIds;
+                _condition.SalaryItemIds = _wpfCondition.SelectedSalaryItemIds;
+                UpdateConditionButtonText();
+            };
+
             // 初始化按钮文本
             UpdateButtonText(btnSeq, "序列", _treeSeq);
             UpdateButtonText(btnDept, "部门", _treeDept);
             UpdateButtonText(btnPost, "职务", _treePost);
             UpdateButtonText(btnStatus, "状态", _treeStatus);
+            UpdateConditionButtonText();
         }
 
         /// <summary>
@@ -179,11 +185,11 @@ namespace CompensationSystemSubInterface {
         /// <summary>
         /// 创建包含 WPF 控件的下拉弹窗
         /// </summary>
-        private ToolStripDropDown CreatePopup(WpfFilterPanel treeContent, int width, int height) {
+        private ToolStripDropDown CreatePopup(System.Windows.UIElement wpfContent, int width, int height) {
             ElementHost host = new ElementHost {
                 AutoSize = false,
                 Size = new System.Drawing.Size(width, height),
-                Child = treeContent,
+                Child = wpfContent,
                 Dock = DockStyle.Fill
             };
             
@@ -198,6 +204,14 @@ namespace CompensationSystemSubInterface {
             popup.Padding = Padding.Empty;
             popup.Items.Add(tsHost);
             return popup;
+        }
+
+        /// <summary>
+        /// 更新条件设置按钮文本
+        /// </summary>
+        private void UpdateConditionButtonText() {
+            if (_wpfCondition == null) return;
+            btnCondition.Text = _wpfCondition.HasFilter ? "条件设置*" : "条件设置";
         }
 
         /// <summary>
@@ -362,33 +376,10 @@ namespace CompensationSystemSubInterface {
         }
 
         /// <summary>
-        /// 条件设置按钮点击事件处理，打开高级筛选条件窗体
+        /// 条件设置按钮点击事件处理，弹出高级筛选条件面板
         /// </summary>
         private void btnCondition_Click(object sender, EventArgs e) {
-            if (_wpfCondition == null) {
-                _wpfCondition = new WpfSalaryCondition(_condition);
-
-                _wpfCondition.ApplySelect += (newCond) => {
-                    _condition = newCond;
-                    btnCondition.Text = _condition.HasFilter ? "条件设置*" : "条件设置";
-                    PerformQuery();
-                };
-
-                _wpfCondition.Closed += (s, args) => {
-                    _wpfCondition = null;
-                };
-
-                // 计算按钮在屏幕上的位置，将窗口显示在按钮下方
-                var screenPoint = btnCondition.PointToScreen(new System.Drawing.Point(0, btnCondition.Height));
-                _wpfCondition.Left = screenPoint.X;
-                _wpfCondition.Top = screenPoint.Y;
-
-                _wpfCondition.Show();
-            } else {
-                // 把它带到最前面，防止用户找不到
-                _wpfCondition.WindowState = System.Windows.WindowState.Normal;
-                _wpfCondition.Activate();
-            }
+            _popupCondition?.Show(btnCondition, 0, btnCondition.Height);
         }
 
         /// <summary>
