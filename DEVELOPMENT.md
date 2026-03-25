@@ -117,9 +117,11 @@
 1.2 到达变动时间才做修改员工信息表操作 ✅已完成
 (当前是保存变更信息的时候就修改了员工信息表,我想的是程序设置一个定时任务,在每天凌晨的时候检查变动数据,最好是使用数据库的时间进行查询,防止用户修改本地时间)
 1.3 变动增加入职选项,入职的逻辑与平调一致 ✅已完成
+
 2.修改 ✅已完成
 2.1 修改界面新增两个单选按钮(试用和应届 对应的字段则是 ZX_config_yg 表中的 shiyong 和 yjbys) ✅已完成
-如果勾选按钮则对应的字段值为1 不勾选则为0 
+如果勾选按钮则对应的字段值为1 不勾选则为0
+
 3.新增 ✅已完成
 3.1 增加入职按钮,填写员工基本信息完成信息保存(基本信息就按照修改员工信息的界面来设计,不同的是所有的字段都需要用户填写,所有字段都默认为空) ✅已完成
 不需要填写但是默认写入的字段:
@@ -131,6 +133,7 @@ jiediao 0 借调
 kaoqin 1 是否读取考勤信息
 xinchou 1 是否计算薪酬信息
 xuhao 序号读取当前最大序号+1即可
+
 4.状态栏 ✅已完成
 以下界面中的表格查询数据后需要显示状态栏,状态栏显示查询到的数据条数.
 UserControl_EmpMaint
@@ -140,6 +143,7 @@ UserControl_PfmcQuery
 UserControl_EmpCgQuery
 UserControl_SalaryQuery
 UserControl_SalaryStatistics
+
 5.表格表头字段点击可以排序 ✅已完成
 UserControl_EmpQuery 页面的表格中 点击某些列的表头进行排序
 性别（男、女）
@@ -153,8 +157,10 @@ UserControl_EmpQuery 页面的表格中 点击某些列的表头进行排序
 年龄（点击→从大到小，再点击→从小到大, 第三次点击恢复初始排序）
 除了年龄字段稍微特殊,其他列举的字段点击之后排序,再次点击恢复初始排序(按照员工序号排序,相当于点击查询按钮)
 每次排序只有一个字段生效,比如点击序列(对序列排序),点击年龄(对年龄排序,忽略序列排序)
+
 6.表格行支持拖拽移动 ✅已完成
 UserControl_EmpMaint页面的表格默认排序是根据员工的序号升序排列,拖拽移动后需要更新员工的序号,并且需要保存到数据库中.
+
 7.以下界面的表格不再展示层级信息 ✅已完成
 UserControl_EmpQuery
 UserControl_EmpRsQuery
@@ -162,20 +168,25 @@ UserControl_EmpRsQuery
 如果CanChange为false,则不显示层级信息
 如果CanChange为true,则显示层级信息
 7.2 WpfEmpMaint.xaml 的层级信息不再展示 ✅已完成
+
 8.调整列宽 ✅已完成
 当前默认列宽是100,有些列需要调整:
 姓名,民族列宽改为 64
 序号,性别,学位,层级,属相,年龄 列宽改为 56
 UserControl_PfmcQuery 页面的表格中,后面跟的年份列宽设置为 80
+
 9.调整变动项目列表顺序 ✅已完成
 晋升,平调,入职,变更,入职,离职,降职
+
 10.人员信息和工资汇总查询供部门主任使用 ✅已完成
 UserControl_EmpQuery和UserControl_SalaryStatistics
 接收主程序的部门信息,如果主程序没有传递部门信息,则显示所有部门
 具体实现可以参考UserControl_EmpMaint接收变动权限的逻辑
+
 11.不显示层级 ✅已完成
 员工信息查询页 UserControl_EmpQuery
 员工离职信息页 UserControl_EmpRsQuery
+
 12.员工信息查询页新增查询按钮 ✅已完成
 UserControl_EmpQuery 新增条件: 出生日期 参加工作时间 入社时间 任现岗位时间 年龄 专业技能 专业技术
 
@@ -198,9 +209,20 @@ UserControl_SalaryStatistics是一个统计页面
 这样用户选择的时间段如果覆盖到12月,那么就要跟前复选框的情况来统计年终奖了.
 这个年终奖逻辑只针对此页面,不要影响到UserControl_SalaryQuery.
 
+14.员工信息查询页对部门主任使用的时候隐藏工资卡号.
+UserControl_EmpQuery在接收到主程序传递的部门ID时,说明当前是部门主任在使用,那么隐藏工资卡号列,否则显示工资卡号列.
 
+15.所有页面的显示表格都以员工序号进行排序
+UserControl_EmpMaint
+UserControl_EmpQuery
+UserControl_EmpRsQuery
+UserControl_PfmcQuery
+UserControl_EmpCgQuery
+UserControl_SalaryQuery
+UserControl_SalaryStatistics
 
-
+16.年终奖的查询逻辑调整.
+之前我们完成了需求13,那个年终奖的逻辑太复杂了,现在与业务部门沟通后,调整年终奖的逻辑如下
 
 ## 潜在问题记录
 

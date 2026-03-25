@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[ZX_SalaryDetails] (
   [DetailId] int  IDENTITY(1,1) NOT NULL,
   [SalaryId] int  NULL,
+  [SalaryId_12] int  NULL,
   [ItemId] int  NULL,
   [Amount] decimal(18,2)  NULL,
   CONSTRAINT [PK_ZX_SalaryDetails] PRIMARY KEY CLUSTERED ([DetailId])
@@ -25,6 +26,13 @@ EXEC sp_addextendedproperty
 'SCHEMA', N'dbo',
 'TABLE', N'ZX_SalaryDetails',
 'COLUMN', N'SalaryId'
+GO
+
+EXEC sp_addextendedproperty
+'MS_Description', N'薪资发放ID_12',
+'SCHEMA', N'dbo',
+'TABLE', N'ZX_SalaryDetails',
+'COLUMN', N'SalaryId_12'
 GO
 
 EXEC sp_addextendedproperty
