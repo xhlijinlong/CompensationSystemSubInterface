@@ -246,8 +246,11 @@ namespace CompensationSystemSubInterface.Services {
                         row["RowType"] = 0; // 明细
 
                         decimal rowSum = 0;
+                        decimal bonusAmt = 0;   // 本月年终奖金额
+                        decimal bonusTaxAmt = 0; // 本月奖金税金额
                         foreach (var d in monthGroup) {
                             int id = d.Field<int>("ItemId");
+                            string itemName = d.Field<string>("ItemName");
 
                             if (colMap.ContainsKey(id)) {
                                 decimal amt = d.Field<decimal>("Amount");
@@ -258,7 +261,16 @@ namespace CompensationSystemSubInterface.Services {
                                 empTotals[cName] += amt;
 
                                 if (showTotalColumn) rowSum += amt;
+
+                                // 记录年终奖和奖金税金额
+                                if (itemName == "年终奖") bonusAmt += amt;
+                                if (itemName == "奖金税") bonusTaxAmt += amt;
                             }
+                        }
+
+                        // 调整应发工资和实发工资（加上年终奖，实发再减去奖金税）
+                        if (bonusAmt != 0) {
+                            AdjustGrossNetPay(row, colMap, colCaption, empTotals, bonusAmt, bonusTaxAmt);
                         }
 
                         if (showTotalColumn) row["TotalAmount"] = rowSum;
@@ -346,145 +358,43 @@ namespace CompensationSystemSubInterface.Services {
         }
 
         /// <summary>
-        /// 获取年终奖薪资项目的 ItemId 列表
-        /// </summary>
-        private List<int> GetBonusItemIds() {
-            string sql = "SELECT ItemId FROM ZX_SalaryItems WHERE ItemName = '年终奖' AND IsEnabled = 1";
-            DataTable dt = SqlHelper.ExecuteDataTable(sql);
-            return dt.AsEnumerable().Select(r => Convert.ToInt32(r["ItemId"])).ToList();
-        }
-
-        /// <summary>
-        /// 【统计页专用】查询原始薪资数据，支持年终奖日期重映射
-        /// 当 bonusToActualYear=false（默认）时，将年终奖的 SalaryMonth 重映射到上一年12月
-        /// 当 bonusToActualYear=true 时，行为与 GetRawSalaryData 完全一致
+        /// 【统计页专用】查询原始薪资数据
+        /// 当 BonusToActualYear=true（勾选）时，使用 SalaryId JOIN（年终奖按实际发放月统计）
+        /// 当 BonusToActualYear=false（默认）时，使用 SalaryId_12 JOIN（年终奖计入上一年12月）
         /// </summary>
         public DataTable GetRawSalaryDataForStatistics(DateTime startDate, DateTime endDate, string keyword, SalaryQueryCondition cond) {
-            bool bonusToActualYear = cond.BonusToActualYear;
-
-            // 如果勾选"年终奖统计到实际发放年"，与普通查询完全一致
-            if (bonusToActualYear) {
+            // 勾选"年终奖统计到实际发放年"时，与按月查询完全一致
+            if (cond.BonusToActualYear) {
                 return GetRawSalaryData(startDate, endDate, keyword, cond);
             }
 
-            // === 默认模式：年终奖统计到上一年12月 ===
-            List<int> bonusItemIds = GetBonusItemIds();
-            // 如果没有年终奖项目，直接返回普通查询结果
-            if (bonusItemIds.Count == 0) {
-                return GetRawSalaryData(startDate, endDate, keyword, cond);
-            }
+            // 默认模式：使用 SalaryId_12 JOIN，年终奖自动归入上一年12月
+            StringBuilder sb = new StringBuilder();
+            sb.Append(@"
+                SELECT h.SalaryMonth, yg.id AS EmployeeId, yg.yuangongbh AS EmployeeNo, yg.xingming AS EmployeeName,
+                       si.ItemId, si.ItemName, d.Amount, bm.bmname AS DeptName, gw.gwname AS PositionName,
+                       h.DisplayOrder, si.DisplayOrder AS ItemOrder
+                FROM ZX_SalaryHeaders h
+                JOIN ZX_SalaryDetails d ON d.SalaryId_12 = h.SalaryId
+                JOIN ZX_SalaryItems si ON d.ItemId = si.ItemId
+                JOIN ZX_config_yg yg ON h.EmployeeId = yg.id
+                JOIN ZX_config_bm bm ON h.DepartmentId = bm.id
+                JOIN ZX_config_xl xl ON h.SequenceId = xl.id
+                JOIN ZX_config_gw gw ON h.PositionId = gw.id
+                JOIN ZX_config_cj cj ON h.LevelId = cj.id
+                JOIN ZX_SalaryAuditBatches ab ON h.BatchId = ab.BatchId
+                WHERE ab.OverallStatus IN (3, 5) AND h.SalaryMonth BETWEEN @StartDate AND @EndDate
+            ");
 
-            string bonusIdList = string.Join(",", bonusItemIds);
+            List<SqlParameter> ps = new List<SqlParameter>();
+            ps.Add(new SqlParameter("@StartDate", startDate));
+            ps.Add(new SqlParameter("@EndDate", endDate));
 
-            // 1. 查询用户时间范围内的"非年终奖"数据 + 用户时间范围内12月的年终奖数据（这部分不需要重映射）
-            //    同时排除1-11月的年终奖数据（因为这些数据会被重映射，需要单独处理）
-            DataTable normalData;
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append(@"
-                    SELECT h.SalaryMonth, yg.id AS EmployeeId, yg.yuangongbh AS EmployeeNo, yg.xingming AS EmployeeName,
-                           si.ItemId, si.ItemName, d.Amount, bm.bmname AS DeptName, gw.gwname AS PositionName,
-                           h.DisplayOrder, si.DisplayOrder AS ItemOrder
-                    FROM ZX_SalaryHeaders h
-                    JOIN ZX_SalaryDetails d ON h.SalaryId = d.SalaryId
-                    JOIN ZX_SalaryItems si ON d.ItemId = si.ItemId
-                    JOIN ZX_config_yg yg ON h.EmployeeId = yg.id
-                    JOIN ZX_config_bm bm ON h.DepartmentId = bm.id
-                    JOIN ZX_config_xl xl ON h.SequenceId = xl.id
-                    JOIN ZX_config_gw gw ON h.PositionId = gw.id
-                    JOIN ZX_config_cj cj ON h.LevelId = cj.id
-                    JOIN ZX_SalaryAuditBatches ab ON h.BatchId = ab.BatchId
-                    WHERE ab.OverallStatus IN (3, 5) AND h.SalaryMonth BETWEEN @StartDate AND @EndDate
-                ");
-                // 排除非12月的年终奖数据（这些会通过 bonusData 查询后重映射）
-                sb.Append($" AND (si.ItemId NOT IN ({bonusIdList}) OR MONTH(h.SalaryMonth) = 12)");
+            AppendFilterConditions(sb, ps, keyword, cond);
+            // 排序：先按员工序号，再按月份, 再按薪资项目
+            sb.Append(" ORDER BY yg.xuhao, h.SalaryMonth, si.DisplayOrder");
 
-                List<SqlParameter> ps = new List<SqlParameter>();
-                ps.Add(new SqlParameter("@StartDate", startDate));
-                ps.Add(new SqlParameter("@EndDate", endDate));
-
-                AppendFilterConditions(sb, ps, keyword, cond);
-                sb.Append(" ORDER BY yg.xuhao, h.SalaryMonth, si.DisplayOrder");
-                normalData = SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
-            }
-
-            // 2. 查询需要重映射的年终奖数据
-            //    查询范围：用户选择的每个覆盖到12月的年份，对应次年1-11月的年终奖记录
-            //    然后将这些记录的 SalaryMonth 重映射到上一年12月
-            DataTable bonusData;
-            {
-                // 确定用户选择的时间范围覆盖了哪些年份的12月
-                List<int> decemberYears = new List<int>();
-                for (int y = startDate.Year; y <= endDate.Year; y++) {
-                    DateTime dec1 = new DateTime(y, 12, 1);
-                    DateTime dec31 = new DateTime(y, 12, 31);
-                    // 检查该年12月是否在用户选择的时间范围内
-                    if (dec1 <= endDate && dec31 >= startDate) {
-                        decemberYears.Add(y);
-                    }
-                }
-
-                if (decemberYears.Count == 0) {
-                    // 没有覆盖到任何年份的12月，不需要查年终奖
-                    return normalData;
-                }
-
-                // 构建年终奖查询：对每个包含12月的年，查询次年1-11月的年终奖数据
-                StringBuilder sb = new StringBuilder();
-                sb.Append(@"
-                    SELECT h.SalaryMonth, yg.id AS EmployeeId, yg.yuangongbh AS EmployeeNo, yg.xingming AS EmployeeName,
-                           si.ItemId, si.ItemName, d.Amount, bm.bmname AS DeptName, gw.gwname AS PositionName,
-                           h.DisplayOrder, si.DisplayOrder AS ItemOrder
-                    FROM ZX_SalaryHeaders h
-                    JOIN ZX_SalaryDetails d ON h.SalaryId = d.SalaryId
-                    JOIN ZX_SalaryItems si ON d.ItemId = si.ItemId
-                    JOIN ZX_config_yg yg ON h.EmployeeId = yg.id
-                    JOIN ZX_config_bm bm ON h.DepartmentId = bm.id
-                    JOIN ZX_config_xl xl ON h.SequenceId = xl.id
-                    JOIN ZX_config_gw gw ON h.PositionId = gw.id
-                    JOIN ZX_config_cj cj ON h.LevelId = cj.id
-                    JOIN ZX_SalaryAuditBatches ab ON h.BatchId = ab.BatchId
-                    WHERE ab.OverallStatus IN (3, 5)
-                    AND si.ItemId IN (") ;
-                sb.Append(bonusIdList);
-                sb.Append(") AND MONTH(h.SalaryMonth) != 12 AND (");
-
-                List<SqlParameter> ps = new List<SqlParameter>();
-
-                // 构建每个12月年份对应的次年范围条件
-                for (int i = 0; i < decemberYears.Count; i++) {
-                    int nextYear = decemberYears[i] + 1;
-                    string startParam = $"@BonusStart{i}";
-                    string endParam = $"@BonusEnd{i}";
-
-                    if (i > 0) sb.Append(" OR ");
-                    sb.Append($"(h.SalaryMonth BETWEEN {startParam} AND {endParam})");
-
-                    ps.Add(new SqlParameter(startParam, new DateTime(nextYear, 1, 1)));
-                    ps.Add(new SqlParameter(endParam, new DateTime(nextYear, 11, 30)));
-                }
-                sb.Append(")");
-
-                AppendFilterConditions(sb, ps, keyword, cond);
-                sb.Append(" ORDER BY yg.xuhao, h.SalaryMonth, si.DisplayOrder");
-                bonusData = SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
-            }
-
-            // 3. 将年终奖数据的 SalaryMonth 重映射到上一年12月，然后合并到 normalData
-            foreach (DataRow row in bonusData.Rows) {
-                DateTime originalMonth = Convert.ToDateTime(row["SalaryMonth"]);
-                // 重映射到上一年12月1日
-                DateTime remappedMonth = new DateTime(originalMonth.Year - 1, 12, 1);
-                
-                DataRow newRow = normalData.NewRow();
-                foreach (DataColumn col in bonusData.Columns) {
-                    newRow[col.ColumnName] = row[col.ColumnName];
-                }
-                newRow["SalaryMonth"] = remappedMonth;
-                normalData.Rows.Add(newRow);
-            }
-
-            return normalData;
+            return SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
         }
 
         /// <summary>
@@ -504,6 +414,42 @@ namespace CompensationSystemSubInterface.Services {
             if (cond.LevelIds.Count > 0) sb.Append($" AND h.LevelId IN ({string.Join(",", cond.LevelIds)})");
             if (cond.EmployeeIds.Count > 0) sb.Append($" AND yg.id IN ({string.Join(",", cond.EmployeeIds)})");
             if (cond.EmploymentStatusIds.Count > 0) sb.Append($" AND yg.zaizhi IN ({string.Join(",", cond.EmploymentStatusIds)})");
+        }
+
+        /// <summary>
+        /// 调整应发工资和实发工资：加上年终奖，实发再减去奖金税
+        /// </summary>
+        /// <param name="row">当前数据行</param>
+        /// <param name="colMap">ItemId 到列名的映射</param>
+        /// <param name="colCaption">ItemId 到 ItemName 的映射</param>
+        /// <param name="totals">累加器字典（用于同步更新小计/部门合计）</param>
+        /// <param name="bonusAmt">年终奖金额</param>
+        /// <param name="bonusTaxAmt">奖金税金额</param>
+        private void AdjustGrossNetPay(DataRow row, Dictionary<int, string> colMap,
+                                       Dictionary<int, string> colCaption,
+                                       Dictionary<string, decimal> totals,
+                                       decimal bonusAmt, decimal bonusTaxAmt) {
+            foreach (var kv in colCaption) {
+                if (!colMap.ContainsKey(kv.Key)) continue;
+                string cName = colMap[kv.Key];
+
+                decimal adjustment = 0;
+                if (kv.Value == "应发工资") {
+                    adjustment = bonusAmt;
+                } else if (kv.Value == "实发工资") {
+                    adjustment = bonusAmt - bonusTaxAmt;
+                }
+
+                if (adjustment != 0) {
+                    decimal currentVal = row[cName] != DBNull.Value ? Convert.ToDecimal(row[cName]) : 0;
+                    row[cName] = currentVal + adjustment;
+
+                    if (totals != null) {
+                        if (!totals.ContainsKey(cName)) totals[cName] = 0;
+                        totals[cName] += adjustment;
+                    }
+                }
+            }
         }
 
 
@@ -617,10 +563,13 @@ namespace CompensationSystemSubInterface.Services {
                     row["RowType"] = 0; // 普通数据行
 
                     decimal rowSum = 0;
+                    decimal bonusAmt = 0;   // 员工年终奖累计
+                    decimal bonusTaxAmt = 0; // 员工奖金税累计
 
                     // 遍历该员工的所有原始数据记录进行累加
                     foreach (var d in empGroup) {
                         int id = d.Field<int>("ItemId");
+                        string itemName = d.Field<string>("ItemName");
 
                         if (colMap.ContainsKey(id)) {
                             decimal amt = d.Field<decimal>("Amount");
@@ -636,7 +585,16 @@ namespace CompensationSystemSubInterface.Services {
 
                             // 累加行合计
                             if (showTotalColumn) rowSum += amt;
+
+                            // 记录年终奖和奖金税金额
+                            if (itemName == "年终奖") bonusAmt += amt;
+                            if (itemName == "奖金税") bonusTaxAmt += amt;
                         }
+                    }
+
+                    // 调整应发工资和实发工资（加上年终奖，实发再减去奖金税）
+                    if (bonusAmt != 0) {
+                        AdjustGrossNetPay(row, colMap, colCaption, deptTotals, bonusAmt, bonusTaxAmt);
                     }
 
                     if (showTotalColumn) row["TotalAmount"] = rowSum;
