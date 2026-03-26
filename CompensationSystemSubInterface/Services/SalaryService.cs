@@ -118,8 +118,8 @@ namespace CompensationSystemSubInterface.Services {
             if (cond.EmployeeIds.Count > 0) sb.Append($" AND yg.id IN ({string.Join(",", cond.EmployeeIds)})");
             // 在职状态筛选: 空列表=全部(不筛选), 否则按选中的状态值筛选
             if (cond.EmploymentStatusIds.Count > 0) sb.Append($" AND yg.zaizhi IN ({string.Join(",", cond.EmploymentStatusIds)})");
-            // 排序：先按展示顺序，再按月份, 再按薪资项目
-            sb.Append(" ORDER BY h.DisplayOrder, h.SalaryMonth, si.DisplayOrder");
+            // 排序：先按员工序号，再按月份, 再按薪资项目
+            sb.Append(" ORDER BY yg.xuhao, h.SalaryMonth, si.DisplayOrder");
 
             return SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
         }
@@ -404,7 +404,7 @@ namespace CompensationSystemSubInterface.Services {
                 ps.Add(new SqlParameter("@EndDate", endDate));
 
                 AppendFilterConditions(sb, ps, keyword, cond);
-                sb.Append(" ORDER BY h.DisplayOrder, h.SalaryMonth, si.DisplayOrder");
+                sb.Append(" ORDER BY yg.xuhao, h.SalaryMonth, si.DisplayOrder");
                 normalData = SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
             }
 
@@ -466,7 +466,7 @@ namespace CompensationSystemSubInterface.Services {
                 sb.Append(")");
 
                 AppendFilterConditions(sb, ps, keyword, cond);
-                sb.Append(" ORDER BY h.DisplayOrder, h.SalaryMonth, si.DisplayOrder");
+                sb.Append(" ORDER BY yg.xuhao, h.SalaryMonth, si.DisplayOrder");
                 bonusData = SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
             }
 

@@ -284,8 +284,8 @@ namespace CompensationSystemSubInterface.Services {
                     sb.Append($" AND yg.zhichengdj IN ({string.Join(",", cond.TitleLevels.Select(x => "'" + x.Replace("'", "''") + "'"))})");
             }
 
-            // 3. 排序 - 按离职日期倒序
-            sb.Append(" ORDER BY yg.lizhisj DESC, yg.xuhao");
+            // 3. 排序 - 按员工序号排序
+            sb.Append(" ORDER BY yg.xuhao");
 
             DataTable dt = SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
 
@@ -520,7 +520,7 @@ namespace CompensationSystemSubInterface.Services {
                     sb.Append($" AND yg.id IN ({string.Join(",", cond.EmployeeIds)})");
             }
 
-            sb.Append(" ORDER BY cg.changeTime DESC, yg.xuhao ASC");
+            sb.Append(" ORDER BY yg.xuhao ASC, cg.changeTime DESC");
 
             return SqlHelper.ExecuteDataTable(sb.ToString(), ps.ToArray());
         }
