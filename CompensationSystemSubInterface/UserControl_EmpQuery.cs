@@ -1,4 +1,4 @@
-﻿using CompensationSystemSubInterface.Common;
+using CompensationSystemSubInterface.Common;
 using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Services;
 using CompensationSystemSubInterface.Utilities;
@@ -508,7 +508,13 @@ namespace CompensationSystemSubInterface {
             int phoneColumnWidth = DpiHelper.ScaleWidth(this, 120);
             if (dgvSalary.Columns["证件号码"] != null) dgvSalary.Columns["证件号码"].Width = wideColumnWidth;
             if (dgvSalary.Columns["联系电话"] != null) dgvSalary.Columns["联系电话"].Width = phoneColumnWidth;
-            if (dgvSalary.Columns["工资卡号"] != null) dgvSalary.Columns["工资卡号"].Width = wideColumnWidth;
+            if (dgvSalary.Columns["工资卡号"] != null) {
+                if (_departmentId > 0) {
+                    dgvSalary.Columns["工资卡号"].Visible = false; // 部门主任模式隐藏工资卡号
+                } else {
+                    dgvSalary.Columns["工资卡号"].Width = wideColumnWidth;
+                }
+            }
             if (dgvSalary.Columns["出生日期"] != null) dgvSalary.Columns["出生日期"].Width = phoneColumnWidth;
             if (dgvSalary.Columns["参加工作时间"] != null) dgvSalary.Columns["参加工作时间"].Width = phoneColumnWidth;
             if (dgvSalary.Columns["入社时间"] != null) dgvSalary.Columns["入社时间"].Width = phoneColumnWidth;
