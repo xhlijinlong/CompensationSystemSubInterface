@@ -25,7 +25,6 @@
         private void InitializeComponent() {
             this.pnlBody = new System.Windows.Forms.Panel();
             this.dgvSalary = new System.Windows.Forms.DataGridView();
-            this.pnlTopContainer = new System.Windows.Forms.Panel();
             this.flpnlTop = new System.Windows.Forms.FlowLayoutPanel();
             this.lbDate = new System.Windows.Forms.Label();
             this.cbYear1 = new System.Windows.Forms.ComboBox();
@@ -47,11 +46,14 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.flpnlRight = new System.Windows.Forms.FlowLayoutPanel();
+            this.flpnlParent = new System.Windows.Forms.FlowLayoutPanel();
             this.pnlBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).BeginInit();
-            this.pnlTopContainer.SuspendLayout();
             this.flpnlTop.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.flpnlRight.SuspendLayout();
+            this.flpnlParent.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlBody
@@ -62,7 +64,7 @@
             this.pnlBody.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnlBody.Name = "pnlBody";
             this.pnlBody.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.pnlBody.Size = new System.Drawing.Size(1200, 518);
+            this.pnlBody.Size = new System.Drawing.Size(1400, 968);
             this.pnlBody.TabIndex = 1;
             // 
             // dgvSalary
@@ -78,17 +80,8 @@
             this.dgvSalary.ReadOnly = true;
             this.dgvSalary.RowTemplate.Height = 23;
             this.dgvSalary.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSalary.Size = new System.Drawing.Size(1188, 508);
+            this.dgvSalary.Size = new System.Drawing.Size(1388, 958);
             this.dgvSalary.TabIndex = 0;
-            // 
-            // pnlTopContainer
-            // 
-            this.pnlTopContainer.Controls.Add(this.flpnlTop);
-            this.pnlTopContainer.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTopContainer.Location = new System.Drawing.Point(0, 0);
-            this.pnlTopContainer.Name = "pnlTopContainer";
-            this.pnlTopContainer.Size = new System.Drawing.Size(1200, 60);
-            this.pnlTopContainer.TabIndex = 2;
             // 
             // flpnlTop
             // 
@@ -108,11 +101,9 @@
             this.flpnlTop.Controls.Add(this.btnPost);
             this.flpnlTop.Controls.Add(this.btnStatus);
             this.flpnlTop.Controls.Add(this.btnCondition);
-            this.flpnlTop.Controls.Add(this.btnQuery);
-            this.flpnlTop.Controls.Add(this.btnExport);
             this.flpnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.flpnlTop.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.flpnlTop.Location = new System.Drawing.Point(0, 0);
+            this.flpnlTop.Location = new System.Drawing.Point(4, 3);
             this.flpnlTop.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.flpnlTop.Name = "flpnlTop";
             this.flpnlTop.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
@@ -291,7 +282,7 @@
             // btnQuery
             // 
             this.btnQuery.BackColor = System.Drawing.Color.AliceBlue;
-            this.btnQuery.Location = new System.Drawing.Point(978, 16);
+            this.btnQuery.Location = new System.Drawing.Point(1, 16);
             this.btnQuery.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(60, 30);
@@ -302,7 +293,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(1044, 16);
+            this.btnExport.Location = new System.Drawing.Point(67, 16);
             this.btnExport.Margin = new System.Windows.Forms.Padding(0, 11, 6, 11);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(95, 30);
@@ -315,9 +306,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 578);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 1028);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1200, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1400, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -327,6 +318,30 @@
             this.lblStatus.Size = new System.Drawing.Size(32, 17);
             this.lblStatus.Text = "就绪";
             // 
+            // flpnlRight
+            // 
+            this.flpnlRight.Controls.Add(this.btnExport);
+            this.flpnlRight.Controls.Add(this.btnQuery);
+            this.flpnlRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flpnlRight.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flpnlRight.Location = new System.Drawing.Point(1212, 3);
+            this.flpnlRight.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.flpnlRight.Name = "flpnlRight";
+            this.flpnlRight.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
+            this.flpnlRight.Size = new System.Drawing.Size(180, 60);
+            this.flpnlRight.TabIndex = 1;
+            // 
+            // flpnlParent
+            // 
+            this.flpnlParent.Controls.Add(this.flpnlTop);
+            this.flpnlParent.Controls.Add(this.flpnlRight);
+            this.flpnlParent.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flpnlParent.Location = new System.Drawing.Point(0, 0);
+            this.flpnlParent.Margin = new System.Windows.Forms.Padding(0);
+            this.flpnlParent.Name = "flpnlParent";
+            this.flpnlParent.Size = new System.Drawing.Size(1400, 60);
+            this.flpnlParent.TabIndex = 2;
+            // 
             // UserControl_SalaryStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -334,19 +349,20 @@
             this.AutoSize = true;
             this.Controls.Add(this.pnlBody);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.pnlTopContainer);
+            this.Controls.Add(this.flpnlParent);
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "UserControl_SalaryStatistics";
-            this.Size = new System.Drawing.Size(1200, 600);
+            this.Size = new System.Drawing.Size(1400, 1050);
             this.Load += new System.EventHandler(this.UserControl_SalaryStatistics_Load);
             this.pnlBody.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvSalary)).EndInit();
-            this.pnlTopContainer.ResumeLayout(false);
             this.flpnlTop.ResumeLayout(false);
             this.flpnlTop.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.flpnlRight.ResumeLayout(false);
+            this.flpnlParent.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -354,7 +370,6 @@
 
         #endregion
         private System.Windows.Forms.Panel pnlBody;
-        private System.Windows.Forms.Panel pnlTopContainer;
         private System.Windows.Forms.FlowLayoutPanel flpnlTop;
         private System.Windows.Forms.Label lbDate;
         private System.Windows.Forms.ComboBox cbYear1;
@@ -377,5 +392,7 @@
         private System.Windows.Forms.Button btnStatus;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;
+        private System.Windows.Forms.FlowLayoutPanel flpnlRight;
+        private System.Windows.Forms.FlowLayoutPanel flpnlParent;
     }
 }

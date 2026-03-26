@@ -222,7 +222,14 @@ UserControl_SalaryQuery
 UserControl_SalaryStatistics
 
 16.年终奖的查询逻辑调整.
-之前我们完成了需求13,那个年终奖的逻辑太复杂了,现在与业务部门沟通后,调整年终奖的逻辑如下
+之前我们完成了需求13,那个年终奖的逻辑太复杂了,现在与业务部门沟通后,调整年终奖的逻辑如下.
+因为UserControl_SalaryQuery按月统计薪酬发放,使用年终奖的实际发放时间,一般是1-3月份.UserControl_SalaryStatistics按时间段统计,使用逻辑上的发放年度来统计,计入上一年的12月份.
+为了解决这个问题,我们调整了数据库表结构,在[ZX_SalaryDetails]中新增了[SalaryId_12]字段,之前有[SalaryId]字段,用于联系薪资发放的记录与明细,之所以新增SalaryId_12是为了记录一条逻辑发放时间为上一年的12月份的薪资发放记录,只有年终奖的发放记录SalaryId_12和SalaryId是不同的,其他项目都是相同的.因此我们在UserControl_SalaryQuery页面的统计使用SalaryId,在UserControl_SalaryStatistics页面的统计使用SalaryId_12.
+
+还有一个情况,就是应发工资项目和实发工资项目,这两个字段每个月的数据都是计算好存表的,年终奖并不计入工资因此他们的纸也没有计入年终奖和奖金税,现在这两个汇总页如果莫一个月份涉及到年终奖,那么这个月的应发工资要加上年终奖,实发工资要加上年终奖减去奖金税.
+
+之后我们再来测试数据吧
+
 
 ## 潜在问题记录
 

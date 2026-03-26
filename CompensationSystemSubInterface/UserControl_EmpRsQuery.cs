@@ -1,4 +1,4 @@
-using CompensationSystemSubInterface.Common;
+﻿using CompensationSystemSubInterface.Common;
 using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Services;
 using CompensationSystemSubInterface.Utilities;
