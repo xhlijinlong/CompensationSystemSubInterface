@@ -1,4 +1,4 @@
-﻿using CompensationSystemSubInterface.Models;
+using CompensationSystemSubInterface.Models;
 using CompensationSystemSubInterface.Services;
 using System;
 using System.Collections.Generic;
@@ -227,17 +227,30 @@ namespace CompensationSystemSubInterface {
             }
 
             try {
-                // 1. 获取新 ID
-                int newBmId = (cbNewDept.SelectedValue as int?) ?? 0;
-                int newXlId = (cbNewSeq.SelectedValue as int?) ?? 0;
-                int newZwId = (cbNewJob.SelectedValue as int?) ?? 0;
-                int newCjId = (cbNewLevel.SelectedValue as int?) ?? 0;
+                int newBmId, newXlId, newZwId, newCjId;
+                string newBmName, newXlName, newZwName, newCjName;
 
-                // 2. 获取新名称
-                string newBmName = (cbNewDept.SelectedItem as ComboItem)?.Name ?? "";
-                string newXlName = (cbNewSeq.SelectedItem as ComboItem)?.Name ?? "";
-                string newZwName = (cbNewJob.SelectedItem as ComboItem)?.Name ?? "";
-                string newCjName = (cbNewLevel.SelectedItem as ComboItem)?.Name ?? "";
+                if (changeType == "离职") {
+                    // 离职时强制使用原值（不读取下拉框，避免误修改）
+                    newBmId = _oldData.DeptId ?? 0;
+                    newXlId = _oldData.SeqId ?? 0;
+                    newZwId = _oldData.JobId ?? 0;
+                    newCjId = _oldData.LevelId ?? 0;
+                    newBmName = _oldData.DeptName ?? "";
+                    newXlName = _oldData.SeqName ?? "";
+                    newZwName = _oldData.JobName ?? "";
+                    newCjName = _oldData.LevelName ?? "";
+                } else {
+                    // 非离职：从下拉框获取新值
+                    newBmId = (cbNewDept.SelectedValue as int?) ?? 0;
+                    newXlId = (cbNewSeq.SelectedValue as int?) ?? 0;
+                    newZwId = (cbNewJob.SelectedValue as int?) ?? 0;
+                    newCjId = (cbNewLevel.SelectedValue as int?) ?? 0;
+                    newBmName = (cbNewDept.SelectedItem as ComboItem)?.Name ?? "";
+                    newXlName = (cbNewSeq.SelectedItem as ComboItem)?.Name ?? "";
+                    newZwName = (cbNewJob.SelectedItem as ComboItem)?.Name ?? "";
+                    newCjName = (cbNewLevel.SelectedItem as ComboItem)?.Name ?? "";
+                }
 
                 // 3. 调用 Service (传入 原ID 和 原名称)
                 _service.ExecuteEmployeeChange(

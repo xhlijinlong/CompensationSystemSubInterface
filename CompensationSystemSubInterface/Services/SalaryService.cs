@@ -251,9 +251,13 @@ namespace CompensationSystemSubInterface.Services {
                         foreach (var d in monthGroup) {
                             int id = d.Field<int>("ItemId");
                             string itemName = d.Field<string>("ItemName");
+                            decimal amt = d.Field<decimal>("Amount");
+
+                            // 无论是否显示，始终记录年终奖和奖金税金额（用于校准应发/实发工资）
+                            if (itemName == "年终奖") bonusAmt += amt;
+                            if (itemName == "奖金税") bonusTaxAmt += amt;
 
                             if (colMap.ContainsKey(id)) {
-                                decimal amt = d.Field<decimal>("Amount");
                                 string cName = colMap[id];
                                 row[cName] = amt;
 
@@ -261,10 +265,6 @@ namespace CompensationSystemSubInterface.Services {
                                 empTotals[cName] += amt;
 
                                 if (showTotalColumn) rowSum += amt;
-
-                                // 记录年终奖和奖金税金额
-                                if (itemName == "年终奖") bonusAmt += amt;
-                                if (itemName == "奖金税") bonusTaxAmt += amt;
                             }
                         }
 
@@ -273,19 +273,26 @@ namespace CompensationSystemSubInterface.Services {
                             AdjustGrossNetPay(row, colMap, colCaption, empTotals, bonusAmt, bonusTaxAmt);
                         }
 
-                        if (showTotalColumn) row["TotalAmount"] = rowSum;
+                        // 用校准后的行数据重新计算合计列
+                        if (showTotalColumn) {
+                            rowSum = 0;
+                            foreach (var kv in colMap) {
+                                decimal v = row[kv.Value] != DBNull.Value ? Convert.ToDecimal(row[kv.Value]) : 0;
+                                rowSum += v;
+                            }
+                            row["TotalAmount"] = rowSum;
+                        }
                         empRowTotal += rowSum;
 
-                        // 累加到人员类别统计
+                        // 累加到人员类别统计（使用调整后的行数据）
                         string category = GetPersonnelCategory(deptName, row["PositionName"]?.ToString() ?? "");
                         if (category != null) {
-                            foreach (var d in monthGroup) {
-                                int id = d.Field<int>("ItemId");
-                                if (colMap.ContainsKey(id)) {
-                                    decimal amt = d.Field<decimal>("Amount");
-                                    string cName = colMap[id];
+                            foreach (var kv in colMap) {
+                                string cName = kv.Value;
+                                decimal val = row[cName] != DBNull.Value ? Convert.ToDecimal(row[cName]) : 0;
+                                if (val != 0) {
                                     if (!categoryTotals[category].ContainsKey(cName)) categoryTotals[category][cName] = 0;
-                                    categoryTotals[category][cName] += amt;
+                                    categoryTotals[category][cName] += val;
                                 }
                             }
                             if (showTotalColumn) categoryRowTotals[category] += rowSum;
@@ -570,9 +577,13 @@ namespace CompensationSystemSubInterface.Services {
                     foreach (var d in empGroup) {
                         int id = d.Field<int>("ItemId");
                         string itemName = d.Field<string>("ItemName");
+                        decimal amt = d.Field<decimal>("Amount");
+
+                        // 无论是否显示，始终记录年终奖和奖金税金额（用于校准应发/实发工资）
+                        if (itemName == "年终奖") bonusAmt += amt;
+                        if (itemName == "奖金税") bonusTaxAmt += amt;
 
                         if (colMap.ContainsKey(id)) {
-                            decimal amt = d.Field<decimal>("Amount");
                             string cName = colMap[id];
 
                             // 累加到当前行
@@ -585,10 +596,6 @@ namespace CompensationSystemSubInterface.Services {
 
                             // 累加行合计
                             if (showTotalColumn) rowSum += amt;
-
-                            // 记录年终奖和奖金税金额
-                            if (itemName == "年终奖") bonusAmt += amt;
-                            if (itemName == "奖金税") bonusTaxAmt += amt;
                         }
                     }
 
@@ -597,19 +604,26 @@ namespace CompensationSystemSubInterface.Services {
                         AdjustGrossNetPay(row, colMap, colCaption, deptTotals, bonusAmt, bonusTaxAmt);
                     }
 
-                    if (showTotalColumn) row["TotalAmount"] = rowSum;
+                    // 用校准后的行数据重新计算合计列
+                    if (showTotalColumn) {
+                        rowSum = 0;
+                        foreach (var kv in colMap) {
+                            decimal v = row[kv.Value] != DBNull.Value ? Convert.ToDecimal(row[kv.Value]) : 0;
+                            rowSum += v;
+                        }
+                        row["TotalAmount"] = rowSum;
+                    }
                     deptRowTotal += rowSum;
 
-                    // 累加到人员类别统计
+                    // 累加到人员类别统计（使用调整后的行数据）
                     string category = GetPersonnelCategory(deptName, row["PositionName"]?.ToString() ?? "");
                     if (category != null) {
-                        foreach (var d in empGroup) {
-                            int id = d.Field<int>("ItemId");
-                            if (colMap.ContainsKey(id)) {
-                                decimal amt = d.Field<decimal>("Amount");
-                                string cName = colMap[id];
+                        foreach (var kv in colMap) {
+                            string cName = kv.Value;
+                            decimal val = row[cName] != DBNull.Value ? Convert.ToDecimal(row[cName]) : 0;
+                            if (val != 0) {
                                 if (!categoryTotals[category].ContainsKey(cName)) categoryTotals[category][cName] = 0;
-                                categoryTotals[category][cName] += amt;
+                                categoryTotals[category][cName] += val;
                             }
                         }
                         if (showTotalColumn) categoryRowTotals[category] += rowSum;

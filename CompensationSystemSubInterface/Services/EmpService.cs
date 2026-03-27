@@ -960,77 +960,41 @@ namespace CompensationSystemSubInterface.Services {
         public void RevokeChange(int changeId, int empId, string empName) {
             // 1. 查询该员工最新一条未删除的变动记录
             string checkSql = @"
-                SELECT TOP 1 id FROM ZX_yuangong_change 
+                SELECT TOP 1 id, IsEffect FROM ZX_yuangong_change 
                 WHERE ygid = @EmpId AND (DeleteType = 0 OR DeleteType IS NULL)
                 ORDER BY id DESC";
-            object latestIdObj = SqlHelper.ExecuteScalar(checkSql, new SqlParameter("@EmpId", empId));
+            DataTable dtCheck = SqlHelper.ExecuteDataTable(checkSql, new SqlParameter("@EmpId", empId));
 
-            if (latestIdObj == null) {
+            if (dtCheck.Rows.Count == 0) {
                 throw new Exception("该员工没有可撤销的变动记录！");
             }
 
-            int latestId = Convert.ToInt32(latestIdObj);
+            DataRow checkRow = dtCheck.Rows[0];
+            int latestId = Convert.ToInt32(checkRow["id"]);
             if (latestId != changeId) {
                 throw new Exception($"仅可撤销{empName}的最新变动记录！");
             }
 
-            // 2. 获取该变动记录详情
-            string detailSql = @"
-                SELECT * FROM ZX_yuangong_change WHERE id = @Id";
-            DataTable dtChange = SqlHelper.ExecuteDataTable(detailSql, new SqlParameter("@Id", changeId));
-            if (dtChange.Rows.Count == 0) {
-                throw new Exception("变动记录不存在！");
+
+            // 2. 已生效的变动不允许撤回
+            bool isEffect = checkRow["IsEffect"] != DBNull.Value && Convert.ToBoolean(checkRow["IsEffect"]);
+            if (isEffect) {
+                throw new Exception($"{empName}的该条变动记录已生效，无法撤回！");
             }
-            DataRow row = dtChange.Rows[0];
 
-            bool isEffect = row["IsEffect"] != DBNull.Value && Convert.ToBoolean(row["IsEffect"]);
-            string changeType = row["changeType"].ToString();
+            // 3. 未生效记录：员工表未被修改过，仅标记变动记录为已撤销
+            string revokeSql = @"
+                UPDATE ZX_yuangong_change SET DeleteType = 1 WHERE id = @Id";
+            SqlHelper.ExecuteNonQuery(revokeSql, new SqlParameter("@Id", changeId));
+        }
 
-            using (SqlConnection conn = new SqlConnection(SqlHelper.ConnString)) {
-                conn.Open();
-                using (SqlTransaction trans = conn.BeginTransaction()) {
-                    try {
-                        // 3. 如果已生效，需要回滚员工表
-                        if (isEffect) {
-                            string rollbackSql;
-                            if (changeType == "离职") {
-                                // 离职撤回：恢复在职状态和原组织信息
-                                rollbackSql = @"
-                                    UPDATE ZX_config_yg 
-                                    SET bmid = @OldBmId, xlid = @OldXlId, 
-                                        gwid = @OldZwId, cjid = @OldCjId,
-                                        zaizhi = 1, lizhisj = NULL
-                                    WHERE id = @EmpId";
-                            } else {
-                                // 普通变动撤回：恢复原组织信息
-                                rollbackSql = @"
-                                    UPDATE ZX_config_yg 
-                                    SET bmid = @OldBmId, xlid = @OldXlId, 
-                                        gwid = @OldZwId, cjid = @OldCjId
-                                    WHERE id = @EmpId";
-                            }
 
-                            SqlHelper.ExecuteNonQuery(trans, rollbackSql,
-                                new SqlParameter("@OldBmId", row["oldbmid"] != DBNull.Value ? row["oldbmid"] : (object)DBNull.Value),
-                                new SqlParameter("@OldXlId", row["oldxlid"] != DBNull.Value ? row["oldxlid"] : (object)DBNull.Value),
-                                new SqlParameter("@OldZwId", row["oldzwid"] != DBNull.Value ? row["oldzwid"] : (object)DBNull.Value),
-                                new SqlParameter("@OldCjId", row["oldcjid"] != DBNull.Value ? row["oldcjid"] : (object)DBNull.Value),
-                                new SqlParameter("@EmpId", empId)
-                            );
-                        }
-
-                        // 4. 标记变动记录为已撤销
-                        string revokeSql = @"
-                            UPDATE ZX_yuangong_change SET DeleteType = 1 WHERE id = @Id";
-                        SqlHelper.ExecuteNonQuery(trans, revokeSql, new SqlParameter("@Id", changeId));
-
-                        trans.Commit();
-                    } catch {
-                        trans.Rollback();
-                        throw;
-                    }
-                }
-            }
+        /// <summary>
+        /// 静态便捷方法：检查并应用待生效的变动记录
+        /// 供主程序启动时调用：EmpService.CheckAndApplyPendingChanges();
+        /// </summary>
+        public static void CheckAndApplyPendingChanges() {
+            new EmpService().ApplyPendingChanges();
         }
 
         /// <summary>
